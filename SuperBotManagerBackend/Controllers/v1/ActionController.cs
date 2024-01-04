@@ -42,8 +42,8 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpGet("{id}")]
         public async Task<ActionDTO> Get(int id)
         {
-            var actionTemplate = await uow.ActionRepository.GetById(id);
-            var dto = mapper.Map<ActionDTO>(actionTemplate);
+            var actionExecutor = await uow.ActionRepository.GetById(id);
+            var dto = mapper.Map<ActionDTO>(actionExecutor);
             return dto;
         }
 

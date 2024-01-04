@@ -5,17 +5,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SuperBotManagerBackend.DTOs
 {
-    public class ActionTemplateCreateDTO
+    public class ActionExecutorCreateDTO
     {
-        public string ActionTemplateName { get; set; }
-        public ActionTemplateSchema ActionData { get; set; }
+        public string ActionExecutorName { get; set; }
+        public ActionExecutorSchema ActionData { get; set; }
 
         public int ActionDefinitionId { get; set; }
-        public RunPeriod RunPeriod { get; set; } = RunPeriod.Single;
+        public RunPeriod RunPeriod { get; set; } = RunPeriod.Manual;
         public int? TimeIntervalSeconds { get; set; }
-        public int? ActionTemplateOnFinishId { get; set; }
+        public int? ActionExecutorOnFinishId { get; set; }
     }
-    public class ActionTemplateDTO : ActionTemplateCreateDTO
+    public class ActionExecutorDTO : ActionExecutorCreateDTO
     {
         public int Id { get; set; }
         

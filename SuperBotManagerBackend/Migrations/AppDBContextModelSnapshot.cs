@@ -49,10 +49,10 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ActionStatus")
+                    b.Property<int?>("ActionExecutorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ActionTemplateId")
+                    b.Property<int>("ActionStatus")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
@@ -66,7 +66,7 @@ namespace SuperBotManagerBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActionTemplateId");
+                    b.HasIndex("ActionExecutorId");
 
                     b.ToTable("action");
                 });
@@ -100,7 +100,7 @@ namespace SuperBotManagerBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -26666654,
+                            Id = 600801797,
                             ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":0},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":1},{\"Name\":\"CardExpiration\",\"Description\":\"Card Expiration with format MM/YY eg. 07/25\",\"Type\":0}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"\",\"Type\":0},{\"Name\":\"Message\",\"Description\":\"\",\"Type\":0}]}",
                             ActionDefinitionName = "SignUpStorytel",
                             CreatedDate = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -108,7 +108,7 @@ namespace SuperBotManagerBackend.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionTemplate", b =>
+            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionExecutor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,11 +123,11 @@ namespace SuperBotManagerBackend.Migrations
                     b.Property<int>("ActionDefinitionId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ActionTemplateName")
+                    b.Property<string>("ActionExecutorName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ActionTemplateOnFinishId")
+                    b.Property<int?>("ActionExecutorOnFinishId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
@@ -149,9 +149,9 @@ namespace SuperBotManagerBackend.Migrations
 
                     b.HasIndex("ActionDefinitionId");
 
-                    b.HasIndex("ActionTemplateOnFinishId");
+                    b.HasIndex("ActionExecutorOnFinishId");
 
-                    b.ToTable("actiontemplate");
+                    b.ToTable("actionexecutor");
                 });
 
             modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RefreshToken", b =>
@@ -368,14 +368,14 @@ namespace SuperBotManagerBackend.Migrations
 
             modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Action", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionTemplate", "ActionTemplate")
+                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionExecutor", "ActionExecutor")
                         .WithMany()
-                        .HasForeignKey("ActionTemplateId");
+                        .HasForeignKey("ActionExecutorId");
 
-                    b.Navigation("ActionTemplate");
+                    b.Navigation("ActionExecutor");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionTemplate", b =>
+            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionExecutor", b =>
                 {
                     b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionDefinition", "ActionDefinition")
                         .WithMany()
@@ -383,13 +383,13 @@ namespace SuperBotManagerBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionTemplate", "ActionTemplateOnFinish")
+                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionExecutor", "ActionExecutorOnFinish")
                         .WithMany()
-                        .HasForeignKey("ActionTemplateOnFinishId");
+                        .HasForeignKey("ActionExecutorOnFinishId");
 
                     b.Navigation("ActionDefinition");
 
-                    b.Navigation("ActionTemplateOnFinish");
+                    b.Navigation("ActionExecutorOnFinish");
                 });
 
             modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RefreshToken", b =>

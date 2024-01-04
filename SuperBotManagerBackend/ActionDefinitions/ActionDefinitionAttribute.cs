@@ -1,4 +1,4 @@
-﻿namespace SuperBotManagerBackend.ActionTemplates
+﻿namespace SuperBotManagerBackend.ActionExecutors
 {
     public class ActionDefinitionAttribute : Attribute
     {

@@ -8,7 +8,7 @@ namespace SuperBotManagerBackend.DTOs
     public class ActionCreateDTO
     {
         public ActionSchema ActionData { get; set; }
-        public int ActionTemplateId { get; set; }
+        public int ActionExecutorId { get; set; }
     }
     public class ActionDTO
     {
@@ -17,7 +17,7 @@ namespace SuperBotManagerBackend.DTOs
         public ActionSchema ActionData { get; set; }
         public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
 
-        public int? ActionTemplateId { get; set; }
+        public int? ActionExecutorId { get; set; }
 
         public int? ErrorId { get; set; }
         /// TODO Error object

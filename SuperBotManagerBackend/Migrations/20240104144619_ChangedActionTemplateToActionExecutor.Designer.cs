@@ -12,8 +12,8 @@ using SuperBotManagerBackend.DB;
 namespace SuperBotManagerBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240104132452_resetedMigrations")]
-    partial class resetedMigrations
+    [Migration("20240104144619_ChangedActionTemplateToActionExecutor")]
+    partial class ChangedActionTemplateToActionExecutor
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,10 +52,10 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ActionStatus")
+                    b.Property<int?>("ActionExecutorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ActionExecutorId")
+                    b.Property<int>("ActionStatus")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
@@ -103,7 +103,7 @@ namespace SuperBotManagerBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -26666654,
+                            Id = 600801797,
                             ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":0},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":1},{\"Name\":\"CardExpiration\",\"Description\":\"Card Expiration with format MM/YY eg. 07/25\",\"Type\":0}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"\",\"Type\":0},{\"Name\":\"Message\",\"Description\":\"\",\"Type\":0}]}",
                             ActionDefinitionName = "SignUpStorytel",
                             CreatedDate = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),

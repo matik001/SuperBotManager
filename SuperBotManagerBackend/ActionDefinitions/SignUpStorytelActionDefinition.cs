@@ -1,4 +1,4 @@
-﻿using SuperBotManagerBackend.ActionTemplates;
+﻿using SuperBotManagerBackend.ActionExecutors;
 using SuperBotManagerBackend.DB.Repositories;
 
 namespace SuperBotManagerBackend.BotDefinitions

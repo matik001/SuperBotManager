@@ -29,9 +29,9 @@ namespace SuperBotManagerBackend.DB.Repositories
         public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
 
 
-        [ForeignKey("ActionTemplate")]
-        public int? ActionTemplateId { get; set; }
-        public virtual ActionTemplate? ActionTemplate { get; set; }
+        [ForeignKey("ActionExecutor")]
+        public int? ActionExecutorId { get; set; }
+        public virtual ActionExecutor? ActionExecutor { get; set; }
 
         public int? ErrorId { get; set; }
         /// TODO Error object

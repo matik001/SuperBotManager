@@ -16,13 +16,13 @@ namespace SuperBotManagerBackend.Controllers.v1
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ActionTemplatesController : ControllerBase
+    public class ActionExecutorController : ControllerBase
     {
         private readonly IAppUnitOfWork uow;
         private readonly IMapper mapper;
         private readonly IAuthService service;
 
-        public ActionTemplatesController(IAppUnitOfWork uow, IMapper mapper, IAuthService service)
+        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IAuthService service)
         {
             this.uow = uow;
             this.mapper = mapper;
@@ -30,47 +30,47 @@ namespace SuperBotManagerBackend.Controllers.v1
         }
 
         [HttpGet]
-        public IEnumerable<ActionTemplateDTO> Get()
+        public IEnumerable<ActionExecutorDTO> Get()
         {
-            var actionDefinitions = uow.ActionTemplateRepository.GetAll().ToList();
-            var dtos = mapper.Map<IEnumerable<ActionTemplateDTO>>(actionDefinitions);
+            var actionDefinitions = uow.ActionExecutorRepository.GetAll().ToList();
+            var dtos = mapper.Map<IEnumerable<ActionExecutorDTO>>(actionDefinitions);
             return dtos;
         }
 
         //// GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionTemplateDTO> Get(int id)
+        public async Task<ActionExecutorDTO> Get(int id)
         {
 
-            var actionTemplate = await uow.ActionTemplateRepository.GetById(id);
-            var dto = mapper.Map<ActionTemplateDTO>(actionTemplate);
+            var actionExecutor = await uow.ActionExecutorRepository.GetById(id);
+            var dto = mapper.Map<ActionExecutorDTO>(actionExecutor);
             return dto;
         }
 
         //// POST api/<ValuesController>
         [HttpPost]
-        public async Task Post([FromBody] ActionTemplateCreateDTO dto)
+        public async Task Post([FromBody] ActionExecutorCreateDTO dto)
         {
-            var actionTemplate = mapper.Map<ActionTemplate>(dto);
-            if(actionTemplate == null)
-                throw ServiceUtils.BadRequest("Bad ActionTemplateCreateDTO format");
-            await uow.ActionTemplateRepository.Create(actionTemplate);
+            var actionExecutor = mapper.Map<ActionExecutor>(dto);
+            if(actionExecutor == null)
+                throw ServiceUtils.BadRequest("Bad ActionExecutorCreateDTO format");
+            await uow.ActionExecutorRepository.Create(actionExecutor);
             await uow.SaveChangesAsync();
         }
 
         [HttpPost]
-        public async Task Put(int id, [FromBody] ActionTemplateCreateDTO dto)
+        public async Task Put(int id, [FromBody] ActionExecutorCreateDTO dto)
         {
-            var action = await uow.ActionTemplateRepository.GetById(id);
+            var action = await uow.ActionExecutorRepository.GetById(id);
             mapper.Map(dto, action);
-            await uow.ActionTemplateRepository.Update(action);
+            await uow.ActionExecutorRepository.Update(action);
             await uow.SaveChangesAsync();
         }
 
         [HttpPost]
         public async Task Delete(int id)
         {
-            await uow.ActionTemplateRepository.Delete(id);
+            await uow.ActionExecutorRepository.Delete(id);
             await uow.SaveChangesAsync();
         }
 
