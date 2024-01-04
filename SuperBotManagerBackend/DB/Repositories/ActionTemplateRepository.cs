@@ -9,21 +9,13 @@ using System.Reflection.Metadata;
 
 namespace SuperBotManagerBackend.DB.Repositories
 {
-    public enum FieldType
-    {
-        String,
-        Int,
-        DateTime
-    }
-    public class FieldInfo
-    {
-        public string Name { get; set; }
-        public FieldType Type { get; set; }
-    }
     public class ActionTemplateSchema
     {
-        public Dictionary<string, FieldInfo> InputSchema { get; set; } = new Dictionary<string, FieldInfo>();
-        public Dictionary<string, FieldInfo> OutputSchema { get; set; } = new Dictionary<string, FieldInfo>();
+        public Dictionary<string, string> Input { get; set; } = new Dictionary<string, string>();
+    }
+    public enum RunPeriod
+    {
+        Single, Everydaym, NonStop, TimePeriod
     }
 
     [Table("actiontemplate")]
@@ -34,7 +26,20 @@ namespace SuperBotManagerBackend.DB.Repositories
 
         public string ActionTemplateName { get; set; }
 
-        public ActionTemplateSchema ActionDataSchema { get; set; }
+        public ActionTemplateSchema ActionData { get; set; }
+
+        [ForeignKey("ActionDefinition")]
+        public int ActionDefinitionId { get; set; }
+        public virtual ActionDefinition ActionDefinition{ get; set; }
+
+        public RunPeriod RunPeriod { get; set; } = RunPeriod.Single;
+        public DateTime? LastRunDate { get; set; }
+        public int? TimeIntervalSeconds { get; set; }
+
+        [ForeignKey("ActionTemplateOnFinish")]
+        public int? ActionTemplateOnFinishId { get; set; }
+        public virtual ActionTemplate? ActionTemplateOnFinish { get; set; }
+
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

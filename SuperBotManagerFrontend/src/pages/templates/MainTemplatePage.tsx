@@ -2,7 +2,7 @@ import LogoImageSrc from 'assets/logo.svg?url';
 import TopMenu from 'components/TopMenu/TopMenu';
 import { CSSProperties, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 const Title = styled.h1`
 	text-align: center;
 	font-weight: 400;
@@ -33,10 +33,15 @@ const MenuRow = styled.div`
 `;
 const MainTemplatePage = ({ children, style }: MainTemplatePageProps) => {
 	const { t } = useTranslation();
+	const theme = useTheme();
 	return (
 		<Layout>
 			<MenuRow>
-				<img height={40} style={{ marginRight: '5px' }} src={LogoImageSrc}></img>
+				<img
+					height={40}
+					style={{ marginRight: '5px', filter: theme.isDarkMode ? 'invert(0.99)' : undefined }}
+					src={LogoImageSrc}
+				></img>
 				<Title>{t('App title')}</Title>
 				<TopMenu />
 			</MenuRow>

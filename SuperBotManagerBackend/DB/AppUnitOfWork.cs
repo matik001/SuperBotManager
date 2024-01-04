@@ -11,8 +11,8 @@ namespace SuperBotManagerBackend.DB
         IRefreshTokenRepository RefreshTokenRepository { get; }
         IRevokedTokenRepository RevokedTokenRepository { get; }
 
-        IActionTemplateRepository ActionTemplateRepository { get; }
         IActionDefinitionRepository ActionDefinitionRepository { get; }
+        IActionTemplateRepository ActionTemplateRepository { get; }
         IActionRepository ActionRepository { get; }
         Task<int> SaveChangesAsync();
     }
@@ -110,18 +110,6 @@ namespace SuperBotManagerBackend.DB
                 return _actionRepository;
             }
         }
-        IActionDefinitionRepository _actionDefinitionRepository;
-        public IActionDefinitionRepository ActionDefinitionRepository
-        {
-            get
-            {
-                if (_actionDefinitionRepository == null)
-                {
-                    _actionDefinitionRepository = new ActionDefinitionRepository(_dbContext);
-                }
-                return _actionDefinitionRepository;
-            }
-        }
         IActionTemplateRepository _actionTemplateRepository;
         public IActionTemplateRepository ActionTemplateRepository
         {
@@ -132,6 +120,18 @@ namespace SuperBotManagerBackend.DB
                     _actionTemplateRepository = new ActionTemplateRepository(_dbContext);
                 }
                 return _actionTemplateRepository;
+            }
+        }
+        IActionDefinitionRepository _actionDefinitionRepository;
+        public IActionDefinitionRepository ActionDefinitionRepository
+        {
+            get
+            {
+                if (_actionDefinitionRepository == null)
+                {
+                    _actionDefinitionRepository = new ActionDefinitionRepository(_dbContext);
+                }
+                return _actionDefinitionRepository;
             }
         }
 

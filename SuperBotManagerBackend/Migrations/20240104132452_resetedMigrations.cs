@@ -9,25 +9,25 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SuperBotManagerBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class resetedMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "actiontemplate",
+                name: "actiondefinition",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ActionTemplateName = table.Column<string>(type: "text", nullable: false),
+                    ActionDefinitionName = table.Column<string>(type: "text", nullable: false),
                     ActionDataSchema = table.Column<string>(type: "text", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_actiontemplate", x => x.Id);
+                    table.PrimaryKey("PK_actiondefinition", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,35 +62,35 @@ namespace SuperBotManagerBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "actiondefinition",
+                name: "actiontemplate",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ActionDefinitionName = table.Column<string>(type: "text", nullable: false),
+                    ActionTemplateName = table.Column<string>(type: "text", nullable: false),
                     ActionData = table.Column<string>(type: "text", nullable: false),
-                    ActionTemplateId = table.Column<int>(type: "integer", nullable: false),
+                    ActionDefinitionId = table.Column<int>(type: "integer", nullable: false),
                     RunPeriod = table.Column<int>(type: "integer", nullable: false),
                     LastRunDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     TimeIntervalSeconds = table.Column<int>(type: "integer", nullable: true),
-                    ActionDefinitionOnFinishId = table.Column<int>(type: "integer", nullable: true),
+                    ActionTemplateOnFinishId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_actiondefinition", x => x.Id);
+                    table.PrimaryKey("PK_actiontemplate", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_actiondefinition_actiondefinition_ActionDefinitionOnFinishId",
-                        column: x => x.ActionDefinitionOnFinishId,
+                        name: "FK_actiontemplate_actiondefinition_ActionDefinitionId",
+                        column: x => x.ActionDefinitionId,
                         principalTable: "actiondefinition",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_actiondefinition_actiontemplate_ActionTemplateId",
-                        column: x => x.ActionTemplateId,
-                        principalTable: "actiontemplate",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_actiontemplate_actiontemplate_ActionTemplateOnFinishId",
+                        column: x => x.ActionTemplateOnFinishId,
+                        principalTable: "actiontemplate",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -223,7 +223,7 @@ namespace SuperBotManagerBackend.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ActionData = table.Column<string>(type: "text", nullable: false),
                     ActionStatus = table.Column<int>(type: "integer", nullable: false),
-                    ActionDefinitionId = table.Column<int>(type: "integer", nullable: true),
+                    ActionTemplateId = table.Column<int>(type: "integer", nullable: true),
                     ErrorId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -232,11 +232,16 @@ namespace SuperBotManagerBackend.Migrations
                 {
                     table.PrimaryKey("PK_action", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_action_actiondefinition_ActionDefinitionId",
-                        column: x => x.ActionDefinitionId,
-                        principalTable: "actiondefinition",
+                        name: "FK_action_actiontemplate_ActionTemplateId",
+                        column: x => x.ActionTemplateId,
+                        principalTable: "actiontemplate",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.InsertData(
+                table: "actiondefinition",
+                columns: new[] { "Id", "ActionDataSchema", "ActionDefinitionName", "CreatedDate", "ModifiedDate" },
+                values: new object[] { -26666654, "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":0},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":1},{\"Name\":\"CardExpiration\",\"Description\":\"Card Expiration with format MM/YY eg. 07/25\",\"Type\":0}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"\",\"Type\":0},{\"Name\":\"Message\",\"Description\":\"\",\"Type\":0}]}", "SignUpStorytel", new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc) });
 
             migrationBuilder.InsertData(
                 table: "role",
@@ -253,19 +258,19 @@ namespace SuperBotManagerBackend.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_action_ActionDefinitionId",
+                name: "IX_action_ActionTemplateId",
                 table: "action",
+                column: "ActionTemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_actiontemplate_ActionDefinitionId",
+                table: "actiontemplate",
                 column: "ActionDefinitionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_actiondefinition_ActionDefinitionOnFinishId",
-                table: "actiondefinition",
-                column: "ActionDefinitionOnFinishId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_actiondefinition_ActionTemplateId",
-                table: "actiondefinition",
-                column: "ActionTemplateId");
+                name: "IX_actiontemplate_ActionTemplateOnFinishId",
+                table: "actiontemplate",
+                column: "ActionTemplateOnFinishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_refreshtoken_UserId",
@@ -315,7 +320,7 @@ namespace SuperBotManagerBackend.Migrations
                 name: "userrole");
 
             migrationBuilder.DropTable(
-                name: "actiondefinition");
+                name: "actiontemplate");
 
             migrationBuilder.DropTable(
                 name: "role");
@@ -324,7 +329,7 @@ namespace SuperBotManagerBackend.Migrations
                 name: "user");
 
             migrationBuilder.DropTable(
-                name: "actiontemplate");
+                name: "actiondefinition");
         }
     }
 }

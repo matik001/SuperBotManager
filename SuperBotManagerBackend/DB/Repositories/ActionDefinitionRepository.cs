@@ -9,13 +9,29 @@ using System.Reflection.Metadata;
 
 namespace SuperBotManagerBackend.DB.Repositories
 {
+    public enum FieldType
+    {
+        String,
+        Number,
+        DateTime
+    }
+    public class FieldInfo
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public FieldType Type { get; set; }
+
+        public FieldInfo(string name, FieldType type, string description = "")
+        {
+            Name = name;
+            Type = type;
+            Description = description;
+        }
+    }
     public class ActionDefinitionSchema
     {
-        public Dictionary<string, string> Input { get; set; } = new Dictionary<string, string>();
-    }
-    public enum RunPeriod
-    {
-        Single, Everydaym, NonStop, TimePeriod
+        public List<FieldInfo> InputSchema { get; set; } = new List<FieldInfo>();
+        public List<FieldInfo> OutputSchema { get; set; } = new List<FieldInfo>();
     }
 
     [Table("actiondefinition")]
@@ -26,20 +42,7 @@ namespace SuperBotManagerBackend.DB.Repositories
 
         public string ActionDefinitionName { get; set; }
 
-        public ActionDefinitionSchema ActionData { get; set; }
-
-        [ForeignKey("ActionTemplate")]
-        public int ActionTemplateId { get; set; }
-        public virtual ActionTemplate ActionTemplate{ get; set; }
-
-        public RunPeriod RunPeriod { get; set; } = RunPeriod.Single;
-        public DateTime? LastRunDate { get; set; }
-        public int? TimeIntervalSeconds { get; set; }
-
-        [ForeignKey("ActionDefinitionOnFinish")]
-        public int? ActionDefinitionOnFinishId { get; set; }
-        public ActionDefinition? ActionDefinitionOnFinish { get; set; }
-
+        public ActionDefinitionSchema ActionDataSchema { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

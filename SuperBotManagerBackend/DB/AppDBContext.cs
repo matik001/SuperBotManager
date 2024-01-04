@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using SuperBotManagerBackend.ActionDefinitions;
 using SuperBotManagerBackend.DB.Repositories;
 using System.Reflection.Emit;
 using Action = SuperBotManagerBackend.DB.Repositories.Action;
@@ -20,24 +21,24 @@ namespace SuperBotManagerBackend.DB
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RevokedToken> RevokedTokens { get; set; }
-        public DbSet<ActionTemplate> ActionTemplates { get; set; }
         public DbSet<ActionDefinition> ActionDefinitions { get; set; }
+        public DbSet<ActionTemplate> ActionTemplates { get; set; }
         public DbSet<Action> Actions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<ActionTemplate>()
+            builder.Entity<ActionDefinition>()
                 .Property(a => a.ActionDataSchema)
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
-                    v => JsonConvert.DeserializeObject<ActionTemplateSchema>(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+                    v => JsonConvert.DeserializeObject<ActionDefinitionSchema>(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
 
-            builder.Entity<ActionDefinition>()
+            builder.Entity<ActionTemplate>()
                 .Property(a => a.ActionData)
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
-                    v => JsonConvert.DeserializeObject<ActionDefinitionSchema>(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+                    v => JsonConvert.DeserializeObject<ActionTemplateSchema>(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
 
 
             builder.Entity<Action>()
@@ -94,6 +95,7 @@ namespace SuperBotManagerBackend.DB
             /////
             ///
             RoleRepository.Seed(builder.Entity<Role>());
+            ActionDefinitionSeeder.Seed(builder.Entity<ActionDefinition>());
         }
 
         private void _setModificationDate()

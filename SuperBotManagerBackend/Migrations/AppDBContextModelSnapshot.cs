@@ -49,10 +49,10 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ActionDefinitionId")
+                    b.Property<int>("ActionStatus")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ActionStatus")
+                    b.Property<int?>("ActionTemplateId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
@@ -66,7 +66,7 @@ namespace SuperBotManagerBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActionDefinitionId");
+                    b.HasIndex("ActionTemplateId");
 
                     b.ToTable("action");
                 });
@@ -79,7 +79,7 @@ namespace SuperBotManagerBackend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ActionData")
+                    b.Property<string>("ActionDataSchema")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -87,10 +87,47 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ActionDefinitionOnFinishId")
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("actiondefinition");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -26666654,
+                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":0},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":1},{\"Name\":\"CardExpiration\",\"Description\":\"Card Expiration with format MM/YY eg. 07/25\",\"Type\":0}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"\",\"Type\":0},{\"Name\":\"Message\",\"Description\":\"\",\"Type\":0}]}",
+                            ActionDefinitionName = "SignUpStorytel",
+                            CreatedDate = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
+                            ModifiedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
+                });
+
+            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("ActionTemplateId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActionData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ActionDefinitionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ActionTemplateName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ActionTemplateOnFinishId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
@@ -110,36 +147,9 @@ namespace SuperBotManagerBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActionDefinitionOnFinishId");
+                    b.HasIndex("ActionDefinitionId");
 
-                    b.HasIndex("ActionTemplateId");
-
-                    b.ToTable("actiondefinition");
-                });
-
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ActionDataSchema")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ActionTemplateName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
+                    b.HasIndex("ActionTemplateOnFinishId");
 
                     b.ToTable("actiontemplate");
                 });
@@ -358,28 +368,28 @@ namespace SuperBotManagerBackend.Migrations
 
             modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Action", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionDefinition", "ActionDefinition")
-                        .WithMany()
-                        .HasForeignKey("ActionDefinitionId");
-
-                    b.Navigation("ActionDefinition");
-                });
-
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionDefinition", b =>
-                {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionDefinition", "ActionDefinitionOnFinish")
-                        .WithMany()
-                        .HasForeignKey("ActionDefinitionOnFinishId");
-
                     b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionTemplate", "ActionTemplate")
                         .WithMany()
-                        .HasForeignKey("ActionTemplateId")
+                        .HasForeignKey("ActionTemplateId");
+
+                    b.Navigation("ActionTemplate");
+                });
+
+            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionTemplate", b =>
+                {
+                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionDefinition", "ActionDefinition")
+                        .WithMany()
+                        .HasForeignKey("ActionDefinitionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ActionDefinitionOnFinish");
+                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionTemplate", "ActionTemplateOnFinish")
+                        .WithMany()
+                        .HasForeignKey("ActionTemplateOnFinishId");
 
-                    b.Navigation("ActionTemplate");
+                    b.Navigation("ActionDefinition");
+
+                    b.Navigation("ActionTemplateOnFinish");
                 });
 
             modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RefreshToken", b =>
