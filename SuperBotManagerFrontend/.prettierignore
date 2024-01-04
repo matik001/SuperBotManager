@@ -1,0 +1,6 @@
+public
+node_modules
+README.md
+dist
+.swc
+.husky
