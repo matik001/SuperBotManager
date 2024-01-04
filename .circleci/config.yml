@@ -1,0 +1,129 @@
+version: 2.1
+
+orbs:
+  windows: circleci/windows@2.2.0
+
+jobs:
+  build-frontend:
+    description: Build frontend
+    docker:
+      - image: cimg/node:21.4.0
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore pnpm Package Cache
+          keys:
+            - pnpm-packages-{{ checksum "SuperBotManagerFrontend/pnpm-lock.yaml" }}
+      - run:
+          name: Install pnpm package manager
+          command: |
+            cd SuperBotManagerFrontend
+            sudo corepack enable
+            sudo corepack prepare pnpm@latest-8 --activate
+      - run:
+          name: Install Dependencies
+          command: |
+            cd SuperBotManagerFrontend
+            pnpm install
+      - save_cache:
+          name: Save pnpm Package Cache
+          key: pnpm-packages-{{ checksum "SuperBotManagerFrontend/pnpm-lock.yaml" }}
+          paths:
+            - SuperBotManagerFrontend/node_modules
+      - run:
+          name: Build react
+          command: |
+            cd SuperBotManagerFrontend
+            pnpm build
+      - persist_to_workspace:
+          root: SuperBotManagerFrontend
+          paths:
+            - dist
+
+  build-backend:
+    description: Build backend with Release configuration
+    docker:
+        - image: mcr.microsoft.com/dotnet/sdk:8.0
+    steps:
+      - add_ssh_keys
+      - checkout
+      - restore_cache:
+          keys:
+            - dotnet-packages-v1-{{ checksum "SuperBotManagerBackend/SuperBotManagerBackend.csproj" }}
+      - run:
+          name: "Install project dependencies"
+          command: |
+            cd SuperBotManagerBackend
+            dotnet restore "SuperBotManagerBackend.csproj"
+      - save_cache:
+          name: Save nugets cache
+          key: dotnet-packages-v1-{{ checksum "SuperBotManagerBackend/SuperBotManagerBackend.csproj" }}
+          paths:
+            - /root/.nuget/packages
+      - run:
+          name: "Add appsettings.json"
+          command: |
+            cd SuperBotManagerBackend
+            echo $appsettings > appsettings_base64.json
+            base64 --decode appsettings_base64.json > appsettings.json
+      - run:
+          name: "Build Application according to some given configuration"
+          command: |
+            cd SuperBotManagerBackend
+            dotnet build "SuperBotManagerBackend.csproj" -c Release
+      - run:
+          name: "Publish to a subfolder"
+          command: |
+            cd SuperBotManagerBackend
+            dotnet publish "SuperBotManagerBackend.csproj" -c Release -o ./backend_build /p:UseAppHost=false
+
+      - persist_to_workspace:
+          root: SuperBotManagerBackend
+          paths:
+            - backend_build
+      
+  deploy:
+    docker:
+      - image: cimg/node:21.4.0
+    steps:
+      - run: sudo apt update
+      - run: sudo apt-get install rsync
+      # adds ssh keys from circleci
+      - add_ssh_keys
+      - attach_workspace:
+          at: .
+    
+      # Deploy frontend
+      - run:
+          name: Upload frontend
+          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete ./dist/* $VPS_USER@$VPS_URL:~/static/botmanager_frontend
+
+      # Send backend
+      - run:
+          name: Upload backend
+          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete ./backend_build/* $VPS_USER@$VPS_URL:~/containers/botmanager_backend
+
+      # Start backend
+      - run: > 
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
+            docker rm -f botmanager_backend ;
+            docker run -v ~/containers/botmanager_backend:/app --name botmanager_backend --rm -d -p 5555:8080 mcr.microsoft.com/dotnet/aspnet:8.0 /bin/bash -c "cd /app ; dotnet SuperBotManagerBackend.dll" '
+      
+
+      # copies files from pipeline to vps via ssh
+      # - run: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete . $VPS_USER@$VPS_URL:~/containers/superchess
+      # - run: > 
+      #     ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL "
+      #       export PORT=5555 ; 
+      #       export DB_CONNECTION_STRING=$DB_CONNECTION_STRING ; 
+      #       cd ~/projects/url_shortener ;
+      #       docker compose -f docker-compose.prod.yaml up --build -d"
+workflows:  
+  build-and-deploy:
+    jobs:
+      - build-backend
+      - build-frontend
+      - deploy:
+          requires:
+            - build-backend
+            - build-frontend
