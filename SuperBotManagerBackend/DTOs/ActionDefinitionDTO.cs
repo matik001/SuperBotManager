@@ -9,6 +9,8 @@ namespace SuperBotManagerBackend.DTOs
     {
         public int Id { get; set; }
         public string ActionDefinitionName { get; set; }
+        public string ActionDefinitionDescription { get; set; }
+        public string ActionDefinitionIcon { get; set; }
         public ActionDefinitionSchema ActionDataSchema { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

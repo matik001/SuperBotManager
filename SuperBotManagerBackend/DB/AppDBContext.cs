@@ -90,6 +90,11 @@ namespace SuperBotManagerBackend.DB
                 .WithOne(e => e.User);
 
 
+            //builder.Entity<ActionExecutor>()
+            //    .HasOne(e => e.ActionExecutorOnFinish)
+            //    .WithOne().HasForeignKey< ActionExecutor>(a=>a.ActionExecutorOnFinishId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
             /////
             ///// Seeds
             /////

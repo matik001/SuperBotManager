@@ -83,6 +83,14 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ActionDefinitionDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ActionDefinitionIcon")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ActionDefinitionName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -100,8 +108,20 @@ namespace SuperBotManagerBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 600801797,
-                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":0},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":1},{\"Name\":\"CardExpiration\",\"Description\":\"Card Expiration with format MM/YY eg. 07/25\",\"Type\":0}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"\",\"Type\":0},{\"Name\":\"Message\",\"Description\":\"\",\"Type\":0}]}",
+                            Id = 1430980592,
+                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Trip date\",\"Description\":\"What day do You want ticket for?\",\"Type\":2},{\"Name\":\"TicketOwner\",\"Description\":\"Owner of the ticket (real Firstname and Lastname)\",\"Type\":0},{\"Name\":\"From\",\"Description\":\"First station where you begin trip\",\"Type\":0},{\"Name\":\"To\",\"Description\":\"Last station - end of trip\",\"Type\":0},{\"Name\":\"Login\",\"Description\":\"Login for intercity\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for intercity\",\"Type\":0},{\"Name\":\"Discount\",\"Description\":\"Pick your discount\",\"Type\":6,\"SetOptions\":[{\"Display\":\"None\",\"Value\":\"None\"},{\"Display\":\"Student\",\"Value\":\"Student\"}]}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if ticket was ordered. You have 10 minutes to pay for it.\",\"Type\":4},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0}]}",
+                            ActionDefinitionDescription = "Buy ticket for intercity",
+                            ActionDefinitionIcon = "intercity.jpg",
+                            ActionDefinitionName = "IntercityBuyTicket",
+                            CreatedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            ModifiedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 999390358,
+                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":0},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":1},{\"Name\":\"CardExpiration\",\"Description\":\"Card Expiration with format MM/YY eg. 07/25\",\"Type\":0}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if account was created\",\"Type\":4},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0}]}",
+                            ActionDefinitionDescription = "Create an account in storytel",
+                            ActionDefinitionIcon = "storytel.png",
                             ActionDefinitionName = "SignUpStorytel",
                             CreatedDate = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
                             ModifiedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc)

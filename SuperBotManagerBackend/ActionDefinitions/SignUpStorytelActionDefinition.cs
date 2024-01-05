@@ -8,8 +8,9 @@ namespace SuperBotManagerBackend.BotDefinitions
     {
         public static ActionDefinition ActionDefinition { get; } = new ActionDefinition()
         {
-            //Id = 1, /// it will be auto generated based on action definition name
             ActionDefinitionName = "SignUpStorytel",
+            ActionDefinitionDescription = "Create an account in storytel",
+            ActionDefinitionIcon = "storytel.png",
             ActionDataSchema = new ActionDefinitionSchema()
             {
                 InputSchema = new List<FieldInfo>()
@@ -22,8 +23,8 @@ namespace SuperBotManagerBackend.BotDefinitions
                 },
                 OutputSchema = new List<FieldInfo>()
                 {
-                    new FieldInfo("Successful", FieldType.String),
-                    new FieldInfo("Message", FieldType.String),
+                    new FieldInfo("Successful", FieldType.Boolean, "True if account was created"),
+                    new FieldInfo("Message", FieldType.String, "Result message"),
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 3), DateTimeKind.Utc),

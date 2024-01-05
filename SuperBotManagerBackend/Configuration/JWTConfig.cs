@@ -48,16 +48,16 @@ namespace SuperBotManagerBackend.Configuration
                         ClockSkew = TimeSpan.Zero,
                         IssuerSigningKey = new SymmetricSecurityKey(
                              Encoding.UTF8.GetBytes(Key)),
-                        LifetimeValidator = (before, expires, token, param) =>
-                        {
-                            if(expires < DateTime.UtcNow)
-                                return false;
-                            var uow = builtServiceProvider.GetRequiredService<IAppUnitOfWork>();
-                            var isRevoked = uow.RevokedTokenRepository.IsTokenRevoked(token.Id);
-                            if(isRevoked)
-                                return false;
-                            return true;
-                        }
+                        //LifetimeValidator = (before, expires, token, param) =>
+                        //{
+                        //    if(expires < DateTime.UtcNow)
+                        //        return false;
+                        //    var uow = builtServiceProvider.GetRequiredService<IAppUnitOfWork>();
+                        //    var isRevoked = uow.RevokedTokenRepository.IsTokenRevoked(token.Id);
+                        //    if(isRevoked)
+                        //        return false;
+                        //    return true;
+                        //}
                     };
 
                     /// auth for signalr

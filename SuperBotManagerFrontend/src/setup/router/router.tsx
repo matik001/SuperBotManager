@@ -1,3 +1,4 @@
+import ActionExecutorsPage from 'pages/ActionExecutorsPage';
 import NotFoundPage from 'pages/NotFoundPage';
 import SignInPage from 'pages/SignInPage';
 import SignUpPage from 'pages/SignUpPage';
@@ -21,7 +22,8 @@ const Router = () => {
 						<Route path="/signup" element={<SignUpPage />} />
 					</>
 				)}
-				<Route path="/" element={<Navigate to="/something" />} />
+				<Route path="/executors" element={<ActionExecutorsPage />} />
+				<Route path="/" element={<Navigate to="/executors" />} />
 
 				<Route path="*" element={<NotFoundPage />} />
 			</Routes>

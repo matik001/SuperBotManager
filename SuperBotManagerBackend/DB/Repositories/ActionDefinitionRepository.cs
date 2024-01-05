@@ -9,17 +9,36 @@ using System.Reflection.Metadata;
 
 namespace SuperBotManagerBackend.DB.Repositories
 {
+    /// <summary>
+    ///  Field value is always string. Field type gives information about how to parse string to specific type and how to display it in the frontend.
+    /// </summary>
     public enum FieldType
     {
         String,
         Number,
-        DateTime
+        DateTime, /// yyyy-MM-dd HH:mm:ss
+        Date, /// yyyy-MM-dd
+        Boolean,
+        Json,
+        Set
+    }
+    public class SetOption
+    {
+        public string Display { get; set; }
+        public string Value { get; set;}
+
+        public SetOption(string display, string value)
+        {
+            Display = display;
+            Value = value;
+        }
     }
     public class FieldInfo
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public FieldType Type { get; set; }
+        public List<SetOption>? SetOptions{ get; set; } = null;
 
         public FieldInfo(string name, FieldType type, string description = "")
         {
@@ -41,7 +60,8 @@ namespace SuperBotManagerBackend.DB.Repositories
         public int Id { get; set; }
 
         public string ActionDefinitionName { get; set; }
-
+        public string ActionDefinitionDescription { get; set; }
+        public string ActionDefinitionIcon { get; set; } /// can be relative or absolute url
         public ActionDefinitionSchema ActionDataSchema { get; set; }
 
         public DateTime CreatedDate { get; set; }

@@ -38,7 +38,7 @@ namespace SuperBotManagerBackend.DB.Repositories
 
         [ForeignKey("ActionExecutorOnFinish")]
         public int? ActionExecutorOnFinishId { get; set; }
-        public virtual ActionExecutor? ActionExecutorOnFinish { get; set; }
+        public virtual ActionExecutor ActionExecutorOnFinish { get; set; }
 
 
         public DateTime CreatedDate { get; set; }

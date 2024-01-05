@@ -1,4 +1,5 @@
 import { ConfigProvider, theme as antdTheme } from 'antd';
+import { darken } from 'polished';
 import React, { ReactNode } from 'react';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { useDarkMode } from 'usehooks-ts';
@@ -37,11 +38,15 @@ input:-webkit-autofill:active{
     transition: background-color 5000s ease-in-out 0s;
     box-shadow: inset 0 0 20px 20px ${(p) => p.theme.secondaryColor};
 }
-
+*{
+	/* font-weight: 100; */
+}
 `;
 export interface AppTheme {
 	primaryColor: string;
 	secondaryColor: string;
+	bgColor2: string;
+	bgColor3: string;
 	bgColor: string;
 	textColor: string;
 	dangerColor: string;
@@ -57,6 +62,8 @@ const AppThemeProvider: React.FC<AppThemeProviderProps> = ({ children }) => {
 	const themeDark: AppTheme = {
 		primaryColor: '#c8923b',
 		secondaryColor: '#262421',
+		bgColor2: darken(0.05, '#262421'),
+		bgColor3: darken(0.08, '#262421'),
 		textColor: 'white',
 		bgColor: '#161513',
 		dangerColor: '#e13f3a',
@@ -65,6 +72,8 @@ const AppThemeProvider: React.FC<AppThemeProviderProps> = ({ children }) => {
 	const themeLight: AppTheme = {
 		primaryColor: '#c8923b',
 		secondaryColor: 'white',
+		bgColor2: darken(0.05, '#ecebe9'),
+		bgColor3: darken(0.08, '#ecebe9'),
 		bgColor: '#ecebe9',
 		textColor: 'black',
 		dangerColor: '#e13f3a',

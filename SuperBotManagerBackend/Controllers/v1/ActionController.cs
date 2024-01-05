@@ -58,7 +58,7 @@ namespace SuperBotManagerBackend.Controllers.v1
             await uow.SaveChangesAsync();
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task Put(int id, [FromBody] ActionCreateDTO dto)
         {
             var action = await uow.ActionRepository.GetById(id);
@@ -67,7 +67,7 @@ namespace SuperBotManagerBackend.Controllers.v1
             await uow.SaveChangesAsync();
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task Delete(int id)
         {
             await uow.ActionRepository.Delete(id);
