@@ -14,6 +14,7 @@ namespace SuperBotManagerBackend.DB
         IActionDefinitionRepository ActionDefinitionRepository { get; }
         IActionExecutorRepository ActionExecutorRepository { get; }
         IActionRepository ActionRepository { get; }
+        ISecretRepository SecretRepository { get; }
         Task<int> SaveChangesAsync();
     }
     public class AppUnitOfWork : IAppUnitOfWork
@@ -132,6 +133,18 @@ namespace SuperBotManagerBackend.DB
                     _actionDefinitionRepository = new ActionDefinitionRepository(_dbContext);
                 }
                 return _actionDefinitionRepository;
+            }
+        }
+        ISecretRepository _secretRepository;
+        public ISecretRepository SecretRepository
+        {
+            get
+            {
+                if (_secretRepository == null)
+                {
+                    _secretRepository = new SecretRepository(_dbContext);
+                }
+                return _secretRepository;
             }
         }
 

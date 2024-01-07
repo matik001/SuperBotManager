@@ -33,8 +33,12 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpGet]
         public IEnumerable<ActionExecutorDTO> Get()
         {
-            var actionDefinitions = uow.ActionExecutorRepository.GetAll().ToList();
-            var dtos = mapper.Map<IEnumerable<ActionExecutorDTO>>(actionDefinitions);
+            var actionDefinitions = uow.ActionExecutorRepository.GetAll().Include(a=>a.ActionDefinition).ToList();
+            var dtos = mapper.Map<IEnumerable<ActionExecutorExtendedDTO>>(actionDefinitions);
+
+            foreach(var dto in dtos)
+                dto.ActionData.MaskSecrets(dto.ActionDefinition.ActionDataSchema);
+
             return dtos;
         }
 
@@ -45,6 +49,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             var actionExecutor = await uow.ActionExecutorRepository.GetById(id, a=>a.Include(x=>x.ActionDefinition));
             var dto = mapper.Map<ActionExecutorExtendedDTO>(actionExecutor);
+            dto.ActionData.MaskSecrets(dto.ActionDefinition.ActionDataSchema);
             return dto;
         }
 
@@ -58,6 +63,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             await uow.ActionExecutorRepository.LoadDefinition(actionExecutor);
             actionExecutor.UpdateIsValid();
+            await actionExecutor.ActionData.EncryptNotMaskedSecrets(actionExecutor.ActionDefinition.ActionDataSchema, uow);
             actionExecutor.ActionDefinition = null;
 
             await uow.ActionExecutorRepository.Create(actionExecutor);
@@ -67,14 +73,20 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody] ActionExecutorCreateDTO dto)
         {
-            var action = await uow.ActionExecutorRepository.GetById(id);
-            mapper.Map(dto, action);
+            var executor = await uow.ActionExecutorRepository.GetById(id, a=>a.Include(x=>x.ActionDefinition));
+            var originalFromDb = executor.ActionData.DeepClone();
 
-            await uow.ActionExecutorRepository.LoadDefinition(action);
-            action.UpdateIsValid();
-            action.ActionDefinition = null;
+            mapper.Map(dto, executor);
 
-            await uow.ActionExecutorRepository.Update(action);
+            executor.UpdateIsValid();
+            /// encrypts secret changes and replaces them with secret guid
+            await executor.ActionData.EncryptNotMaskedSecrets(executor.ActionDefinition.ActionDataSchema, uow);
+            /// replaces what wasn't changed (secret masks) and replaces it with secret guid (from db)
+            await executor.ActionData.ReverseMasking(originalFromDb, executor.ActionDefinition.ActionDataSchema);
+
+            executor.ActionDefinition = null;
+
+            await uow.ActionExecutorRepository.Update(executor);
             await uow.SaveChangesAsync();
         }
 
