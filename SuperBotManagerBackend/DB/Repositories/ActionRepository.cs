@@ -20,7 +20,7 @@ namespace SuperBotManagerBackend.DB.Repositories
         Pending, InProgress, Finished, Error
     }
     [Table("action")]
-    public class Action : IEntity
+    public class Action : IEntity<int>
     {
         [Key]
         public int Id { get; set; }
@@ -39,11 +39,11 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
-    public interface IActionRepository : IGenericRepository<Action>
+    public interface IActionRepository : IGenericRepository<Action, int>
     {
 
     }
-    public class ActionRepository : GenericRepository<Action>, IActionRepository
+    public class ActionRepository : GenericRepository<Action, int>, IActionRepository
     {
         public ActionRepository(AppDBContext dbContext) : base(dbContext)
         {

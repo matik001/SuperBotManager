@@ -32,6 +32,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 services.ConfigureJWT(builder.Configuration);
 services.ConfigureCORS(builder.Configuration);
+services.ConfigureEncryption(builder.Configuration);
 services.AddSignalR()
         .AddJsonProtocol(options =>
         {

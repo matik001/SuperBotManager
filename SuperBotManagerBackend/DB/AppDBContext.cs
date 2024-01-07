@@ -24,6 +24,7 @@ namespace SuperBotManagerBackend.DB
         public DbSet<ActionDefinition> ActionDefinitions { get; set; }
         public DbSet<ActionExecutor> ActionExecutors { get; set; }
         public DbSet<Action> Actions { get; set; }
+        public DbSet<Secret> Secrets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -107,18 +108,32 @@ namespace SuperBotManagerBackend.DB
         {
             var entries = ChangeTracker
               .Entries()
-              .Where(e => e.Entity is IEntity && (
+              .Where(e => (e.Entity is IEntity<int> || e.Entity is IEntity<Guid>) && (
                       e.State == EntityState.Added
                       || e.State == EntityState.Modified));
 
             foreach(var entityEntry in entries)
             {
-                ((IEntity)entityEntry.Entity).ModifiedDate = DateTime.UtcNow;
-
-                if(entityEntry.State == EntityState.Added)
+                if(entityEntry.Entity is IEntity<int>)
                 {
-                    ((IEntity)entityEntry.Entity).CreatedDate = DateTime.UtcNow;
+                    ((IEntity<int>)entityEntry.Entity).ModifiedDate = DateTime.UtcNow;
+
+                    if(entityEntry.State == EntityState.Added)
+                    {
+                        ((IEntity<int>)entityEntry.Entity).CreatedDate = DateTime.UtcNow;
+                    }
                 }
+                else if(entityEntry.Entity is IEntity<Guid>)
+                {
+                    ((IEntity<Guid>)entityEntry.Entity).ModifiedDate = DateTime.UtcNow;
+
+                    if(entityEntry.State == EntityState.Added)
+                    {
+                        ((IEntity<Guid>)entityEntry.Entity).CreatedDate = DateTime.UtcNow;
+                    }
+                }
+                else
+                    throw new Exception("Entity generic type is not supported");
             }
         }
         public override int SaveChanges()

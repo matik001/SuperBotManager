@@ -57,6 +57,7 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 										a!.actionExecutorName = e.target.value;
 									})
 								}
+								onPressEnter={() => setIsEditingName(false)}
 							/>
 						</>
 					) : (

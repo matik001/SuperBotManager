@@ -9,7 +9,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace SuperBotManagerBackend.DB.Repositories
 {
     [Table("user")]
-    public class User : IEntity
+    public class User : IEntity<int>
     {
         [Key]
         [Column("UserId")]
@@ -31,13 +31,13 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime ModifiedDate { get; set; }
 
     }
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository : IGenericRepository<User, int>
     {
         Task<User> GetByUserName(string userName, Func<IQueryable<User>, IQueryable<User>> queryFn = null);
 
         UserPassword GetCurrentUserPassword(User user);
     }
-    public class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : GenericRepository<User, int>, IUserRepository
     {
         public UserRepository(AppDBContext dbContext) : base(dbContext)
         {

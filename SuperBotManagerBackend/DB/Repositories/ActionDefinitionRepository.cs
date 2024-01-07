@@ -58,7 +58,7 @@ namespace SuperBotManagerBackend.DB.Repositories
     }
 
     [Table("actiondefinition")]
-    public class ActionDefinition : IEntity
+    public class ActionDefinition : IEntity<int>
     {
         [Key]
         public int Id { get; set; }
@@ -72,11 +72,11 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
-    public interface IActionDefinitionRepository : IGenericRepository<ActionDefinition>
+    public interface IActionDefinitionRepository : IGenericRepository<ActionDefinition, int>
     {
 
     }
-    public class ActionDefinitionRepository : GenericRepository<ActionDefinition>, IActionDefinitionRepository
+    public class ActionDefinitionRepository : GenericRepository<ActionDefinition, int>, IActionDefinitionRepository
     {
         public ActionDefinitionRepository(AppDBContext dbContext) : base(dbContext)
         {

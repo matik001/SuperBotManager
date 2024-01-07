@@ -19,7 +19,7 @@ namespace SuperBotManagerBackend.DB.Repositories
     }
 
     [Table("actionexecutor")]
-    public class ActionExecutor : IEntity
+    public class ActionExecutor : IEntity<int>
     {
         [Key]
         public int Id { get; set; }
@@ -70,11 +70,11 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
-    public interface IActionExecutorRepository : IGenericRepository<ActionExecutor>
+    public interface IActionExecutorRepository : IGenericRepository<ActionExecutor, int>
     {
         Task LoadDefinition(ActionExecutor actionExecutor);
     }
-    public class ActionExecutorRepository : GenericRepository<ActionExecutor>, IActionExecutorRepository
+    public class ActionExecutorRepository : GenericRepository<ActionExecutor, int>, IActionExecutorRepository
     {
         public ActionExecutorRepository(AppDBContext dbContext) : base(dbContext)
         {

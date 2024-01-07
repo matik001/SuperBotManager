@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SuperBotManagerBackend.DB.Repositories
 {
     [Table("userpassword")]
-    public class UserPassword : IEntity
+    public class UserPassword : IEntity<int>
     {
         [Key]
         [Column("PasswordId")]
@@ -21,10 +21,10 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime ModifiedDate { get; set; }
 
     }
-    public interface IUserPasswordRepository : IGenericRepository<UserPassword>
+    public interface IUserPasswordRepository : IGenericRepository<UserPassword, int>
     {
     }
-    public class UserPasswordRepository : GenericRepository<UserPassword>, IUserPasswordRepository
+    public class UserPasswordRepository : GenericRepository<UserPassword, int>, IUserPasswordRepository
     {
         public UserPasswordRepository(AppDBContext dbContext) : base(dbContext)
         {

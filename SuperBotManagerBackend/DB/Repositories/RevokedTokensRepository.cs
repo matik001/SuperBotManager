@@ -9,7 +9,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace SuperBotManagerBackend.DB.Repositories
 {
     [Table("revokedtokens")]
-    public class RevokedToken : IEntity
+    public class RevokedToken : IEntity<int>
     {
         [Key]
         [Column("RevokedTokenId")]
@@ -25,11 +25,11 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
-    public interface IRevokedTokenRepository : IGenericRepository<RevokedToken>
+    public interface IRevokedTokenRepository : IGenericRepository<RevokedToken, int>
     {
         public bool IsTokenRevoked(string tokenGuid);
     }
-    public class RevokedTokenRepository : GenericRepository<RevokedToken>, IRevokedTokenRepository
+    public class RevokedTokenRepository : GenericRepository<RevokedToken, int>, IRevokedTokenRepository
     {
         public RevokedTokenRepository(AppDBContext dbContext) : base(dbContext)
         {

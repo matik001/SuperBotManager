@@ -8,7 +8,7 @@ using System.Reflection.Metadata;
 namespace SuperBotManagerBackend.DB.Repositories
 {
     [Table("role")]
-    public class Role : IEntity
+    public class Role : IEntity<int>
     {
         [Key]
         [Column("RoleId")]
@@ -28,12 +28,12 @@ namespace SuperBotManagerBackend.DB.Repositories
         Blocked = 2
     }
 
-    public interface IRoleRepository : IGenericRepository<Role>
+    public interface IRoleRepository : IGenericRepository<Role, int>
     {
         Task<Role> GetOrCreate(string roleName);
     }
 
-    public class RoleRepository : GenericRepository<Role>, IRoleRepository
+    public class RoleRepository : GenericRepository<Role, int>, IRoleRepository
     {
         public RoleRepository(AppDBContext dbContext) : base(dbContext)
         {

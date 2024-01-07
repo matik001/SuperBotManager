@@ -10,7 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace SuperBotManagerBackend.DB.Repositories
 {
     [Table("refreshtoken")]
-    public class RefreshToken : IEntity
+    public class RefreshToken : IEntity<int>
     {
         [Key]
         [Column("RefreshTokenId")]
@@ -26,12 +26,12 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
-    public interface IRefreshTokenRepository : IGenericRepository<RefreshToken>
+    public interface IRefreshTokenRepository : IGenericRepository<RefreshToken, int>
     {
         Task<RefreshToken> GenerateNew(User user);
         Task<RefreshToken> GenerateNewAndRemoveOld(User user, string oldToken);
     }
-    public class RefreshTokenRepository : GenericRepository<RefreshToken>, IRefreshTokenRepository
+    public class RefreshTokenRepository : GenericRepository<RefreshToken, int>, IRefreshTokenRepository
     {
         public RefreshTokenRepository(AppDBContext dbContext) : base(dbContext)
         {

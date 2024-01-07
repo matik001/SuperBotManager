@@ -8,7 +8,7 @@ using System.Reflection.Metadata;
 namespace SuperBotManagerBackend.DB.Repositories
 {
     [Table("userrole")]
-    public class UserRole : IEntity
+    public class UserRole : IEntity<int>
     {
         [Key]
         [Column("UserRoleId")]
@@ -27,11 +27,11 @@ namespace SuperBotManagerBackend.DB.Repositories
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
-    public interface IUserRoleRepository: IGenericRepository<UserRole>
+    public interface IUserRoleRepository: IGenericRepository<UserRole, int>
     {
     }
 
-    public class UserRoleRepository : GenericRepository<UserRole>, IUserRoleRepository
+    public class UserRoleRepository : GenericRepository<UserRole, int>, IUserRoleRepository
     {
         public UserRoleRepository(AppDBContext dbContext) : base(dbContext)
         {
