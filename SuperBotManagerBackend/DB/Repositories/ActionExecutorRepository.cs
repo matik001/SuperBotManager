@@ -50,7 +50,7 @@ namespace SuperBotManagerBackend.DB.Repositories
             var actionData = actionExecutor.ActionData;
             if (actionDefinition == null || actionData == null)
                 return false;
-            if (actionDefinition.ActionDataSchema.InputSchema.Count == 0)
+            if (actionData.Inputs.Count == 0)
                 return false;
             foreach (var inputSchema in actionDefinition.ActionDataSchema.InputSchema)
             {

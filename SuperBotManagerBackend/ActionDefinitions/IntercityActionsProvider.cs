@@ -16,11 +16,11 @@ namespace SuperBotManagerBackend.BotDefinitions
                 InputSchema = new List<FieldInfo>()
                 {
                     new FieldInfo("Trip date", FieldType.DateTime, "What day do You want ticket for?"),
-                    new FieldInfo("TicketOwner", FieldType.String, "Owner of the ticket (real Firstname and Lastname)"),
+                    new FieldInfo("Ticket owner", FieldType.String, "Owner of the ticket (real Firstname and Lastname)"),
                     new FieldInfo("From", FieldType.String, "First station where you begin trip"),
                     new FieldInfo("To", FieldType.String, "Last station - end of trip"),
                     new FieldInfo("Login", FieldType.String, "Login for intercity"),
-                    new FieldInfo("Password", FieldType.String, "Password for intercity"),
+                    new FieldInfo("Password", FieldType.Secret, "Password for intercity"),
                     new FieldInfo("Discount", FieldType.Set, "Pick your discount")
                     {
                         SetOptions = new List<SetOption>()

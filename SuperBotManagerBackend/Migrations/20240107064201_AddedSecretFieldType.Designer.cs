@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SuperBotManagerBackend.DB;
@@ -11,9 +12,11 @@ using SuperBotManagerBackend.DB;
 namespace SuperBotManagerBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240107064201_AddedSecretFieldType")]
+    partial class AddedSecretFieldType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +114,8 @@ namespace SuperBotManagerBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1279897748,
-                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Trip date\",\"Description\":\"What day do You want ticket for?\",\"Type\":3,\"IsOptional\":false},{\"Name\":\"Ticket owner\",\"Description\":\"Owner of the ticket (real Firstname and Lastname)\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"From\",\"Description\":\"First station where you begin trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"To\",\"Description\":\"Last station - end of trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Login\",\"Description\":\"Login for intercity\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for intercity\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Discount\",\"Description\":\"Pick your discount\",\"Type\":7,\"IsOptional\":false,\"SetOptions\":[{\"Display\":\"None\",\"Value\":\"None\"},{\"Display\":\"Student\",\"Value\":\"Student\"}]}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if ticket was ordered. You have 10 minutes to pay for it.\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}",
+                            Id = -445203029,
+                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Trip date\",\"Description\":\"What day do You want ticket for?\",\"Type\":3,\"IsOptional\":false},{\"Name\":\"TicketOwner\",\"Description\":\"Owner of the ticket (real Firstname and Lastname)\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"From\",\"Description\":\"First station where you begin trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"To\",\"Description\":\"Last station - end of trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Login\",\"Description\":\"Login for intercity\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for intercity\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Discount\",\"Description\":\"Pick your discount\",\"Type\":7,\"IsOptional\":false,\"SetOptions\":[{\"Display\":\"None\",\"Value\":\"None\"},{\"Display\":\"Student\",\"Value\":\"Student\"}]}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if ticket was ordered. You have 10 minutes to pay for it.\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}",
                             ActionDefinitionDescription = "Buy ticket for intercity",
                             ActionDefinitionIcon = "/intercity.jpg",
                             ActionDefinitionName = "Intercity - buy ticket",
@@ -122,8 +125,8 @@ namespace SuperBotManagerBackend.Migrations
                         },
                         new
                         {
-                            Id = 400536037,
-                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Card number\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Card CCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Card expiration\",\"Description\":\"Card expiration date (only year and month matter)\",\"Type\":4,\"IsOptional\":false}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if account was created\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}",
+                            Id = -252066601,
+                            ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"CardNumber\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"CardCCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"CardExpiration\",\"Description\":\"Card expiration date (only year and month matter)\",\"Type\":4,\"IsOptional\":false}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if account was created\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}",
                             ActionDefinitionDescription = "Create an account in storytel",
                             ActionDefinitionIcon = "/storytel.png",
                             ActionDefinitionName = "Storytel - sign up",

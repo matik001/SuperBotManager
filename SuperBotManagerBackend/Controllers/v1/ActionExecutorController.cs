@@ -58,6 +58,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             await uow.ActionExecutorRepository.LoadDefinition(actionExecutor);
             actionExecutor.UpdateIsValid();
+            actionExecutor.ActionDefinition = null;
 
             await uow.ActionExecutorRepository.Create(actionExecutor);
             await uow.SaveChangesAsync();
@@ -71,6 +72,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             await uow.ActionExecutorRepository.LoadDefinition(action);
             action.UpdateIsValid();
+            action.ActionDefinition = null;
 
             await uow.ActionExecutorRepository.Update(action);
             await uow.SaveChangesAsync();

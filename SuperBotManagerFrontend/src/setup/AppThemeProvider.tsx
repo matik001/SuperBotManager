@@ -17,7 +17,10 @@ body, html, #root {
   overflow-x: hidden;
 
 }
-
+img{
+	pointer-events: none;
+	user-select: none;
+}
 *{
 	margin: 0;
 	padding: 0;
@@ -47,6 +50,7 @@ export interface AppTheme {
 	successColor: string;
 	warningColor: string;
 	errorColor: string;
+	infoColor: string;
 
 	bgColor2: string;
 	bgColor3: string;
@@ -70,6 +74,7 @@ export const themeDark: AppTheme = {
 	errorColor: '#FF4D4F',
 	successColor: '#52c41a',
 	warningColor: '#FAAD14',
+	infoColor: '#4ba0b5',
 	isDarkMode: true
 };
 export const themeLight: AppTheme = {
@@ -82,6 +87,7 @@ export const themeLight: AppTheme = {
 	errorColor: '#FF4D4F',
 	successColor: '#52c41a',
 	warningColor: '#FAAD14',
+	infoColor: '#4ba0b5',
 	isDarkMode: false
 };
 

@@ -1,6 +1,15 @@
 import { appAxios } from './apiConfig';
 
-export type FieldType = 'String' | 'Number' | 'Date' | 'DateTime' | 'Boolean' | 'Json' | 'Set';
+export type FieldType =
+	| 'String'
+	| 'Number'
+	| 'Secret'
+	| 'Date'
+	| 'DateTime'
+	| 'Boolean'
+	| 'Json'
+	| 'Set'
+	| 'ExecutorPicker';
 export interface SetOption {
 	display: string;
 	value: string;

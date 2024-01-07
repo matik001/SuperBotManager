@@ -9,6 +9,7 @@ const IconButton = ({ style, ...props }: ComponentProps<typeof Button>) => {
 				display: 'flex',
 				flexDirection: style?.flexDirection ?? 'row',
 				alignItems: style?.alignItems ?? 'center',
+				justifyContent: 'center',
 				gap: style?.gap ?? '5px'
 			}}
 			{...props}

@@ -9,7 +9,6 @@ import useAuthStore from 'store/authStore';
 const Router = () => {
 	const tokens = useAuthStore((a) => a.tokens);
 	const isLoggedIn = !!tokens;
-	console.log(isLoggedIn);
 	return (
 		<BrowserRouter>
 			<Routes>

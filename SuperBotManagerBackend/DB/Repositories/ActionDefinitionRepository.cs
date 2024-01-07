@@ -16,11 +16,13 @@ namespace SuperBotManagerBackend.DB.Repositories
     {
         String,
         Number,
-        DateTime, /// yyyy-MM-dd HH:mm:ss
-        Date, /// yyyy-MM-dd
+        Secret,
+        DateTime, 
+        Date, 
         Boolean,
         Json,
-        Set
+        Set,
+        ExecutorPicker
     }
     public class SetOption
     {

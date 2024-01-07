@@ -8,6 +8,8 @@ interface InputEditorProps {
 	input: ExecutorInput;
 	inputSchema: FieldInfo[];
 	onChangeInput: (newInput: ExecutorInput) => void;
+	invalidInputsNames?: string[];
+	onChangeValidation?: (inputName: string, isValid: boolean) => void;
 }
 const Container = styled.div`
 	display: grid;
@@ -18,7 +20,13 @@ const Container = styled.div`
 		grid-template-columns: auto 1fr;
 	}
 `;
-const InputEditor: React.FC<InputEditorProps> = ({ input, inputSchema, onChangeInput }) => {
+const InputEditor: React.FC<InputEditorProps> = ({
+	input,
+	inputSchema,
+	onChangeInput,
+	invalidInputsNames,
+	onChangeValidation
+}) => {
 	return (
 		<Container>
 			{inputSchema.map((fieldInfo) => (
@@ -28,6 +36,8 @@ const InputEditor: React.FC<InputEditorProps> = ({ input, inputSchema, onChangeI
 						fieldSchema={fieldInfo}
 						onChange={(val) => onChangeInput({ ...input, [fieldInfo.name]: val })}
 						value={input[fieldInfo.name]}
+						isValid={!invalidInputsNames || !invalidInputsNames.includes(fieldInfo.name)}
+						onChangeValidation={onChangeValidation}
 					/>
 				</>
 			))}

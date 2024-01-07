@@ -16,10 +16,10 @@ namespace SuperBotManagerBackend.BotDefinitions
                 InputSchema = new List<FieldInfo>()
                 {
                     new FieldInfo("Email", FieldType.String, "Address email for your new account"),
-                    new FieldInfo("Password", FieldType.String, "Password for your new account"),
-                    new FieldInfo("CardNumber", FieldType.String, "Card number eg. 1234 1234 1234 1234"),
-                    new FieldInfo("CardCCV", FieldType.Number, "Card CCV numer eg. 321"),
-                    new FieldInfo("CardExpiration", FieldType.String, "Card Expiration with format MM/YY eg. 07/25"),
+                    new FieldInfo("Password", FieldType.Secret, "Password for your new account"),
+                    new FieldInfo("Card number", FieldType.String, "Card number eg. 1234 1234 1234 1234"),
+                    new FieldInfo("Card CCV", FieldType.Secret, "Card CCV numer eg. 321"),
+                    new FieldInfo("Card expiration", FieldType.Date, "Card expiration date (only year and month matter)"),
                 },
                 OutputSchema = new List<FieldInfo>()
                 {

@@ -66,7 +66,6 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 				<Backdrop>
 					<Tooltip title="Settings">
 						<Button
-							ghost
 							styles={{
 								icon: {
 									fontSize: '20px'
@@ -113,7 +112,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 						title={
 							noInputs
 								? 'No inputs to execute'
-								: actionExecutor.isValid
+								: !actionExecutor.isValid
 									? 'Settings are invalid'
 									: undefined
 						}

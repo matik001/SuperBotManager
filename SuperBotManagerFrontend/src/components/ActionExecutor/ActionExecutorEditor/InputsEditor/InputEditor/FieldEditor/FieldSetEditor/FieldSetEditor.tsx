@@ -6,9 +6,15 @@ interface FieldSetEditorProps {
 	fieldSchema: FieldInfo;
 	value: string | undefined;
 	onChange: (newVal: string | undefined) => void;
+	fieldWidthPx?: number;
 }
 
-const FieldSetEditor: React.FC<FieldSetEditorProps> = ({ fieldSchema, onChange, value }) => {
+const FieldSetEditor: React.FC<FieldSetEditorProps> = ({
+	fieldSchema,
+	onChange,
+	value,
+	fieldWidthPx
+}) => {
 	const options = useMemo<SelectProps['options']>(
 		() =>
 			fieldSchema.setOptions!.map((option) => ({
@@ -24,7 +30,7 @@ const FieldSetEditor: React.FC<FieldSetEditorProps> = ({ fieldSchema, onChange, 
 	}, [fieldSchema, onChange, value]);
 	return (
 		<Select
-			style={{ width: '200px' }}
+			style={{ width: fieldWidthPx }}
 			value={value}
 			onChange={(val) => onChange(val)}
 			options={options}
