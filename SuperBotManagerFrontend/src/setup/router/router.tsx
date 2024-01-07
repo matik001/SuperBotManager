@@ -1,3 +1,4 @@
+import ActionExecutorEditPage from 'pages/ActionExecutorEditPage';
 import ActionExecutorsPage from 'pages/ActionExecutorsPage';
 import NotFoundPage from 'pages/NotFoundPage';
 import SignInPage from 'pages/SignInPage';
@@ -8,6 +9,7 @@ import useAuthStore from 'store/authStore';
 const Router = () => {
 	const tokens = useAuthStore((a) => a.tokens);
 	const isLoggedIn = !!tokens;
+	console.log(isLoggedIn);
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -15,15 +17,17 @@ const Router = () => {
 					<>
 						<Route path="/signin" element={<Navigate to="/" />} />
 						<Route path="/signup" element={<Navigate to="/" />} />
+						<Route path="/executors" element={<ActionExecutorsPage />} />
+						<Route path="/executor/edit/:id" element={<ActionExecutorEditPage />} />
+						<Route path="/" element={<Navigate to="/executors" />} />
 					</>
 				) : (
 					<>
 						<Route path="/signin" element={<SignInPage />} />
 						<Route path="/signup" element={<SignUpPage />} />
+						<Route path="*" element={<Navigate to="/signin" />} />
 					</>
 				)}
-				<Route path="/executors" element={<ActionExecutorsPage />} />
-				<Route path="/" element={<Navigate to="/executors" />} />
 
 				<Route path="*" element={<NotFoundPage />} />
 			</Routes>

@@ -37,12 +37,14 @@ namespace SuperBotManagerBackend.Controllers.v1
             return dtos;
         }
 
-        //// GET api/<ValuesController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+        // GET api/<ValuesController>/5
+        [HttpGet("{id}")]
+        public async Task<ActionDefinitionDTO> Get(int id)
+        {
+            var action = await uow.ActionDefinitionRepository.GetById(id);
+            var dto = mapper.Map<ActionDefinitionDTO>(action);
+            return dto;
+        }
 
         //// POST api/<ValuesController>
         //[HttpPost]

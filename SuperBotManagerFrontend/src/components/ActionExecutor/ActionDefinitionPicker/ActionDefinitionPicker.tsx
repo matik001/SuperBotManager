@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { Input, Modal } from 'antd';
-import { ColumnsType } from 'antd/es/table';
 import {
 	ActionDefinitionDTO,
-	FieldInfo,
-	QUERYKEY_ACTIONDEFINITION_GETALL,
-	actionDefinitionGetAll
+	actionDefinitionGetAll,
+	definitionKeys
 } from 'api/actionDefinitionApi';
 import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import React, { useEffect, useMemo, useState } from 'react';
+import { MdSearch } from 'react-icons/md';
 import styled, { useTheme } from 'styled-components';
 import ActionDefinitionItem from './ActionDefinitionItem/ActionDefinitionItem';
 
@@ -19,23 +18,6 @@ interface ActionDefinitionPickerProps {
 	onClose: () => void;
 }
 
-const fieldColumns: ColumnsType<FieldInfo> = [
-	{
-		title: 'Field name',
-		dataIndex: 'name',
-		key: 'name'
-	},
-	{
-		title: 'Description',
-		dataIndex: 'description',
-		key: 'description'
-	},
-	{
-		title: 'Type',
-		dataIndex: 'type',
-		key: 'type'
-	}
-];
 const Container = styled.div`
 	${ScrollableMixin}
 	height: calc(100% - 50px);
@@ -46,7 +28,7 @@ const ActionDefinitionPicker: React.FC<ActionDefinitionPickerProps> = ({
 	onClose
 }) => {
 	const { data: actionDefinitions, isFetching } = useQuery({
-		queryKey: [QUERYKEY_ACTIONDEFINITION_GETALL],
+		queryKey: definitionKeys.list(),
 		queryFn: ({ signal }) => actionDefinitionGetAll(signal)
 	});
 	const theme = useTheme();
@@ -84,10 +66,10 @@ const ActionDefinitionPicker: React.FC<ActionDefinitionPickerProps> = ({
 					}}
 				>
 					<div style={{ flexGrow: 1, fontSize: '30px' }}>Pick an action to create</div>
-					Search
 					<Input
+						prefix={<MdSearch />}
 						value={searchPhrase}
-						placeholder="Enter a phrase to search"
+						placeholder="Search"
 						style={{ width: '250px', fontSize: '18px', marginLeft: '10px' }}
 						onChange={(text) => setSearchPhrase(text.target.value)}
 					/>

@@ -3,14 +3,14 @@ using SuperBotManagerBackend.DB.Repositories;
 
 namespace SuperBotManagerBackend.BotDefinitions
 {
-    [ActionDefinition]
-    public class IntercityBuyTicketActionDefinition
+    [ActionsDefinitionProvider]
+    public class IntercityActionsProvider
     {
-        public static ActionDefinition ActionDefinition { get; } = new ActionDefinition()
+        public static ActionDefinition BuyTicket { get; } = new ActionDefinition()
         {
-            ActionDefinitionName = "IntercityBuyTicket",
+            ActionDefinitionName = "Intercity - buy ticket",
             ActionDefinitionDescription = "Buy ticket for intercity",
-            ActionDefinitionIcon = "intercity.jpg",
+            ActionDefinitionIcon = "/intercity.jpg",
             ActionDataSchema = new ActionDefinitionSchema()
             {
                 InputSchema = new List<FieldInfo>()
@@ -37,7 +37,8 @@ namespace SuperBotManagerBackend.BotDefinitions
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 4), DateTimeKind.Utc),
-            ModifiedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 4), DateTimeKind.Utc)
+            ModifiedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 4), DateTimeKind.Utc),
+            PreserveExecutedInputs = true
         };
     }
 }

@@ -1,14 +1,22 @@
-import LogoImageSrc from 'assets/logo.svg?url';
+import LogoImageSvg from 'assets/logo.svg?raw';
 import TopMenu from 'components/TopMenu/TopMenu';
 import { CSSProperties, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
+
 const Title = styled.h1`
 	text-align: center;
 	font-weight: 400;
-	font-size: 32px;
+	font-size: 28px;
 	pointer-events: none;
 	user-select: none;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	color: ${(a) => a.theme.textColor};
+	text-decoration: none !important;
 `;
 
 interface MainTemplatePageProps {
@@ -28,7 +36,7 @@ const MenuRow = styled.div`
 	flex-direction: row;
 	align-items: center;
 	padding: 16px;
-	background-color: ${(props) => props.theme.secondaryColor};
+	background-color: ${(props) => props.theme.secondaryBgColor};
 	width: 100%;
 `;
 const MainTemplatePage = ({ children, style }: MainTemplatePageProps) => {
@@ -37,12 +45,19 @@ const MainTemplatePage = ({ children, style }: MainTemplatePageProps) => {
 	return (
 		<Layout>
 			<MenuRow>
-				<img
-					height={40}
-					style={{ marginRight: '5px', filter: theme.isDarkMode ? 'invert(0.99)' : undefined }}
-					src={LogoImageSrc}
-				></img>
-				<Title>{t('App title')}</Title>
+				<Link to="/" style={{ textDecoration: 'none' }}>
+					<Title>
+						<div
+							style={{
+								marginRight: '3px',
+								color: theme.primaryColor
+							}}
+							dangerouslySetInnerHTML={{ __html: LogoImageSvg }}
+						></div>
+
+						{t('App title')}
+					</Title>
+				</Link>
 				<TopMenu />
 			</MenuRow>
 

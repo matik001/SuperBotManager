@@ -3,14 +3,14 @@ using SuperBotManagerBackend.DB.Repositories;
 
 namespace SuperBotManagerBackend.BotDefinitions
 {
-    [ActionDefinition]
-    public class SignUpStorytelActionDefinition
+    [ActionsDefinitionProvider]
+    public class StorytelActionsProvider
     {
-        public static ActionDefinition ActionDefinition { get; } = new ActionDefinition()
+        public static ActionDefinition SignUp { get; } = new ActionDefinition()
         {
-            ActionDefinitionName = "SignUpStorytel",
+            ActionDefinitionName = "Storytel - sign up",
             ActionDefinitionDescription = "Create an account in storytel",
-            ActionDefinitionIcon = "storytel.png",
+            ActionDefinitionIcon = "/storytel.png",
             ActionDataSchema = new ActionDefinitionSchema()
             {
                 InputSchema = new List<FieldInfo>()
@@ -28,7 +28,8 @@ namespace SuperBotManagerBackend.BotDefinitions
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 3), DateTimeKind.Utc),
-            ModifiedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 4), DateTimeKind.Utc)
+            ModifiedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 4), DateTimeKind.Utc),
+            PreserveExecutedInputs = false,
         };
     }
 }

@@ -1,10 +1,10 @@
-import ActionExecutorsList from 'components/ActionExecutor/ActionExecutorsList/ActionExecutorsList';
+import ActionsExecutorsList from 'components/ActionExecutor/ActionExecutorsList/ActionExecutorsList';
 import MainTemplatePage from './templates/MainTemplatePage';
 
 const ActionExecutorsPage = () => {
 	return (
 		<MainTemplatePage>
-			<ActionExecutorsList />
+			<ActionsExecutorsList />
 		</MainTemplatePage>
 	);
 };

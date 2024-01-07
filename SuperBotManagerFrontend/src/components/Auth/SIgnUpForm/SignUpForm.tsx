@@ -11,7 +11,7 @@ interface SignUpFormProps {}
 
 const SignupPanel = styled.div`
 	padding: 10px 60px 30px 60px;
-	background-color: ${(p) => p.theme.secondaryColor};
+	background-color: ${(p) => p.theme.secondaryBgColor};
 	width: 600px;
 	margin: 100px auto;
 	max-width: 90%;

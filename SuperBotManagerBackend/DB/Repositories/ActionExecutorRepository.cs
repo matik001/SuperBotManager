@@ -28,6 +28,9 @@ namespace SuperBotManagerBackend.DB.Repositories
 
         public ActionExecutorSchema ActionData { get; set; }
 
+        public bool PreserveExecutedInputs { get; set; }
+        public bool IsValid { get; set; } /// all inputs are filled correctly
+
         [ForeignKey("ActionDefinition")]
         public int ActionDefinitionId { get; set; }
         public virtual ActionDefinition ActionDefinition{ get; set; }
@@ -41,17 +44,45 @@ namespace SuperBotManagerBackend.DB.Repositories
         public virtual ActionExecutor ActionExecutorOnFinish { get; set; }
 
 
+        public static bool CheckIfValid(ActionExecutor actionExecutor)
+        {
+            var actionDefinition = actionExecutor.ActionDefinition;
+            var actionData = actionExecutor.ActionData;
+            if (actionDefinition == null || actionData == null)
+                return false;
+            if (actionDefinition.ActionDataSchema.InputSchema.Count == 0)
+                return false;
+            foreach (var inputSchema in actionDefinition.ActionDataSchema.InputSchema)
+            {
+                var values = actionData.Inputs.Select(a => a.ContainsKey(inputSchema.Name) ? a[inputSchema.Name] : null);
+                if(!inputSchema.IsOptional && values.Any(a => string.IsNullOrEmpty(a)))
+                    return false;                    
+            }
+            return true;    
+        }
+        public void UpdateIsValid()
+        {
+            if(this.ActionDefinition == null)
+                throw new Exception("ActionDefinition is null");
+            this.IsValid = ActionExecutor.CheckIfValid(this);
+        }
+
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
     public interface IActionExecutorRepository : IGenericRepository<ActionExecutor>
     {
-
+        Task LoadDefinition(ActionExecutor actionExecutor);
     }
     public class ActionExecutorRepository : GenericRepository<ActionExecutor>, IActionExecutorRepository
     {
         public ActionExecutorRepository(AppDBContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task LoadDefinition(ActionExecutor actionExecutor)
+        {
+            await this._dbContext.Entry(actionExecutor).Reference(a => a.ActionDefinition).LoadAsync();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SuperBotManagerBackend.ActionExecutors
 {
-    public class ActionDefinitionAttribute : Attribute
+    public class ActionsDefinitionProviderAttribute : Attribute
     {
     }
 }

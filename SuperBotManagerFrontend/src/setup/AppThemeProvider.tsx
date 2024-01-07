@@ -17,10 +17,6 @@ body, html, #root {
   overflow-x: hidden;
 
 }
-h1{
-	color: ${(args) => args.theme.primaryColor};
-
-}
 
 *{
 	margin: 0;
@@ -36,7 +32,7 @@ input:-webkit-autofill:active{
     -webkit-background-clip: text;
 	-webkit-text-fill-color: ${(p) => p.theme.textColor} !important;
     transition: background-color 5000s ease-in-out 0s;
-    box-shadow: inset 0 0 20px 20px ${(p) => p.theme.secondaryColor};
+    box-shadow: inset 0 0 20px 20px ${(p) => p.theme.secondaryBgColor};
 }
 *{
 	/* font-weight: 100; */
@@ -44,41 +40,54 @@ input:-webkit-autofill:active{
 `;
 export interface AppTheme {
 	primaryColor: string;
-	secondaryColor: string;
+	bgColor: string;
+	secondaryBgColor: string;
+	textColor: string;
+
+	successColor: string;
+	warningColor: string;
+	errorColor: string;
+
 	bgColor2: string;
 	bgColor3: string;
-	bgColor: string;
-	textColor: string;
-	dangerColor: string;
+
 	isDarkMode: boolean;
 }
 declare module 'styled-components' {
 	// eslint-disable-next-line @typescript-eslint/no-empty-interface
 	export interface DefaultTheme extends AppTheme {}
 }
+
+export const themeDark: AppTheme = {
+	primaryColor: '#FA8616',
+	// secondaryBgColor: 'rgba(255, 255, 255, 0.12)',
+	secondaryBgColor: '#262421',
+
+	bgColor2: darken(0.05, '#262421'),
+	bgColor3: darken(0.08, '#262421'),
+	textColor: 'white',
+	bgColor: '#161513',
+	errorColor: '#FF4D4F',
+	successColor: '#52c41a',
+	warningColor: '#FAAD14',
+	isDarkMode: true
+};
+export const themeLight: AppTheme = {
+	primaryColor: '#FA8616',
+	secondaryBgColor: 'white',
+	bgColor2: darken(0.05, '#ecebe9'),
+	bgColor3: darken(0.08, '#ecebe9'),
+	bgColor: '#ecebe9',
+	textColor: 'black',
+	errorColor: '#FF4D4F',
+	successColor: '#52c41a',
+	warningColor: '#FAAD14',
+	isDarkMode: false
+};
+
 const AppThemeProvider: React.FC<AppThemeProviderProps> = ({ children }) => {
 	const { isDarkMode } = useDarkMode(true);
 
-	const themeDark: AppTheme = {
-		primaryColor: '#c8923b',
-		secondaryColor: '#262421',
-		bgColor2: darken(0.05, '#262421'),
-		bgColor3: darken(0.08, '#262421'),
-		textColor: 'white',
-		bgColor: '#161513',
-		dangerColor: '#e13f3a',
-		isDarkMode: true
-	};
-	const themeLight: AppTheme = {
-		primaryColor: '#c8923b',
-		secondaryColor: 'white',
-		bgColor2: darken(0.05, '#ecebe9'),
-		bgColor3: darken(0.08, '#ecebe9'),
-		bgColor: '#ecebe9',
-		textColor: 'black',
-		dangerColor: '#e13f3a',
-		isDarkMode: false
-	};
 	const theme = isDarkMode ? themeDark : themeLight;
 	const { defaultAlgorithm, darkAlgorithm } = antdTheme;
 
@@ -90,13 +99,19 @@ const AppThemeProvider: React.FC<AppThemeProviderProps> = ({ children }) => {
 						? {
 								token: {
 									colorPrimary: theme.primaryColor,
-									colorBgBase: theme.bgColor
+									colorText: theme.textColor,
+									colorBgBase: theme.bgColor,
+
+									colorError: theme.errorColor,
+									colorWarning: theme.warningColor,
+									colorSuccess: theme.successColor
 								},
 								algorithm: darkAlgorithm
 							}
 						: {
 								token: {
-									colorPrimary: theme.primaryColor
+									colorPrimary: theme.primaryColor,
+									colorText: theme.textColor
 								},
 								algorithm: defaultAlgorithm
 							}

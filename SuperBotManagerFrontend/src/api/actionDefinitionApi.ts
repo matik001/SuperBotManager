@@ -1,6 +1,6 @@
 import { appAxios } from './apiConfig';
 
-type FieldType = 'String' | 'Number' | 'DateTime';
+export type FieldType = 'String' | 'Number' | 'Date' | 'DateTime' | 'Boolean' | 'Json' | 'Set';
 export interface SetOption {
 	display: string;
 	value: string;
@@ -8,6 +8,7 @@ export interface SetOption {
 export interface FieldInfo {
 	name: string;
 	description: string;
+	isOptional: boolean;
 	type: FieldType;
 	setOptions?: SetOption[];
 }
@@ -20,14 +21,27 @@ export interface ActionDefinitionDTO {
 	actionDefinitionName: string;
 	actionDefinitionDescription: string;
 	actionDefinitionIcon: string;
+	preserveExecutedInputs: boolean;
+
 	actionDataSchema: ActionDefinitionSchema;
 	createdDate: Date;
 	modifiedDate: Date;
 }
 
-export const QUERYKEY_ACTIONDEFINITION_GETALL = 'QUERYKEY_ACTIONDEFINITION_GETALL';
+export const definitionKeys = {
+	prefix: ['definition'] as const,
+	list: () => [...definitionKeys.prefix, 'list'] as const,
+	one: (id: number) => [...definitionKeys.prefix, 'one', id] as const
+};
 export const actionDefinitionGetAll = async (signal: AbortSignal) => {
 	const res = await appAxios.get<ActionDefinitionDTO[]>('/v1/ActionDefinition', {
+		signal: signal
+	});
+	return res.data;
+};
+
+export const actionDefinitionGetOne = async (id: number, signal: AbortSignal) => {
+	const res = await appAxios.get<ActionDefinitionDTO>(`/v1/ActionDefinition/${id}`, {
 		signal: signal
 	});
 	return res.data;

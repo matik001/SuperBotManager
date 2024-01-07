@@ -82,15 +82,7 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 				</>
 			)}
 
-			<Button
-				style={{ marginLeft: 'auto' }}
-				type="primary"
-				ghost
-				// ghost={location.pathname == '/profile' ? false : true}
-				onClick={() => navigate('/profile')}
-			>
-				{nickname}
-			</Button>
+			<div style={{ marginLeft: 'auto' }}></div>
 			<Button
 				type="text"
 				onClick={() => {

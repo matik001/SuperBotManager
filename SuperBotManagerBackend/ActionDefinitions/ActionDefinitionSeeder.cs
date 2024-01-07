@@ -12,12 +12,16 @@ namespace SuperBotManagerBackend.ActionDefinitions
     {
         public static void Seed(EntityTypeBuilder<ActionDefinition> builder)
         {
-            var types = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsDefined(typeof(ActionDefinitionAttribute)));
-            var actionDefinitions = types.Select(a =>
+            var types = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsDefined(typeof(ActionsDefinitionProviderAttribute)));
+            var actionDefinitions = types.SelectMany(provider =>
             {
-                var action = a.GetProperty("ActionDefinition", BindingFlags.Static | BindingFlags.Public).GetValue(null, null) as ActionDefinition;
-                action.Id = action.ActionDefinitionName.GetHashCode();
-                return action;
+                var properties = provider.GetProperties().Where(p => p.PropertyType == typeof(ActionDefinition));
+                return properties.Select(p =>
+                {
+                    var action = p.GetValue(null, null) as ActionDefinition;
+                    action.Id = action.ActionDefinitionName.GetHashCode();
+                    return action;
+                });
             });
             builder.HasData(actionDefinitions);
         }

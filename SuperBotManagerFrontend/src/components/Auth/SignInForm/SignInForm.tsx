@@ -1,4 +1,5 @@
-import { Button, Spin } from 'antd';
+import { Button } from 'antd';
+import Spinner from 'components/UI/Spinners/Spinner';
 import ValidatedInput from 'components/UI/ValidatedInput/ValidatedInput';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,10 +12,11 @@ interface SignInFormProps {}
 
 const LoginPanel = styled.div`
 	padding: 10px 60px 30px 60px;
-	background-color: ${(p) => p.theme.secondaryColor};
+	background-color: ${(p) => p.theme.secondaryBgColor};
 	width: 600px;
 	margin: 100px auto;
 	max-width: 90%;
+	position: relative;
 `;
 const Title = styled.div`
 	font-size: 36px;
@@ -46,40 +48,39 @@ const SignInForm: React.FC<SignInFormProps> = ({}) => {
 	const theme = useTheme();
 	return (
 		<LoginPanel>
-			<Spin spinning={isLoading}>
-				<Title>{t('Sign in')}</Title>
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<div style={{ marginBottom: '9px' }}>{t('User name')}: </div>
-					<ValidatedInput
-						control={control}
-						name="Username"
-						style={{ marginBottom: '24px' }}
-						rules={{}}
-					/>
+			{isLoading && <Spinner />}
+			<Title>{t('Sign in')}</Title>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div style={{ marginBottom: '9px' }}>{t('User name')}: </div>
+				<ValidatedInput
+					control={control}
+					name="Username"
+					style={{ marginBottom: '24px' }}
+					rules={{}}
+				/>
 
-					<div style={{ marginBottom: '9px' }}>{t('Password')}: </div>
-					<ValidatedInput
-						control={control}
-						name="Password"
-						style={{ marginBottom: '0px' }}
-						rules={{}}
-						isPassword
-					/>
-					{authError && (
-						<div style={{ color: theme.dangerColor, marginTop: '10px' }}>
-							{t('Wrong username or password')}
-						</div>
-					)}
-					<div style={{ marginTop: '24px' }}>
-						<Button type="primary" htmlType="submit">
-							{t('Sign in')}
-						</Button>
-						<Button type="link" onClick={() => navigate('/signup')}>
-							{t('Dont have account? Sign up.')}
-						</Button>
+				<div style={{ marginBottom: '9px' }}>{t('Password')}: </div>
+				<ValidatedInput
+					control={control}
+					name="Password"
+					style={{ marginBottom: '0px' }}
+					rules={{}}
+					isPassword
+				/>
+				{authError && (
+					<div style={{ color: theme.errorColor, marginTop: '10px' }}>
+						{t('Wrong username or password')}
 					</div>
-				</form>
-			</Spin>
+				)}
+				<div style={{ marginTop: '24px' }}>
+					<Button type="primary" htmlType="submit">
+						{t('Sign in')}
+					</Button>
+					<Button type="link" onClick={() => navigate('/signup')}>
+						{t('Dont have account? Sign up.')}
+					</Button>
+				</div>
+			</form>
 		</LoginPanel>
 	);
 };

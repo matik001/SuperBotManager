@@ -17,7 +17,7 @@ const ItemContainer = styled.div`
 	user-select: none;
 	transition: all 0.3s;
 	border-radius: 8px;
-	background-color: ${(a) => a.theme.secondaryColor};
+	background-color: ${(a) => a.theme.secondaryBgColor};
 	&:hover {
 		background-color: ${(a) => a.theme.bgColor2};
 	}

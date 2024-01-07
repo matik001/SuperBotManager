@@ -17,10 +17,11 @@ const init = async () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
-				refetchOnReconnect: false,
-				refetchOnWindowFocus: false,
+				refetchOnReconnect: true,
+				refetchOnWindowFocus: true,
 				refetchInterval: false,
-				refetchOnMount: false,
+				refetchOnMount: true,
+				staleTime: 1000 * 60 * 5,
 				retry: 0
 			}
 		}

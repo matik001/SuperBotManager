@@ -8,6 +8,7 @@ using SuperBotManagerBackend.DB;
 using SuperBotManagerBackend.DB.Repositories;
 using SuperBotManagerBackend.DTOs;
 using SuperBotManagerBackend.Services;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -42,8 +43,8 @@ namespace SuperBotManagerBackend.Controllers.v1
         public async Task<ActionExecutorDTO> Get(int id)
         {
 
-            var actionExecutor = await uow.ActionExecutorRepository.GetById(id);
-            var dto = mapper.Map<ActionExecutorDTO>(actionExecutor);
+            var actionExecutor = await uow.ActionExecutorRepository.GetById(id, a=>a.Include(x=>x.ActionDefinition));
+            var dto = mapper.Map<ActionExecutorExtendedDTO>(actionExecutor);
             return dto;
         }
 
@@ -54,20 +55,28 @@ namespace SuperBotManagerBackend.Controllers.v1
             var actionExecutor = mapper.Map<ActionExecutor>(dto);
             if(actionExecutor == null)
                 throw ServiceUtils.BadRequest("Bad ActionExecutorCreateDTO format");
+
+            await uow.ActionExecutorRepository.LoadDefinition(actionExecutor);
+            actionExecutor.UpdateIsValid();
+
             await uow.ActionExecutorRepository.Create(actionExecutor);
             await uow.SaveChangesAsync();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task Put(int id, [FromBody] ActionExecutorCreateDTO dto)
         {
             var action = await uow.ActionExecutorRepository.GetById(id);
             mapper.Map(dto, action);
+
+            await uow.ActionExecutorRepository.LoadDefinition(action);
+            action.UpdateIsValid();
+
             await uow.ActionExecutorRepository.Update(action);
             await uow.SaveChangesAsync();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
             await uow.ActionExecutorRepository.Delete(id);

@@ -1,9 +1,15 @@
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import i18n from 'i18next';
 import common_en from 'locale/en/common.json';
 import common_pl from 'locale/pl/common.json';
 import LoadingPage from 'pages/LoadingPage';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { initReactI18next } from 'react-i18next';
+import { initReactI18next, useTranslation } from 'react-i18next';
+
+import('dayjs/locale/en');
+import('dayjs/locale/pl');
 interface AppTranslationsProviderProps {
 	children: ReactNode;
 }
@@ -33,6 +39,12 @@ const AppTranslationsProvider: React.FC<AppTranslationsProviderProps> = ({ child
 	useEffect(() => {
 		setIsLoading(false);
 	}, []);
+	const { t, i18n } = useTranslation();
+	useEffect(() => {
+		dayjs.locale(i18n.language);
+		dayjs.extend(relativeTime);
+		dayjs.extend(localizedFormat);
+	}, [i18n.language]);
 
 	/// todo: dodac pobieranie tlumaczen z backendu tylko potrzebnych, zamiast tak jak teraz wszystkich
 	/// gdy projekt sie bardzo rozwinie i będzie wiecej plikow niz tylko common.json bedzie to mialo sens

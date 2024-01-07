@@ -22,25 +22,21 @@ export interface RefreshTokenRequstDTO {
 	refreshToken: string;
 }
 
-export const QUERYKEY_SIGNUP = 'QUERYKEY_SIGNUP';
 export const signup = async (requestData: UserSignUpRequestDTO) => {
 	const res = await appAxios.post<UserTokensDTO>('/v1/Auth/signup', requestData);
 	return res.data;
 };
 
-export const QUERYKEY_SIGNIN = 'QUERYKEY_SIGNIN';
 export const signin = async (requestData: UserSignInRequestDTO) => {
 	const res = await appAxios.post<UserTokensDTO>('/v1/Auth/signin', requestData);
 	return res.data;
 };
 
-export const QUERYKEY_REFRESHTOKEN = 'QUERYKEY_REFRESHTOKEN';
 export const refreshToken = async (requestData: RefreshTokenRequstDTO) => {
 	const res = await appAxios.post<UserTokensDTO>('/v1/Auth/refresh-token', requestData);
 	return res.data;
 };
 
-export const QUERYKEY_LOGOUT = 'QUERYKEY_LOGOUT';
 export const logout = async () => {
 	const res = await appAxios.post<UserTokensDTO>('/v1/Auth/logout', {});
 	return res.data;

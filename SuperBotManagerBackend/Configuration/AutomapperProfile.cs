@@ -15,6 +15,7 @@ namespace SuperBotManagerBackend.Configuration
             CreateMap<ActionDefinition, ActionDefinitionDTO>().ReverseMap();
             CreateMap<ActionExecutor, ActionExecutorDTO>().ReverseMap();
             CreateMap<ActionExecutor, ActionExecutorCreateDTO>().ReverseMap();
+            CreateMap<ActionExecutor, ActionExecutorExtendedDTO>().ReverseMap();
             CreateMap<Action, ActionDTO>().ReverseMap();
             CreateMap<Action, ActionCreateDTO>().ReverseMap();
         }

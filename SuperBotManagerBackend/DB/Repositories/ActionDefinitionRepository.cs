@@ -38,13 +38,15 @@ namespace SuperBotManagerBackend.DB.Repositories
         public string Name { get; set; }
         public string Description { get; set; }
         public FieldType Type { get; set; }
+        public bool IsOptional { get; set; } = false;
         public List<SetOption>? SetOptions{ get; set; } = null;
 
-        public FieldInfo(string name, FieldType type, string description = "")
+        public FieldInfo(string name, FieldType type, string description = "", bool isOptional = false)
         {
             Name = name;
             Type = type;
             Description = description;
+            IsOptional = isOptional;
         }
     }
     public class ActionDefinitionSchema
@@ -63,6 +65,7 @@ namespace SuperBotManagerBackend.DB.Repositories
         public string ActionDefinitionDescription { get; set; }
         public string ActionDefinitionIcon { get; set; } /// can be relative or absolute url
         public ActionDefinitionSchema ActionDataSchema { get; set; }
+        public bool PreserveExecutedInputs { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

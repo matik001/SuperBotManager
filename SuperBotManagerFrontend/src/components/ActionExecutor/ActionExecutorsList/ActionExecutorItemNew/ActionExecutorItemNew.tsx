@@ -12,14 +12,16 @@ const Container = styled.div`
 	user-select: none;
 	cursor: pointer;
 	width: 200px;
-	height: 280px;
-	background-color: ${(p) => p.theme.secondaryColor};
+	height: 200px;
+	background-color: ${(p) => p.theme.secondaryBgColor};
 	opacity: 0.4;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	transition: all 0.3s;
+	border-radius: 14px;
+
 	&:hover {
 		opacity: 1;
 	}
