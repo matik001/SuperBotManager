@@ -47,7 +47,7 @@ namespace SuperBotManagerBase.DB.Repositories
             var secretFields = definitionSchema.InputSchema.Where(a => a.Type == FieldType.Secret);
 
             
-            for(int i = 0; i< Inputs.Count; i++)
+            for(int i = 0; i< Math.Min(Inputs.Count, original.Inputs.Count); i++)
             {
                 var input = Inputs[i];
                 foreach(var secretField in secretFields)
@@ -57,6 +57,7 @@ namespace SuperBotManagerBase.DB.Repositories
                         var plainTextValue = input[secretField.Name];
                         if(plainTextValue != DEFAULT_SECRET_MASK)
                             continue;
+                        
                         input[secretField.Name] = original.Inputs[i][secretField.Name];
                     }
                 }

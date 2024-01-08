@@ -9,6 +9,7 @@ import { IoDuplicate } from 'react-icons/io5';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useCounter } from 'usehooks-ts';
+import { duplicateInput } from 'utils/executorUtils';
 import InputEditor from './InputEditor/InputEditor';
 
 export interface InputsEditorProps {
@@ -42,7 +43,8 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 	};
 	const onDuplicateInput = useCallback(
 		(idx: number) => {
-			const inputCopy = JSON.parse(JSON.stringify(inputs[idx])) as ExecutorInput;
+			const inputCopy = duplicateInput(inputs[idx], inputSchema);
+
 			const newId = nextInputId;
 			incNextInputId();
 
@@ -55,7 +57,7 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 			setInputIds(newIds);
 			onChangeInputs(newInputs);
 		},
-		[incNextInputId, inputs, inputsIds, nextInputId, onChangeInputs]
+		[incNextInputId, inputSchema, inputs, inputsIds, nextInputId, onChangeInputs]
 	);
 
 	/// pairs:  (inputId, list of invalid inputs names)

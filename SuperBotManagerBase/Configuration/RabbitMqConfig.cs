@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
+using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.Services;
+using System.Runtime.Serialization;
 using System.Text;
 namespace SuperBotManagerBase.Configuration
 {
@@ -32,7 +34,7 @@ namespace SuperBotManagerBase.Configuration
                     Password = RabbitMqConfig.Password,
                     VirtualHost = RabbitMqConfig.VirtualHost,
 
-                    //DispatchConsumersAsync = true,
+                    DispatchConsumersAsync = true,
                     AutomaticRecoveryEnabled = true,
 
                     //ConsumerDispatchConcurrency = settings.RabbitMqConsumerConcurrency.GetValueOrDefault(),
@@ -40,7 +42,28 @@ namespace SuperBotManagerBase.Configuration
 
                 return factory;
             });
-            services.AddScoped<IMessageProducer, MessageProducer>();
+            services.AddScoped<IRabbitmqConnectionProvider, RabbitmqConnectionProvider>();
+            services.AddScoped<IRabbitmqChannelProvider, RabbitmqChannelProvider>();
+            services.AddScoped(typeof(IRabbitmqProducer<>), typeof(RabbitmqProducer<>));
+            services.AddScoped<IActionProducer, ActionProducer>();
+        }
+    }
+    public class QueueingException : Exception
+    {
+        public QueueingException()
+        {
+        }
+
+        public QueueingException(string? message) : base(message)
+        {
+        }
+
+        public QueueingException(string? message, Exception? innerException) : base(message, innerException)
+        {
+        }
+
+        protected QueueingException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

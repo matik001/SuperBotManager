@@ -63,6 +63,7 @@ namespace SuperBotManagerBase.DB.Repositories
         public int Id { get; set; }
 
         public string ActionDefinitionName { get; set; }
+        public string ActionDefinitionQueueName { get; set; } /// not present in the frontend (not in dto)
         public string ActionDefinitionDescription { get; set; }
         public string ActionDefinitionIcon { get; set; } /// can be relative or absolute url
         public ActionDefinitionSchema ActionDataSchema { get; set; }

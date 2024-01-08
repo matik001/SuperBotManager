@@ -6,9 +6,11 @@ namespace SuperBotManagerBase.BotDefinitions
     [ActionsDefinitionProvider]
     public class StorytelActionsProvider
     {
+        public static string SignUpQueueName { get; } = "storytel-sign-up";
         public static ActionDefinition SignUp { get; } = new ActionDefinition()
         {
             ActionDefinitionName = "Storytel - sign up",
+            ActionDefinitionQueueName = SignUpQueueName,
             ActionDefinitionDescription = "Create an account in storytel",
             ActionDefinitionIcon = "/storytel.png",
             ActionDataSchema = new ActionDefinitionSchema()

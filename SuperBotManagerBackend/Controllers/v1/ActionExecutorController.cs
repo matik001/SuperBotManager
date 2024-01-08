@@ -8,6 +8,7 @@ using SuperBotManagerBackend.Services;
 using SuperBotManagerBase.Configuration;
 using SuperBotManagerBase.DB;
 using SuperBotManagerBase.DB.Repositories;
+using SuperBotManagerBase.RabbitMq.Concreate;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -22,13 +23,13 @@ namespace SuperBotManagerBackend.Controllers.v1
     {
         private readonly IAppUnitOfWork uow;
         private readonly IMapper mapper;
-        private readonly IAuthService service;
+        private readonly IActionProducer actionProducer;
 
-        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IAuthService service)
+        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IActionProducer actionProducer)
         {
             this.uow = uow;
             this.mapper = mapper;
-            this.service = service;
+            this.actionProducer = actionProducer;
         }
 
         [HttpGet]
@@ -132,6 +133,13 @@ namespace SuperBotManagerBackend.Controllers.v1
             executor.LastRunDate = DateTime.UtcNow;
             await uow.ActionExecutorRepository.Update(executor);
             await uow.SaveChangesAsync();
+
+            foreach(var action in newActions)
+            {
+                action.ActionExecutor = executor;
+                actionProducer.SendToExecute(action);
+            }
+
         }
 
     }

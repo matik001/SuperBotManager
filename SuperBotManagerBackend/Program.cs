@@ -22,7 +22,7 @@ services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddDbContext<AppDBContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString);
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SuperBotManagerBackend"));
 });
 services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 services.AddScoped<IAuthService, AuthService>();

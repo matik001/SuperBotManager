@@ -9,11 +9,11 @@ using SuperBotManagerBase.DB;
 
 #nullable disable
 
-namespace SuperBotManagerBase.Migrations
+namespace SuperBotManagerBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240107212339_AddedSecretTable")]
-    partial class AddedSecretTable
+    [Migration("20240108171303_AddedQueueNameAndClearMigrations")]
+    partial class AddedQueueNameAndClearMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("RoleUser");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Action", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.Action", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("action");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionDefinition", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionDefinition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,6 +98,10 @@ namespace SuperBotManagerBase.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ActionDefinitionQueueName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -114,29 +118,31 @@ namespace SuperBotManagerBase.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1866972961,
+                            Id = -2067914952,
                             ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Trip date\",\"Description\":\"What day do You want ticket for?\",\"Type\":3,\"IsOptional\":false},{\"Name\":\"Ticket owner\",\"Description\":\"Owner of the ticket (real Firstname and Lastname)\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"From\",\"Description\":\"First station where you begin trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"To\",\"Description\":\"Last station - end of trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Login\",\"Description\":\"Login for intercity\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for intercity\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Discount\",\"Description\":\"Pick your discount\",\"Type\":7,\"IsOptional\":false,\"SetOptions\":[{\"Display\":\"None\",\"Value\":\"None\"},{\"Display\":\"Student\",\"Value\":\"Student\"}]}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if ticket was ordered. You have 10 minutes to pay for it.\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}",
                             ActionDefinitionDescription = "Buy ticket for intercity",
                             ActionDefinitionIcon = "/intercity.jpg",
                             ActionDefinitionName = "Intercity - buy ticket",
+                            ActionDefinitionQueueName = "intercity-buy-ticket",
                             CreatedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc),
                             ModifiedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc),
                             PreserveExecutedInputs = true
                         },
                         new
                         {
-                            Id = 784263069,
+                            Id = 775138330,
                             ActionDataSchema = "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Card number\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Card CCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Card expiration\",\"Description\":\"Card expiration date (only year and month matter)\",\"Type\":4,\"IsOptional\":false}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if account was created\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}",
                             ActionDefinitionDescription = "Create an account in storytel",
                             ActionDefinitionIcon = "/storytel.png",
                             ActionDefinitionName = "Storytel - sign up",
+                            ActionDefinitionQueueName = "storytel-sign-up",
                             CreatedDate = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
                             ModifiedDate = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc),
                             PreserveExecutedInputs = false
                         });
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionExecutor", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionExecutor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,7 +194,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("actionexecutor");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RefreshToken", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -223,7 +229,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("refreshtoken");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RevokedToken", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.RevokedToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,7 +261,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("revokedtokens");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Role", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -295,7 +301,7 @@ namespace SuperBotManagerBase.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Secret", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.Secret", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -320,7 +326,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("secret");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.User", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -348,7 +354,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("user");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.UserPassword", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.UserPassword", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -380,7 +386,7 @@ namespace SuperBotManagerBase.Migrations
                     b.ToTable("userpassword");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.UserRole", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.UserRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -412,37 +418,37 @@ namespace SuperBotManagerBase.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.Role", null)
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.User", null)
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Action", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.Action", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionExecutor", "ActionExecutor")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.ActionExecutor", "ActionExecutor")
                         .WithMany()
                         .HasForeignKey("ActionExecutorId");
 
                     b.Navigation("ActionExecutor");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.ActionExecutor", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionExecutor", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionDefinition", "ActionDefinition")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.ActionDefinition", "ActionDefinition")
                         .WithMany()
                         .HasForeignKey("ActionDefinitionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.ActionExecutor", "ActionExecutorOnFinish")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.ActionExecutor", "ActionExecutorOnFinish")
                         .WithMany()
                         .HasForeignKey("ActionExecutorOnFinishId");
 
@@ -451,9 +457,9 @@ namespace SuperBotManagerBase.Migrations
                     b.Navigation("ActionExecutorOnFinish");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RefreshToken", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.RefreshToken", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.User", "User")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -462,9 +468,9 @@ namespace SuperBotManagerBase.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.RevokedToken", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.RevokedToken", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.User", "User")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", "User")
                         .WithMany("RevokedTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -473,9 +479,9 @@ namespace SuperBotManagerBase.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.UserPassword", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.UserPassword", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.User", "User")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", "User")
                         .WithMany("UserPasswords")
                         .HasForeignKey("PasswordUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -484,15 +490,15 @@ namespace SuperBotManagerBase.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.UserRole", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.UserRole", b =>
                 {
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.Role", "Role")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuperBotManagerBackend.DB.Repositories.User", "User")
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -503,12 +509,12 @@ namespace SuperBotManagerBase.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.Role", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("SuperBotManagerBackend.DB.Repositories.User", b =>
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.User", b =>
                 {
                     b.Navigation("RefreshTokens");
 

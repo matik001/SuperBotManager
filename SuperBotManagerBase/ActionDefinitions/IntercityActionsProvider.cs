@@ -6,9 +6,11 @@ namespace SuperBotManagerBase.BotDefinitions
     [ActionsDefinitionProvider]
     public class IntercityActionsProvider
     {
+        public static string BuyTicketQueueName { get; } = "intercity-buy-ticket";
         public static ActionDefinition BuyTicket { get; } = new ActionDefinition()
         {
             ActionDefinitionName = "Intercity - buy ticket",
+            ActionDefinitionQueueName = BuyTicketQueueName,
             ActionDefinitionDescription = "Buy ticket for intercity",
             ActionDefinitionIcon = "/intercity.jpg",
             ActionDataSchema = new ActionDefinitionSchema()
