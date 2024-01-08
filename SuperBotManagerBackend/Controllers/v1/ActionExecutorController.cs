@@ -3,15 +3,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SuperBotManagerBackend.Configuration;
-using SuperBotManagerBackend.DB;
-using SuperBotManagerBackend.DB.Repositories;
 using SuperBotManagerBackend.DTOs;
 using SuperBotManagerBackend.Services;
+using SuperBotManagerBase.Configuration;
+using SuperBotManagerBase.DB;
+using SuperBotManagerBase.DB.Repositories;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Action = SuperBotManagerBase.DB.Repositories.Action;
 
 namespace SuperBotManagerBackend.Controllers.v1
 {
@@ -33,7 +34,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpGet]
         public IEnumerable<ActionExecutorDTO> Get()
         {
-            var actionDefinitions = uow.ActionExecutorRepository.GetAll().Include(a=>a.ActionDefinition).ToList();
+            var actionDefinitions = uow.ActionExecutorRepository.GetAll().Include(a => a.ActionDefinition).ToList();
             var dtos = mapper.Map<IEnumerable<ActionExecutorExtendedDTO>>(actionDefinitions);
 
             foreach(var dto in dtos)
@@ -47,7 +48,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         public async Task<ActionExecutorDTO> Get(int id)
         {
 
-            var actionExecutor = await uow.ActionExecutorRepository.GetById(id, a=>a.Include(x=>x.ActionDefinition));
+            var actionExecutor = await uow.ActionExecutorRepository.GetById(id, a => a.Include(x => x.ActionDefinition));
             var dto = mapper.Map<ActionExecutorExtendedDTO>(actionExecutor);
             dto.ActionData.MaskSecrets(dto.ActionDefinition.ActionDataSchema);
             return dto;
@@ -59,7 +60,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         {
             var actionExecutor = mapper.Map<ActionExecutor>(dto);
             if(actionExecutor == null)
-                throw ServiceUtils.BadRequest("Bad ActionExecutorCreateDTO format");
+                throw HttpUtilsService.BadRequest("Bad ActionExecutorCreateDTO format");
 
             await uow.ActionExecutorRepository.LoadDefinition(actionExecutor);
             actionExecutor.UpdateIsValid();
@@ -73,7 +74,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody] ActionExecutorCreateDTO dto)
         {
-            var executor = await uow.ActionExecutorRepository.GetById(id, a=>a.Include(x=>x.ActionDefinition));
+            var executor = await uow.ActionExecutorRepository.GetById(id, a => a.Include(x => x.ActionDefinition));
             var originalFromDb = executor.ActionData.DeepClone();
 
             mapper.Map(dto, executor);
@@ -97,6 +98,41 @@ namespace SuperBotManagerBackend.Controllers.v1
             await uow.SaveChangesAsync();
         }
 
+
+        [HttpPost("{id}/execute")]
+        public async Task Execute(int id)
+        {
+            var executor = await uow.ActionExecutorRepository.GetById(id, a => a.Include(x => x.ActionDefinition));
+            var executorData = executor.ActionData.DeepClone();
+            await executorData.DecryptSecrets(executor.ActionDefinition.ActionDataSchema, uow);
+
+            if(!executor.IsValid)
+            {
+                throw HttpUtilsService.BadRequest("Executor is not valid, so cannot be run");
+            }
+            var newActions = executorData.Inputs.Select(input =>
+            {
+                var action = new Action()
+                {
+                    ActionExecutorId = executor.Id,
+                    ActionStatus = ActionStatus.Pending,
+                    ActionData = new ActionSchema()
+                    {
+                        Input = input,
+                        Output = new Dictionary<string, string>()
+                    },
+                };
+
+                return action;
+            }).ToList();
+            foreach(var action in newActions)
+            {
+                await uow.ActionRepository.Create(action);
+            }
+            executor.LastRunDate = DateTime.UtcNow;
+            await uow.ActionExecutorRepository.Update(executor);
+            await uow.SaveChangesAsync();
+        }
 
     }
 }

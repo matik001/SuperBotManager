@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 
 </Project>

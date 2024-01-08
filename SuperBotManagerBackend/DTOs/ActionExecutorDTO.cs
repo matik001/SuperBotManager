@@ -1,5 +1,5 @@
-﻿using SuperBotManagerBackend.DB.Repositories;
-using SuperBotManagerBackend.DB;
+﻿using SuperBotManagerBase.DB.Repositories;
+using SuperBotManagerBase.DB;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,7 +27,7 @@ namespace SuperBotManagerBackend.DTOs
         public DateTime? LastRunDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-    }    
+    }
     public class ActionExecutorExtendedDTO : ActionExecutorDTO
     {
         public ActionDefinitionDTO ActionDefinition { get; set; }

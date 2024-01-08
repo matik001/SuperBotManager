@@ -1,5 +1,5 @@
-﻿using SuperBotManagerBackend.DB.Repositories;
-using SuperBotManagerBackend.DB;
+﻿using SuperBotManagerBase.DB.Repositories;
+using SuperBotManagerBase.DB;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 

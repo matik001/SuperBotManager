@@ -15,8 +15,10 @@ namespace SuperBotManagerBackend.Configuration
         public static void ConfigureExceptionHandler(this IApplicationBuilder app, IConfigurationManager configuration, ILogger logger)
         {
             ReturnStackTrace = configuration.GetValue<bool>("ReturnStackTrace");
-            app.UseExceptionHandler(builder => {
-                builder.Run(async context => {
+            app.UseExceptionHandler(builder =>
+            {
+                builder.Run(async context =>
+                {
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if(contextFeature != null)
                     {

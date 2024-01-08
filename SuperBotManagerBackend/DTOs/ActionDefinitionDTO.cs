@@ -1,11 +1,11 @@
-﻿using SuperBotManagerBackend.DB.Repositories;
-using SuperBotManagerBackend.DB;
+﻿using SuperBotManagerBase.DB.Repositories;
+using SuperBotManagerBase.DB;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace SuperBotManagerBackend.DTOs
 {
-    public class ActionDefinitionDTO 
+    public class ActionDefinitionDTO
     {
         public int Id { get; set; }
         public string ActionDefinitionName { get; set; }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using SuperBotManagerBackend.DB;
+using SuperBotManagerBase.DB;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -36,7 +36,8 @@ namespace SuperBotManagerBackend.Configuration
                 opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options => {
+                .AddJwtBearer(options =>
+                {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -76,14 +77,16 @@ namespace SuperBotManagerBackend.Configuration
                     };
                 });
 
-            services.AddAuthorization(options => {
-                
+            services.AddAuthorization(options =>
+            {
+
                 /// Users must be authenticated to access any endpoint
-                options.DefaultPolicy = new AuthorizationPolicyBuilder(options.DefaultPolicy) 
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(options.DefaultPolicy)
                      .RequireAuthenticatedUser()
                      .Build();
 
-                options.AddPolicy(AuthPolicy.AdminOnly, policy => {
+                options.AddPolicy(AuthPolicy.AdminOnly, policy =>
+                {
                     policy.RequireClaim("Admin", true.ToString());
                 });
             });

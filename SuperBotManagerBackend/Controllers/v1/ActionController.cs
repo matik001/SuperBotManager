@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SuperBotManagerBackend.Configuration;
-using SuperBotManagerBackend.DB;
-using SuperBotManagerBackend.DB.Repositories;
 using SuperBotManagerBackend.DTOs;
 using SuperBotManagerBackend.Services;
+using SuperBotManagerBase.Configuration;
+using SuperBotManagerBase.DB;
+using SuperBotManagerBase.DB.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Action = SuperBotManagerBackend.DB.Repositories.Action;
+using Action = SuperBotManagerBase.DB.Repositories.Action;
 
 namespace SuperBotManagerBackend.Controllers.v1
 {
@@ -53,7 +53,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         {
             var action = mapper.Map<Action>(dto);
             if(action == null)
-                throw ServiceUtils.BadRequest("Bad ActionDTO format");
+                throw HttpUtilsService.BadRequest("Bad ActionDTO format");
             await uow.ActionRepository.Create(action);
             await uow.SaveChangesAsync();
         }

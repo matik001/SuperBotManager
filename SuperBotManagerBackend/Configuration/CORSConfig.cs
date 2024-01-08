@@ -24,13 +24,13 @@ namespace SuperBotManagerBackend.Configuration
             AllowAll = section.GetValue<bool>("AllowAll");
             AllowedOrigins = section.GetSection("AllowedOrigins")
                                     .AsEnumerable()
-                                    .Select(a=>a.Value)
-                                    .Where(a=>!string.IsNullOrEmpty(a))
+                                    .Select(a => a.Value)
+                                    .Where(a => !string.IsNullOrEmpty(a))
                                     .ToArray();
             services.AddCors(options =>
             {
                 options.AddPolicy(CORSPolicy.AllowAll,
-                    p =>p.AllowAnyOrigin()
+                    p => p.AllowAnyOrigin()
                          .AllowAnyMethod()
                          .AllowAnyHeader()
                     );

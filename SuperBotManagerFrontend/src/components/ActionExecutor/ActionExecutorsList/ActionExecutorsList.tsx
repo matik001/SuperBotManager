@@ -4,6 +4,7 @@ import {
 	ActionExecutorDTO,
 	actionExecutorCreate,
 	actionExecutorGetAll,
+	actionExecutorRun,
 	executorKeys
 } from 'api/actionExecutorApi';
 import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
@@ -54,6 +55,16 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 			});
 		}
 	});
+	const runExecutorMutation = useMutation({
+		mutationFn: (id: number) => {
+			return actionExecutorRun(id);
+		},
+		onSuccess: () => {
+			// queryClient.invalidateQueries({
+			// 	queryKey: executorKeys.prefix
+			// });
+		}
+	});
 	const {
 		value: isModalAddOpen,
 		setTrue: openModalAdd,
@@ -78,7 +89,13 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 				/>
 				<ActionExecutorItemNew onClick={openModalAdd} />
 				{actionExecutors?.map((a) => (
-					<ActionExecutorItem key={a.id} actionExecutor={a} onClickedSettings={onClickedSettings} />
+					<ActionExecutorItem
+						key={a.id}
+						actionExecutor={a}
+						onClickedSettings={onClickedSettings}
+						onRun={() => runExecutorMutation.mutate(a.id)}
+						isQueueing={runExecutorMutation.isPending && runExecutorMutation.variables === a.id}
+					/>
 				))}
 			</Container>
 		</>

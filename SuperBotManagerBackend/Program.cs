@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using SuperBotManagerBackend.Configuration;
-using SuperBotManagerBackend.DB;
-//using SuperBotManagerBackend.Hubs;
 using SuperBotManagerBackend.Services;
+using SuperBotManagerBase.Configuration;
+using SuperBotManagerBase.DB;
+//using SuperBotManagerBackend.Hubs;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

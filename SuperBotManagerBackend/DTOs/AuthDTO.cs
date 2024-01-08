@@ -4,8 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SuperBotManagerBackend.DTOs {
-    public class UserSignInRequestDTO {
+namespace SuperBotManagerBackend.DTOs
+{
+    public class UserSignInRequestDTO
+    {
         [Required(ErrorMessage = "Username is required")]
         public string UserName { get; set; }
 
@@ -13,7 +15,8 @@ namespace SuperBotManagerBackend.DTOs {
         public string Password { get; set; }
     }
 
-    public class UserTokensDTO {
+    public class UserTokensDTO
+    {
         public string Token { get; set; }
         public string RefreshToken { get; set; }
         public DateTime TokenExpiration { get; set; }

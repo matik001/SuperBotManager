@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SuperBotManagerBackend.DTOs {
-    public class ErrorDTO {
+namespace SuperBotManagerBackend.DTOs
+{
+    public class ErrorDTO
+    {
         public int StatusCode { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }

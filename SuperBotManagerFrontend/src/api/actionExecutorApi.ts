@@ -63,3 +63,14 @@ export const actionExecutorPut = async (action: ActionExecutorUpdateDTO, signal?
 	});
 	return res.data;
 };
+
+export const actionExecutorRun = async (id: number, signal?: AbortSignal) => {
+	const res = await appAxios.post<undefined>(
+		`/v1/ActionExecutor/${id}/execute`,
+		{},
+		{
+			signal: signal
+		}
+	);
+	return res.data;
+};

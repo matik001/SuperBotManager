@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SuperBotManagerBackend.Configuration;
-using SuperBotManagerBackend.DB;
-using SuperBotManagerBackend.DB.Repositories;
 using SuperBotManagerBackend.DTOs;
+using SuperBotManagerBase.DB;
+using SuperBotManagerBase.DB.Repositories;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -86,18 +86,18 @@ namespace SuperBotManagerBackend.Services
                                               .Include(x => x.Roles));
             if(user == null)
             {
-                throw ServiceUtils.BadRequest("Bad email or password");
+                throw HttpUtilsService.BadRequest("Bad email or password");
             }
             var password = uow.UserRepository.GetCurrentUserPassword(user);
             var isCorrectPass = password != null && BC.Verify(loginReq.Password, password.PasswordHash);
 
             if(!isCorrectPass)
             {
-                throw ServiceUtils.BadRequest("Bad email or password");
+                throw HttpUtilsService.BadRequest("Bad email or password");
             }
 
             var result = await CreateTokens(user);
-            await uow.SaveChangesAsync(); 
+            await uow.SaveChangesAsync();
 
             return result;
         }
@@ -108,7 +108,7 @@ namespace SuperBotManagerBackend.Services
             /// TODO you can check if email exists in one db query
             if(userExists)
             {
-                throw ServiceUtils.BadRequest("User with that name already exists :(");
+                throw HttpUtilsService.BadRequest("User with that name already exists :(");
             }
             var user = new User()
             {
@@ -139,10 +139,10 @@ namespace SuperBotManagerBackend.Services
             var userIdStr = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var userId = int.Parse(userIdStr);
             var tokenGuid = httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Jti).Value;
-            var user = await uow.UserRepository.GetById(userId, a=>a.Include(x=>x.RevokedTokens));
+            var user = await uow.UserRepository.GetById(userId, a => a.Include(x => x.RevokedTokens));
             if(user == null)
             {
-                throw ServiceUtils.BadRequest();
+                throw HttpUtilsService.BadRequest();
             }
             user.RevokedTokens.Add(new RevokedToken()
             {
@@ -182,14 +182,14 @@ namespace SuperBotManagerBackend.Services
             var principal = _getPrincipalFromExpiredToken(refreshToken.Token);
             var userIdStr = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
             var userId = int.Parse(userIdStr);
-            var user = await uow.UserRepository.GetById(userId, a=>a.Include(x=>x.RefreshTokens).Include(x=>x.Roles));
+            var user = await uow.UserRepository.GetById(userId, a => a.Include(x => x.RefreshTokens).Include(x => x.Roles));
             if(user == null)
             {
-                throw ServiceUtils.BadRequest();
+                throw HttpUtilsService.BadRequest();
             }
             if(!user.RefreshTokens.Any(a => a.Token == refreshToken.RefreshToken))
             {
-                throw ServiceUtils.BadRequest("Refresh token is invalid or already expired");
+                throw HttpUtilsService.BadRequest("Refresh token is invalid or already expired");
             }
             var result = await CreateTokens(user, refreshToken.RefreshToken);
             await uow.SaveChangesAsync();

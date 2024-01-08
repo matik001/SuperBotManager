@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using SuperBotManagerBackend.DB.Repositories;
 using SuperBotManagerBackend.DTOs;
-using Action = SuperBotManagerBackend.DB.Repositories.Action;
+using SuperBotManagerBase.DB.Repositories;
+using Action = SuperBotManagerBase.DB.Repositories.Action;
 
 namespace SuperBotManagerBackend.Configuration
 {

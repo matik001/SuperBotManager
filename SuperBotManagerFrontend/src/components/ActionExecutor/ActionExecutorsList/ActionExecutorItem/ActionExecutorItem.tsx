@@ -14,6 +14,8 @@ import { styled, useTheme } from 'styled-components';
 interface ActionExecutorItemProps {
 	actionExecutor: ActionExecutorDTO;
 	onClickedSettings: (actionExecutor: ActionExecutorDTO) => void;
+	onRun: () => void;
+	isQueueing: boolean;
 }
 
 const Container = styled.div<{ $imgUrl: string }>`
@@ -41,7 +43,9 @@ const Backdrop = styled.div`
 `;
 const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 	actionExecutor,
-	onClickedSettings
+	onClickedSettings,
+	onRun,
+	isQueueing
 }) => {
 	const { data: actionDefinition } = useQuery({
 		queryKey: definitionKeys.list(),
@@ -52,6 +56,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 
 	const noInputs = actionExecutor.actionData.inputs.length === 0;
 	const theme = useTheme();
+
 	return (
 		<ConfigProvider
 			theme={{
@@ -103,7 +108,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 						</div>
 						<div>
 							Last run:{' '}
-							<b>
+							<b style={{ fontSize: '12px' }}>
 								{actionExecutor.lastRunDate ? dayjs(actionExecutor.lastRunDate).toNow() : 'never'}
 							</b>
 						</div>
@@ -127,6 +132,8 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 								marginTop: 'auto',
 								marginBottom: '7px'
 							}}
+							loading={isQueueing}
+							onClick={onRun}
 						>
 							<IoIosPlay />
 							Run
