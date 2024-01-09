@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -35,6 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ActionDefinitions\DiscordActionsDefinitions\DiscordActionsDefinitions.csproj" />
+    <ProjectReference Include="..\ActionDefinitions\IntercityActionsDefinitions\IntercityActionsDefinitions.csproj" />
+    <ProjectReference Include="..\ActionDefinitions\StorytelActionsDefinitions\StorytelActionsDefinitions.csproj" />
     <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 

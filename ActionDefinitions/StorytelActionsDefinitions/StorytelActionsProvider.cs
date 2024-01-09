@@ -1,7 +1,7 @@
 ﻿using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.DB.Repositories;
 
-namespace SuperBotManagerBase.BotDefinitions
+namespace StorytelActionsDefinitions
 {
     [ActionsDefinitionProvider]
     public class StorytelActionsProvider

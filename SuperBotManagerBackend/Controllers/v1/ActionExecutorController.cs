@@ -133,7 +133,12 @@ namespace SuperBotManagerBackend.Controllers.v1
                 action.ActionExecutor = executor;
                 actionProducer.SendToExecute(action);
             }
-
+            if(!executor.PreserveExecutedInputs)
+            {
+                executor.ActionData.Inputs.Clear();
+                await uow.ActionExecutorRepository.Update(executor);
+                await uow.SaveChangesAsync();
+            }
         }
 
     }

@@ -21,6 +21,8 @@ namespace SuperBotManagerBase.DB
         Task Update(TEntity entity);
 
         Task Delete(TID id);
+
+        void DeleteOthers(IEnumerable<TID> ids);
     }
 
     public class GenericRepository<TEntity, TID> : IGenericRepository<TEntity, TID>
@@ -38,11 +40,8 @@ namespace SuperBotManagerBase.DB
             await _dbContext.Set<TEntity>().AddAsync(entity);
         }
 
-        public async Task Delete(TID id)
-        {
-            var entity = await GetById(id);
-            _dbContext.Set<TEntity>().Remove(entity);
-        }
+
+
 
         public IQueryable<TEntity> GetAll()
         {
@@ -74,6 +73,17 @@ namespace SuperBotManagerBase.DB
         {
             _dbContext.Update(entity);
             //_dbContext.Entry(entity).State = EntityState.Modified;
+        }
+        public async Task Delete(TID id)
+        {
+            var entity = await GetById(id);
+            _dbContext.Set<TEntity>().Remove(entity);
+        }
+
+        public void DeleteOthers(IEnumerable<TID> ids)
+        {
+            var toRemove = GetAll().Where(e => !ids.Contains(e.Id));
+            _dbContext.Set<TEntity>().RemoveRange(toRemove);
         }
     }
 }

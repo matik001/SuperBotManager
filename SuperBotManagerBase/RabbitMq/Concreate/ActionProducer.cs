@@ -26,7 +26,16 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
                 TimeToLive = TimeSpan.FromDays(10),
                 Action = action
             };
+            /// to prevent circle references when serializing to json
+            var prevExecutors = action.ActionExecutor.ActionDefinition.ActionExecutors;
+            var prevActions = action.ActionExecutor.Actions;
+            action.ActionExecutor.ActionDefinition.ActionExecutors = null;
+
+            action.ActionExecutor.Actions = null;
+
             producer.PublishMessage(msg, action.ActionExecutor.ActionDefinition.ActionDefinitionQueueName);
+            action.ActionExecutor.ActionDefinition.ActionExecutors = prevExecutors; ;
+            action.ActionExecutor.Actions = prevActions; ;
         }
     }
 }

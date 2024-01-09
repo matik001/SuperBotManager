@@ -50,7 +50,10 @@ namespace SuperBotManagerBase.Services
 
         private static byte[] SerializeMessage(TQueueMessage message)
         {
-            var stringContent = JsonConvert.SerializeObject(message);
+            var stringContent = JsonConvert.SerializeObject(message, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            });
             return Encoding.UTF8.GetBytes(stringContent);
         }
     }

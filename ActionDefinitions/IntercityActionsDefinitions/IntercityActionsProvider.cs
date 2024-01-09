@@ -1,7 +1,7 @@
 ﻿using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.DB.Repositories;
 
-namespace SuperBotManagerBase.BotDefinitions
+namespace IntercityActionsDefinitions
 {
     [ActionsDefinitionProvider]
     public class IntercityActionsProvider

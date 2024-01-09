@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="3.13.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 

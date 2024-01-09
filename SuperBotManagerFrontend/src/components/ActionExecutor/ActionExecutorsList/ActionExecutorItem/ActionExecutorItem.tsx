@@ -84,6 +84,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 						/>
 					</Tooltip>
 					<div
+						title={actionExecutor.actionExecutorName}
 						style={{
 							fontSize: '20px',
 							textOverflow: 'ellipsis',

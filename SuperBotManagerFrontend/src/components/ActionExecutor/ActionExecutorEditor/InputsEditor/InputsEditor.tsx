@@ -48,17 +48,17 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 			incNextInputId();
 
 			const newIds = [...inputsIds];
-			newIds.splice(idx, 0, newId);
+			newIds.splice(idx + 1, 0, newId);
 
 			const newInputs = [...inputs];
-			newInputs.splice(idx, 0, inputCopy);
+			newInputs.splice(idx + 1, 0, inputCopy);
 
 			setInputIds(newIds);
 			onChangeInputs(newInputs);
 		},
 		[incNextInputId, inputSchema, inputs, inputsIds, nextInputId, onChangeInputs]
 	);
-
+	console.log(inputs);
 	const isInputValid = (idx: number) => {
 		const input = inputs[idx];
 		if (!input) return false;

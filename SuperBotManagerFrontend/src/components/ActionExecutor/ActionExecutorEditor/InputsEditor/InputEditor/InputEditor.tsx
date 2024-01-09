@@ -8,8 +8,6 @@ interface InputEditorProps {
 	input: ExecutorInput;
 	inputSchema: FieldInfo[];
 	onChangeInput: (newInput: ExecutorInput) => void;
-	invalidInputsNames?: string[];
-	onChangeValidation?: (inputName: string, isValid: boolean) => void;
 }
 const Container = styled.div`
 	display: grid;

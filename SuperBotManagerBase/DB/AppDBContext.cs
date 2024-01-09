@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SuperBotManagerBase.ActionDefinitions;
 using SuperBotManagerBase.DB.Repositories;
+using SuperBotManagerBase.Services;
 using System.Reflection.Emit;
 using Action = SuperBotManagerBase.DB.Repositories.Action;
 
@@ -89,6 +89,16 @@ namespace SuperBotManagerBase.DB
                 .HasMany(e => e.RevokedTokens)
                 .WithOne(e => e.User);
 
+            builder.Entity<ActionDefinition>()
+                .HasMany(e => e.ActionExecutors)
+                .WithOne(e => e.ActionDefinition)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ActionExecutor>()
+                .HasMany(e => e.Actions)
+                .WithOne(e => e.ActionExecutor)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             //builder.Entity<ActionExecutor>()
             //    .HasOne(e => e.ActionExecutorOnFinish)
@@ -100,7 +110,6 @@ namespace SuperBotManagerBase.DB
             /////
             ///
             RoleRepository.Seed(builder.Entity<Role>());
-            ActionDefinitionSeeder.Seed(builder.Entity<ActionDefinition>());
         }
 
         private void _setModificationDate()

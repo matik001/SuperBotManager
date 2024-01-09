@@ -122,6 +122,7 @@ namespace SuperBotManagerBase.DB.Repositories
         public int? ActionExecutorOnFinishId { get; set; }
         public virtual ActionExecutor ActionExecutorOnFinish { get; set; }
 
+        public virtual ICollection<Action> Actions { get; set; }
 
         public void UpdateIsValid()
         {

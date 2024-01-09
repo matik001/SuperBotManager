@@ -2,6 +2,7 @@
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 using SuperBotManagerBase.Services;
+using SuperBotManagerBase.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,29 +20,6 @@ namespace SuperbotConsumerService
 
     internal static class ServiceUtils
     {
-
-        internal static IEnumerable<Type> GetClassesWithAttribute<TAttribute>(this Assembly assembly)
-            where TAttribute : Attribute
-        {
-            return assembly.GetTypes().Where(t => t.IsDefined(typeof(TAttribute)));
-        }
-
-        internal static void LoadConsumersAssemblies()
-        {
-            foreach(string dll in Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory, "*.dll", SearchOption.AllDirectories))
-            {
-                if(!dll.Contains("Consumer"))
-                    continue;
-                try
-                {
-                    Assembly loadedAssembly = Assembly.LoadFile(dll);
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
         internal static IEnumerable<ConsumerServiceInfo> GetConsumersForAssembly(Assembly assembly)
         {
             var consumers = assembly.GetClassesWithAttribute<ServiceActionConsumerAttribute>();

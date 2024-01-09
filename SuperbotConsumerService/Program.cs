@@ -1,17 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using SuperbotConsumerService;
 using SuperBotManagerBase.Attributes;
-using SuperBotManagerBase.BotDefinitions;
 using SuperBotManagerBase.Configuration;
 using SuperBotManagerBase.DB;
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 using SuperBotManagerBase.Services;
+using SuperBotManagerBase.Utils;
 using System.Reflection;
 
 
-ServiceUtils.LoadConsumersAssemblies();
-var consumers = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => ServiceUtils.GetConsumersForAssembly(a)).ToList();
+var loadedAssemblies = AssemblyUtils.LoadAssembliesContainingName("Consumer");
+var consumers = loadedAssemblies.SelectMany(a => ServiceUtils.GetConsumersForAssembly(a)).ToList();
 List<IHost> hosts = new List<IHost>();
 foreach(var consumer in consumers)
 {

@@ -69,12 +69,14 @@ namespace SuperBotManagerBase.DB.Repositories
         public ActionDefinitionSchema ActionDataSchema { get; set; }
         public bool PreserveExecutedInputs { get; set; }
 
+        public virtual ICollection<ActionExecutor> ActionExecutors { get; set; }
+
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+
     }
     public interface IActionDefinitionRepository : IGenericRepository<ActionDefinition, int>
     {
-
     }
     public class ActionDefinitionRepository : GenericRepository<ActionDefinition, int>, IActionDefinitionRepository
     {
