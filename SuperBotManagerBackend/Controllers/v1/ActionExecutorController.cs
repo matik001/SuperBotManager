@@ -38,9 +38,6 @@ namespace SuperBotManagerBackend.Controllers.v1
             var actionDefinitions = uow.ActionExecutorRepository.GetAll().Include(a => a.ActionDefinition).ToList();
             var dtos = mapper.Map<IEnumerable<ActionExecutorExtendedDTO>>(actionDefinitions);
 
-            foreach(var dto in dtos)
-                dto.ActionData.MaskSecrets(dto.ActionDefinition.ActionDataSchema);
-
             return dtos;
         }
 
@@ -51,7 +48,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             var actionExecutor = await uow.ActionExecutorRepository.GetById(id, a => a.Include(x => x.ActionDefinition));
             var dto = mapper.Map<ActionExecutorExtendedDTO>(actionExecutor);
-            dto.ActionData.MaskSecrets(dto.ActionDefinition.ActionDataSchema);
+
             return dto;
         }
 
@@ -65,7 +62,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             await uow.ActionExecutorRepository.LoadDefinition(actionExecutor);
             actionExecutor.UpdateIsValid();
-            await actionExecutor.ActionData.EncryptNotMaskedSecrets(actionExecutor.ActionDefinition.ActionDataSchema, uow);
+            await actionExecutor.ActionData.EncryptSecrets(actionExecutor.ActionDefinition.ActionDataSchema, uow);
             actionExecutor.ActionDefinition = null;
 
             await uow.ActionExecutorRepository.Create(actionExecutor);
@@ -81,10 +78,7 @@ namespace SuperBotManagerBackend.Controllers.v1
             mapper.Map(dto, executor);
 
             executor.UpdateIsValid();
-            /// encrypts secret changes and replaces them with secret guid
-            await executor.ActionData.EncryptNotMaskedSecrets(executor.ActionDefinition.ActionDataSchema, uow);
-            /// replaces what wasn't changed (secret masks) and replaces it with secret guid (from db)
-            await executor.ActionData.ReverseMasking(originalFromDb, executor.ActionDefinition.ActionDataSchema);
+            await executor.ActionData.EncryptSecrets(executor.ActionDefinition.ActionDataSchema, uow);
 
             executor.ActionDefinition = null;
 
@@ -119,7 +113,7 @@ namespace SuperBotManagerBackend.Controllers.v1
                     ActionStatus = ActionStatus.Pending,
                     ActionData = new ActionSchema()
                     {
-                        Input = input,
+                        Input = input.ToDictionary(a=>a.Key, a=>a.Value.Value),
                         Output = new Dictionary<string, string>()
                     },
                 };

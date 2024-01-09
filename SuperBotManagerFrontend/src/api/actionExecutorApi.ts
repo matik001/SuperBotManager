@@ -2,7 +2,12 @@ import { ActionDefinitionDTO } from './actionDefinitionApi';
 import { appAxios } from './apiConfig';
 export type RunPeriod = 'Manual' | 'Everyday' | 'Loop' | 'TimePeriod';
 
-export type ExecutorInput = Record<string, string | undefined>;
+export interface FieldValue {
+	value: string | undefined;
+	isEncrypted: boolean;
+	isValid: boolean;
+}
+export type ExecutorInput = Record<string, FieldValue | undefined>;
 export interface ActionExecutorSchema {
 	inputs: ExecutorInput[];
 }

@@ -8,3 +8,5 @@ export const duplicateInput = (input: ExecutorInput, inputSchema: FieldInfo[]) =
 	}
 	return inputCopy;
 };
+
+export const MASK_ENCRYPTED = '????????';

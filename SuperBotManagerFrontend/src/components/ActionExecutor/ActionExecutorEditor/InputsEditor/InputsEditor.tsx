@@ -7,9 +7,8 @@ import { AiOutlineExclamationCircle, AiOutlinePlus } from 'react-icons/ai';
 import { IoMdTrash } from 'react-icons/io';
 import { IoDuplicate } from 'react-icons/io5';
 import styled, { CSSProperties, useTheme } from 'styled-components';
-import { useImmer } from 'use-immer';
 import { useCounter } from 'usehooks-ts';
-import { duplicateInput } from 'utils/executorUtils';
+import { MASK_ENCRYPTED, duplicateInput } from 'utils/executorUtils';
 import InputEditor from './InputEditor/InputEditor';
 
 export interface InputsEditorProps {
@@ -60,11 +59,10 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 		[incNextInputId, inputSchema, inputs, inputsIds, nextInputId, onChangeInputs]
 	);
 
-	/// pairs:  (inputId, list of invalid inputs names)
-	const [invalidInputsDict, updateinvalidInputsDict] = useImmer<Record<number, string[]>>({});
 	const isInputValid = (idx: number) => {
-		const inputId = inputsIds[idx];
-		return !invalidInputsDict[inputId] || invalidInputsDict[inputId].length === 0;
+		const input = inputs[idx];
+		if (!input) return false;
+		return Object.values(input).every((field) => field?.isValid);
 	};
 	const theme = useTheme();
 	const items: CollapseProps['items'] =
@@ -72,7 +70,14 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 		inputs.map((input, idx) => ({
 			key: inputsIds[idx],
 			label: `Input ${idx + 1} (${Object.entries(input)
-				.map(([name, val]) => `${name}: ${val}`)
+				.map(
+					([name, val]) =>
+						`${name}: ${
+							inputSchema.some((a) => a.name === name && a.type === 'Secret')
+								? MASK_ENCRYPTED
+								: val?.value
+						}`
+				)
 				.join(', ')})`,
 			headerClass: collapseTitleClassname,
 			style: {},
@@ -134,16 +139,6 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 						];
 						onChangeInputs(newInputs);
 						return newInputs;
-					}}
-					invalidInputsNames={invalidInputsDict[inputsIds[idx]] ?? []}
-					onChangeValidation={(inputName, isValid) => {
-						updateinvalidInputsDict((dict) => {
-							const invalidNames = dict[inputsIds[idx]] ?? [];
-							const invalidSet = new Set(invalidNames);
-							if (isValid) invalidSet.delete(inputName);
-							else invalidSet.add(inputName);
-							dict[inputsIds[idx]] = [...invalidSet];
-						});
 					}}
 				/>
 			)

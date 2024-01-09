@@ -1,22 +1,12 @@
 import { Switch } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import React from 'react';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldBooleanEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-}
-
-const FieldBooleanEditor: React.FC<FieldBooleanEditorProps> = ({
-	fieldSchema,
-	onChange,
-	value
-}) => {
+const FieldBooleanEditor: React.FC<InnerFieldEditorProps> = ({ fieldSchema, onChange, value }) => {
 	return (
 		<Switch
-			value={value !== undefined ? value === 'true' : undefined}
-			onChange={(val) => onChange(val ? 'true' : 'false')}
+			value={value.value !== undefined ? value.value === 'true' : undefined}
+			onChange={(val) => onChange({ ...value, value: val ? 'true' : 'false' })}
 		></Switch>
 	);
 };

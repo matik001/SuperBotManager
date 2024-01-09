@@ -1,17 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectProps } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import { actionExecutorGetAll, executorKeys } from 'api/actionExecutorApi';
 import React, { useEffect, useMemo } from 'react';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldExecutorPickerEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	fieldWidthPx?: number;
-}
-
-const FieldExecutorPickerEditor: React.FC<FieldExecutorPickerEditorProps> = ({
+const FieldExecutorPickerEditor: React.FC<InnerFieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
@@ -45,8 +38,8 @@ const FieldExecutorPickerEditor: React.FC<FieldExecutorPickerEditorProps> = ({
 	}, [executors, fieldSchema.isOptional]);
 
 	useEffect(() => {
-		if (value === undefined && options && options.length > 0) {
-			onChange(options[0].value as string);
+		if (value.value === undefined && options && options.length > 0) {
+			onChange({ ...value, value: options[0].value as string });
 		}
 	}, [fieldSchema, onChange, options, value]);
 
@@ -54,8 +47,8 @@ const FieldExecutorPickerEditor: React.FC<FieldExecutorPickerEditorProps> = ({
 		<Select
 			loading={isFetchingExecutors}
 			style={{ width: fieldWidthPx }}
-			value={value}
-			onChange={(val) => onChange(val)}
+			value={value.value}
+			onChange={(val) => onChange({ ...value, value: val })}
 			options={options}
 		/>
 	);

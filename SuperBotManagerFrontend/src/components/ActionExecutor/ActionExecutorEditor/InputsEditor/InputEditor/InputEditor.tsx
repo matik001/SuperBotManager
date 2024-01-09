@@ -20,13 +20,7 @@ const Container = styled.div`
 		grid-template-columns: auto 1fr;
 	}
 `;
-const InputEditor: React.FC<InputEditorProps> = ({
-	input,
-	inputSchema,
-	onChangeInput,
-	invalidInputsNames,
-	onChangeValidation
-}) => {
+const InputEditor: React.FC<InputEditorProps> = ({ input, inputSchema, onChangeInput }) => {
 	return (
 		<Container>
 			{inputSchema.map((fieldInfo) => (
@@ -36,8 +30,6 @@ const InputEditor: React.FC<InputEditorProps> = ({
 						fieldSchema={fieldInfo}
 						onChange={(val) => onChangeInput({ ...input, [fieldInfo.name]: val })}
 						value={input[fieldInfo.name]}
-						isValid={!invalidInputsNames || !invalidInputsNames.includes(fieldInfo.name)}
-						onChangeValidation={onChangeValidation}
 					/>
 				</>
 			))}

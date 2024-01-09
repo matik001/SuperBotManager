@@ -1,15 +1,9 @@
 import { Input } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import React from 'react';
+import { MASK_ENCRYPTED } from 'utils/executorUtils';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldSecretEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	fieldWidthPx?: number;
-}
-
-const FieldSecretEditor: React.FC<FieldSecretEditorProps> = ({
+const FieldSecretEditor: React.FC<InnerFieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
@@ -19,8 +13,14 @@ const FieldSecretEditor: React.FC<FieldSecretEditorProps> = ({
 		<Input.Password
 			style={{ width: fieldWidthPx }}
 			placeholder="Provide a value"
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
+			value={value.isEncrypted ? MASK_ENCRYPTED : value.value}
+			onChange={(e) => {
+				if (value.isEncrypted) {
+					onChange({ ...value, isEncrypted: false, value: '' });
+				} else {
+					onChange({ ...value, isEncrypted: false, value: e.target.value });
+				}
+			}}
 		></Input.Password>
 	);
 };

@@ -1,15 +1,8 @@
 import { Select, SelectProps } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import React, { useEffect, useMemo } from 'react';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldSetEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	fieldWidthPx?: number;
-}
-
-const FieldSetEditor: React.FC<FieldSetEditorProps> = ({
+const FieldSetEditor: React.FC<InnerFieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
@@ -24,15 +17,15 @@ const FieldSetEditor: React.FC<FieldSetEditorProps> = ({
 		[fieldSchema.setOptions]
 	);
 	useEffect(() => {
-		if (value === undefined && fieldSchema.setOptions) {
-			onChange(fieldSchema.setOptions[0].value);
+		if (value.value === undefined && fieldSchema.setOptions) {
+			onChange({ ...value, value: fieldSchema.setOptions[0].value });
 		}
 	}, [fieldSchema, onChange, value]);
 	return (
 		<Select
 			style={{ width: fieldWidthPx }}
-			value={value}
-			onChange={(val) => onChange(val)}
+			value={value.value}
+			onChange={(val) => onChange({ ...value, value: val })}
 			options={options}
 		/>
 	);

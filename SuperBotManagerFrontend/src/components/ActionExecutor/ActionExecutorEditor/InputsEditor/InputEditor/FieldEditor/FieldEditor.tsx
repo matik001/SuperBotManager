@@ -1,5 +1,6 @@
 import { Form, Tooltip } from 'antd';
 import { FieldInfo, FieldType } from 'api/actionDefinitionApi';
+import { FieldValue } from 'api/actionExecutorApi';
 import React, { ReactNode, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import FieldBooleanEditor from './FieldBooleanEditor/FieldBooleanEditor';
@@ -13,10 +14,14 @@ import FieldStringEditor from './FieldStringEditor/FieldStringEditor';
 
 interface FieldEditorProps {
 	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	isValid?: boolean;
-	onChangeValidation?: (inputName: string, isValid: boolean) => void;
+	value: FieldValue | undefined;
+	onChange: (newValue: FieldValue | undefined) => void;
+	fieldWidthPx?: number;
+}
+export interface InnerFieldEditorProps {
+	fieldSchema: FieldInfo;
+	value: FieldValue;
+	onChange: (newValue: FieldValue) => void;
 	fieldWidthPx?: number;
 }
 
@@ -25,21 +30,35 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
-	isValid,
-	onChangeValidation,
 	fieldWidthPx = 200
 }) => {
 	const invalidMessage = useMemo(() => {
-		if (!fieldSchema.isOptional && (value === undefined || value.length === 0))
+		if (!fieldSchema.isOptional && (value?.value === undefined || value.value.length === 0))
 			return 'Field cannot be empty';
 		return undefined;
-	}, [fieldSchema.isOptional, value]);
+	}, [fieldSchema.isOptional, value?.value]);
 	useEffect(() => {
 		const newValid = !invalidMessage;
-		if (!onChangeValidation || isValid === newValid) return;
-		onChangeValidation(fieldSchema.name, newValid);
+		if (value === undefined || value?.isValid === newValid) return;
+		onChange({
+			...value,
+			isValid: newValid
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [invalidMessage]);
+
+	const valueNotUndefined = useMemo(
+		() =>
+			value === undefined
+				? ({ isEncrypted: false, isValid: false, value: value } as FieldValue)
+				: value,
+		[value]
+	);
+
+	useEffect(() => {
+		if (value === undefined) onChange(valueNotUndefined);
+	}, [onChange, value, valueNotUndefined]);
+
 	return (
 		<>
 			<div style={{ marginRight: '15px', alignSelf: 'center' }}>{fieldSchema.name}</div>
@@ -66,7 +85,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										Secret: (
@@ -74,7 +93,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										Number: (
@@ -82,7 +101,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										Date: (
@@ -90,7 +109,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										DateTime: (
@@ -98,7 +117,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										Boolean: (
@@ -106,7 +125,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												// fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										Set: (
@@ -114,7 +133,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										),
 										ExecutorPicker: (
@@ -122,7 +141,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 												fieldWidthPx={fieldWidthPx}
 												fieldSchema={fieldSchema}
 												onChange={onChange}
-												value={value}
+												value={valueNotUndefined}
 											/>
 										)
 									} as Record<FieldType, ReactNode>

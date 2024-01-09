@@ -1,15 +1,8 @@
 import { Input } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import React from 'react';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldStringEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	fieldWidthPx?: number;
-}
-
-const FieldStringEditor: React.FC<FieldStringEditorProps> = ({
+const FieldStringEditor: React.FC<InnerFieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
@@ -19,8 +12,8 @@ const FieldStringEditor: React.FC<FieldStringEditorProps> = ({
 		<Input
 			style={{ width: fieldWidthPx }}
 			placeholder="Provide a value"
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
+			value={value.value}
+			onChange={(e) => onChange({ ...value, value: e.target.value })}
 		></Input>
 	);
 };

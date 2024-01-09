@@ -1,16 +1,9 @@
 import { DatePicker } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import dayjs from 'dayjs';
 import React from 'react';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldDateTimeEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	fieldWidthPx?: number;
-}
-
-const FieldDateTimeEditor: React.FC<FieldDateTimeEditorProps> = ({
+const FieldDateTimeEditor: React.FC<InnerFieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
@@ -19,9 +12,9 @@ const FieldDateTimeEditor: React.FC<FieldDateTimeEditorProps> = ({
 	return (
 		<DatePicker
 			style={{ width: fieldWidthPx }}
-			value={value ? dayjs(value) : undefined}
+			value={value.value ? dayjs(value.value) : undefined}
 			showTime
-			onChange={(date) => onChange(date?.toISOString())}
+			onChange={(date) => onChange({ ...value, value: date?.toISOString() })}
 		></DatePicker>
 	);
 };

@@ -1,15 +1,8 @@
 import { InputNumber } from 'antd';
-import { FieldInfo } from 'api/actionDefinitionApi';
 import React from 'react';
+import { InnerFieldEditorProps } from '../FieldEditor';
 
-interface FieldNumberEditorProps {
-	fieldSchema: FieldInfo;
-	value: string | undefined;
-	onChange: (newVal: string | undefined) => void;
-	fieldWidthPx?: number;
-}
-
-const FieldNumberEditor: React.FC<FieldNumberEditorProps> = ({
+const FieldNumberEditor: React.FC<InnerFieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
@@ -19,8 +12,8 @@ const FieldNumberEditor: React.FC<FieldNumberEditorProps> = ({
 		<InputNumber
 			style={{ width: fieldWidthPx }}
 			placeholder="Provide a value"
-			value={value}
-			onChange={(val) => onChange(val ?? '')}
+			value={value.value}
+			onChange={(val) => onChange({ ...value, value: val ?? '' })}
 		></InputNumber>
 	);
 };

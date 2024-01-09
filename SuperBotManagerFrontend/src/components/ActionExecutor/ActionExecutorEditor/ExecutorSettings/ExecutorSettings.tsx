@@ -95,11 +95,15 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 						onChange={(value) =>
 							updateExecutor((a) => {
 								if (a) {
-									a.preserveExecutedInputs = value === 'true';
+									a.preserveExecutedInputs = value?.value === 'true';
 								}
 							})
 						}
-						value={executor.preserveExecutedInputs ? 'true' : 'false'}
+						value={{
+							isEncrypted: false,
+							isValid: true,
+							value: executor.preserveExecutedInputs ? 'true' : 'false'
+						}}
 					/>
 					<FieldEditor
 						fieldSchema={{
@@ -117,14 +121,14 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 						onChange={(value) =>
 							updateExecutor((a) => {
 								if (a) {
-									a.runPeriod = value as RunPeriod;
+									a.runPeriod = value?.value as RunPeriod;
 									if (!a.timeIntervalSeconds) {
 										a.timeIntervalSeconds = 300;
 									}
 								}
 							})
 						}
-						value={executor.runPeriod}
+						value={{ isEncrypted: false, isValid: true, value: executor.runPeriod }}
 					/>
 					{executor.runPeriod === 'TimePeriod' && (
 						<FieldEditor
@@ -137,11 +141,15 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 							onChange={(value) =>
 								updateExecutor((a) => {
 									if (a) {
-										a.timeIntervalSeconds = parseInt(value ?? '300');
+										a.timeIntervalSeconds = parseInt(value?.value ?? '300');
 									}
 								})
 							}
-							value={executor.timeIntervalSeconds?.toString() ?? '300'}
+							value={{
+								value: executor.timeIntervalSeconds?.toString() ?? '300',
+								isEncrypted: false,
+								isValid: true
+							}}
 						/>
 					)}
 					<FieldEditor
@@ -155,15 +163,20 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 							updateExecutor((a) => {
 								if (a) {
 									a.actionExecutorOnFinishId =
-										value === '' || value === undefined ? undefined : parseInt(value);
+										value?.value === '' || value?.value === undefined
+											? undefined
+											: parseInt(value.value);
 								}
 							})
 						}
-						value={
-							executor.actionExecutorOnFinishId === undefined
-								? ''
-								: executor.actionExecutorOnFinishId?.toString()
-						}
+						value={{
+							isEncrypted: false,
+							isValid: true,
+							value:
+								executor.actionExecutorOnFinishId === undefined
+									? ''
+									: executor.actionExecutorOnFinishId?.toString()
+						}}
 					/>
 				</TwoColumnsGrid>
 			</Column>

@@ -8,71 +8,42 @@ using System.Reflection.Metadata;
 
 namespace SuperBotManagerBase.DB.Repositories
 {
+    public class FieldValue
+    {
+        public string Value { get; set; }
+        public bool IsEncrypted { get; set; }
+        public bool IsValid { get; set; }
+
+        public FieldValue(string value, bool isMasked = false, bool isValid = true)
+        {
+            Value = value;
+            IsEncrypted = isMasked;
+            IsValid = isValid;
+        }
+
+        public FieldValue Clone()
+        {
+            return new FieldValue(Value, IsEncrypted, IsValid);
+        }
+    }
     public class ActionExecutorSchema 
     {
-        public List<Dictionary<string, string>> Inputs { get; set; } = new List<Dictionary<string, string>>();
+        /// <summary>
+        /// paris of field name - value
+        /// </summary>
+        public List<Dictionary<string, FieldValue>> Inputs { get; set; } = new List<Dictionary<string, FieldValue>>();
 
         public ActionExecutorSchema DeepClone()
         {
             return new ActionExecutorSchema()
             {
-                Inputs = this.Inputs.Select(a => a.ToDictionary(b => b.Key, b => b.Value)).ToList()
+                Inputs = this.Inputs.Select(a => a.ToDictionary(b => b.Key, b => b.Value.Clone())).ToList()
             };
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////// UTILS
-        public static readonly string DEFAULT_SECRET_MASK = "????????";
-        public void MaskSecrets(ActionDefinitionSchema schema)
-        {
-            var secretFields = schema.InputSchema.Where(a => a.Type == FieldType.Secret);
-
-            foreach (var input in Inputs)
-            {
-                foreach(var secretField in secretFields)
-                {
-                    if(input.ContainsKey(secretField.Name))
-                    {
-                        input[secretField.Name] = DEFAULT_SECRET_MASK;
-                    }
-                }
-            }
-        }
 
 
-        /// <summary>
-        /// it replaces masked field with value from "original" (for example secret guid)
-        /// </summary>
-        public async Task ReverseMasking(ActionExecutorSchema original, ActionDefinitionSchema definitionSchema)
-        {
-            var secretFields = definitionSchema.InputSchema.Where(a => a.Type == FieldType.Secret);
-
-            
-            for(int i = 0; i< Math.Min(Inputs.Count, original.Inputs.Count); i++)
-            {
-                var input = Inputs[i];
-                foreach(var secretField in secretFields)
-                {
-                    if(input.ContainsKey(secretField.Name))
-                    {
-                        var plainTextValue = input[secretField.Name];
-                        if(plainTextValue != DEFAULT_SECRET_MASK)
-                            continue;
-                        
-                        input[secretField.Name] = original.Inputs[i][secretField.Name];
-                    }
-                }
-            }
-        }
-
-
-
-        /// / <summary>
-        /// if secret input value is not equal mask it will encrypt it and replace with secret id. You must save changes!
-        /// </summary>
-        /// <param name="definitionSchema"></param>
-        /// <param name="uow"></param>
-        /// <returns></returns>chema, IAppUnitOfWork uow)
-        public async Task EncryptNotMaskedSecrets(ActionDefinitionSchema definitionSchema, IAppUnitOfWork uow)
+        public async Task EncryptSecrets(ActionDefinitionSchema definitionSchema, IAppUnitOfWork uow)
         {
             var secretFields = definitionSchema.InputSchema.Where(a => a.Type == FieldType.Secret);
 
@@ -80,18 +51,17 @@ namespace SuperBotManagerBase.DB.Repositories
             {
                 foreach(var secretField in secretFields)
                 {
-                    if(input.ContainsKey(secretField.Name))
+                    if(input.ContainsKey(secretField.Name) && input[secretField.Name] != null && !input[secretField.Name].IsEncrypted)
                     {
-                        var plainTextValue = input[secretField.Name];
-                        if(plainTextValue == DEFAULT_SECRET_MASK)
-                            continue;
+                        var plainTextValue = input[secretField.Name].Value;
                         var newSecret = new Secret()
                         {
                             Id = Guid.NewGuid(),
                             DecryptedSecretValue = plainTextValue
                         };
                         await uow.SecretRepository.Create(newSecret);
-                        input[secretField.Name] = newSecret.Id.ToString();
+                        input[secretField.Name].Value = newSecret.Id.ToString();
+                        input[secretField.Name].IsEncrypted = true;
                     }
                 }
             }
@@ -107,13 +77,16 @@ namespace SuperBotManagerBase.DB.Repositories
                 {
                     if(input.ContainsKey(secretField.Name))
                     {
-                        var secretGuid = input[secretField.Name];
+                        var secretGuid = input[secretField.Name]?.Value;
                         if(secretGuid == null)
-                            continue; 
-                        var secret = await uow.SecretRepository.GetById(Guid.Parse(secretGuid));
-                        if(secret != null)
                             continue;
-                        input[secretField.Name] = secret.DecryptedSecretValue;
+                        if(input[secretField.Name].IsEncrypted == false)
+                            continue;
+                        var secret = await uow.SecretRepository.GetById(Guid.Parse(secretGuid));
+                        if(secret == null)
+                            continue;
+                        input[secretField.Name].Value = secret.DecryptedSecretValue;
+                        input[secretField.Name].IsEncrypted = false;
                     }
                 }
             }
@@ -150,27 +123,41 @@ namespace SuperBotManagerBase.DB.Repositories
         public virtual ActionExecutor ActionExecutorOnFinish { get; set; }
 
 
-        public static bool CheckIfValid(ActionExecutor actionExecutor)
-        {
-            var actionDefinition = actionExecutor.ActionDefinition;
-            var actionData = actionExecutor.ActionData;
-            if (actionDefinition == null || actionData == null)
-                return false;
-            if (actionData.Inputs.Count == 0)
-                return false;
-            foreach (var inputSchema in actionDefinition.ActionDataSchema.InputSchema)
-            {
-                var values = actionData.Inputs.Select(a => a.ContainsKey(inputSchema.Name) ? a[inputSchema.Name] : null);
-                if(!inputSchema.IsOptional && values.Any(a => string.IsNullOrEmpty(a)))
-                    return false;                    
-            }
-            return true;    
-        }
         public void UpdateIsValid()
         {
             if(this.ActionDefinition == null)
                 throw new Exception("ActionDefinition is null");
-            this.IsValid = ActionExecutor.CheckIfValid(this);
+
+            var actionDefinition = this.ActionDefinition;
+            var actionData = this.ActionData;
+            if (actionDefinition == null || actionData == null)
+                return;
+            if (actionData.Inputs.Count == 0)
+                return;
+
+            this.IsValid = true;
+            foreach (var fieldInfo in actionDefinition.ActionDataSchema.InputSchema)
+            {
+                foreach (var input in actionData.Inputs)
+                {
+                    if(!fieldInfo.IsOptional)
+                    {
+                        if(!input.ContainsKey(fieldInfo.Name) || input[fieldInfo.Name] == null)
+                        {
+                            this.IsValid = false;
+                            continue;
+                        }
+                        var fieldValue = input[fieldInfo.Name];
+                        if(string.IsNullOrEmpty(fieldValue.Value))
+                        {
+                            fieldValue.IsValid = false;
+                            this.IsValid = false;
+                            continue;
+                        }
+
+                    }
+                }
+            }
         }
 
         public DateTime CreatedDate { get; set; }
