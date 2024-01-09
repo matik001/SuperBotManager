@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ActionConsumers\StorytelSignupActionConsumer\StorytelSignupActionConsumer.csproj" />
+    <ProjectReference Include="..\ActionConsumers\DiscordActionsConsumer\DiscordActionsConsumer.csproj" />
+    <ProjectReference Include="..\ActionConsumers\IntercityActionsConsumer\IntercityActionsConsumer.csproj" />
+    <ProjectReference Include="..\ActionConsumers\StorytelActionsConsumer\StorytelActionsConsumer.csproj" />
     <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 </Project>

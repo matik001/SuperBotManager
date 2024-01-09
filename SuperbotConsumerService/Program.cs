@@ -1,42 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using SuperbotConsumerService;
+using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.BotDefinitions;
 using SuperBotManagerBase.Configuration;
 using SuperBotManagerBase.DB;
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 using SuperBotManagerBase.Services;
+using System.Reflection;
 
-var builder = Host.CreateApplicationBuilder(args);
-var services = builder.Services;
-services.AddDbContext<AppDBContext>(options =>
+
+ServiceUtils.LoadConsumersAssemblies();
+var consumers = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => ServiceUtils.GetConsumersForAssembly(a)).ToList();
+List<IHost> hosts = new List<IHost>();
+foreach(var consumer in consumers)
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString);
-});
-services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
-services.ConfigureRabbitMq(builder.Configuration);
-services.AddQueueMessageConsumer<StorytelSignupActionConsumer.StorytelSignupActionConsumer, ActionQueueMessage>(StorytelActionsProvider.SignUpQueueName);
-
-var logger = services.BuildServiceProvider().GetRequiredService<ILogger<StorytelSignupActionConsumer.StorytelSignupActionConsumer>>();
-
-var host = builder.Build();
-host.Run();
-
-public static partial class Program
-{
-    public static void AddQueueMessageConsumer<TMessageConsumer, TQueueMessage>(this IServiceCollection services, string queueName)
-        where TMessageConsumer : IQueueConsumer<TQueueMessage> 
-        where TQueueMessage : class, IQueueMessage
+    var builder = Host.CreateApplicationBuilder(args);
+    var services = builder.Services;
+    services.AddDbContext<AppDBContext>(options =>
     {
-        services.AddScoped(typeof(TMessageConsumer));
-        services.AddScoped<IRabbitmqQueueProvider<ActionQueueMessage>>(p =>
-        {
-            var channelProvider = p.GetRequiredService<IRabbitmqChannelProvider>();
-            return new RabbitmqQueueProvider<ActionQueueMessage>(channelProvider, queueName);
-        });
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        options.UseNpgsql(connectionString);
+    });
+    services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+    services.ConfigureRabbitMq(builder.Configuration);
 
-        services.AddScoped<IQueueConsumerHandler<TMessageConsumer, TQueueMessage>, QueueConsumerHandler<TMessageConsumer, TQueueMessage>>();
-        services.AddHostedService<QueueConsumerRegistratorService<TMessageConsumer, TQueueMessage>>();
-    }
+    services.AddQueueMessageConsumer(consumer.ConsumerType, typeof(ActionQueueMessage), consumer.QueueName);
+
+    var host = builder.Build();
+    hosts.Add(host);
 }
+
+Task.WaitAll(hosts.Select(h => h.RunAsync()).ToArray());
+
+

@@ -1,4 +1,4 @@
-﻿namespace SuperBotManagerBase.ActionExecutors
+﻿namespace SuperBotManagerBase.Attributes
 {
     public class ActionsDefinitionProviderAttribute : Attribute
     {

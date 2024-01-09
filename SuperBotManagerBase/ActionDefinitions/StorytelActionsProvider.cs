@@ -1,4 +1,4 @@
-﻿using SuperBotManagerBase.ActionExecutors;
+﻿using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.DB.Repositories;
 
 namespace SuperBotManagerBase.BotDefinitions
@@ -6,11 +6,10 @@ namespace SuperBotManagerBase.BotDefinitions
     [ActionsDefinitionProvider]
     public class StorytelActionsProvider
     {
-        public static string SignUpQueueName { get; } = "storytel-sign-up";
         public static ActionDefinition SignUp { get; } = new ActionDefinition()
         {
+            ActionDefinitionQueueName = "storytel-sign-up",
             ActionDefinitionName = "Storytel - sign up",
-            ActionDefinitionQueueName = SignUpQueueName,
             ActionDefinitionDescription = "Create an account in storytel",
             ActionDefinitionIcon = "/storytel.png",
             ActionDataSchema = new ActionDefinitionSchema()

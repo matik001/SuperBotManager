@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SuperBotManagerBase.ActionExecutors;
+using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.BotDefinitions;
 using SuperBotManagerBase.DB.Repositories;
 using System.Diagnostics;

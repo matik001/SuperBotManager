@@ -1,15 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 
-namespace StorytelSignupActionConsumer
+namespace IntercityActionConsumer
 {
-    public class StorytelSignupActionConsumer : IQueueConsumer<ActionQueueMessage>
+    [ServiceActionConsumer("intercity-buy-ticket")]
+    public class IntercityBuyTicketActionConsumer : IQueueConsumer<ActionQueueMessage>
     {
-        ILogger<StorytelSignupActionConsumer> logger;
+        ILogger<IntercityBuyTicketActionConsumer> logger;
 
-        public StorytelSignupActionConsumer(ILogger<StorytelSignupActionConsumer> logger)
+        public IntercityBuyTicketActionConsumer(ILogger<IntercityBuyTicketActionConsumer> logger)
         {
             this.logger = logger;
         }
