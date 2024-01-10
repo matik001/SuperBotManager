@@ -99,6 +99,10 @@ namespace SuperBotManagerBase.DB
                 .WithOne(e => e.ActionExecutor)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<ActionExecutor>()
+                .HasOne(e => e.ActionExecutorOnFinish)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             //builder.Entity<ActionExecutor>()
             //    .HasOne(e => e.ActionExecutorOnFinish)

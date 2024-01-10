@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
 	ActionExecutorExtendedDTO,
 	ActionExecutorUpdateDTO,
+	actionExecutorDelete,
 	actionExecutorGetOne,
 	executorKeys
 } from 'api/actionExecutorApi';
@@ -62,18 +63,28 @@ const ActionExecutorEditor: React.FC<ActionExecutorEditorProps> = ({ id, onSave 
 	const onGoBack = () => {
 		navigate('/executors');
 	};
+	const queryClient = useQueryClient();
+	const deleteExecutorMutation = useMutation({
+		mutationFn: () => actionExecutorDelete(id),
+		onSuccess: async () => {
+			await queryClient.invalidateQueries();
+			onGoBack();
+		}
+	});
 	return (
 		<Container>
 			<TopHeader
+				isDeleting={deleteExecutorMutation.isPending}
 				canSave={canSave}
 				onGoBack={onGoBack}
 				hasUnsaveChanges={hasUnsaveChanges}
 				title={executorLocal?.actionExecutorName ?? ''}
 				onSave={() => executorLocal && onSave(executorLocal)}
 				iconUrl={executorLocal?.actionDefinition?.actionDefinitionIcon}
+				onDelete={deleteExecutorMutation.mutate}
 			/>
 			<Content>
-				{!isFetching && executorLocal ? (
+				{!isFetching && executorLocal && !deleteExecutorMutation.isPending ? (
 					<>
 						<ExecutorSettings executor={executorLocal} updateExecutor={updateExecutorLocal} />
 						<InputsEditor
