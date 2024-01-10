@@ -13,7 +13,7 @@ const FieldDateEditor: React.FC<InnerFieldEditorProps> = ({
 		<DatePicker
 			style={{ width: fieldWidthPx }}
 			value={value.value ? dayjs(value.value) : undefined}
-			onChange={(date) => onChange({ ...value, value: date?.toISOString() })}
+			onChange={(date) => onChange({ ...value, value: date?.toISOString() ?? null })}
 		></DatePicker>
 	);
 };

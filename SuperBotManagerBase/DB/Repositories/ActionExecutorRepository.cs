@@ -10,11 +10,11 @@ namespace SuperBotManagerBase.DB.Repositories
 {
     public class FieldValue
     {
-        public string Value { get; set; }
+        public string? Value { get; set; }
         public bool IsEncrypted { get; set; }
         public bool IsValid { get; set; }
 
-        public FieldValue(string value, bool isMasked = false, bool isValid = true)
+        public FieldValue(string? value, bool isMasked = false, bool isValid = true)
         {
             Value = value;
             IsEncrypted = isMasked;

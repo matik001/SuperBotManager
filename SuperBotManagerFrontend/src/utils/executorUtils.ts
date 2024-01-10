@@ -1,6 +1,17 @@
-import { FieldInfo } from 'api/actionDefinitionApi';
+import { FieldInfo, FieldType } from 'api/actionDefinitionApi';
 import { ExecutorInput } from 'api/actionExecutorApi';
 
+const initialValues: Record<FieldType, string | null> = {
+	Boolean: 'false',
+	Date: null,
+	DateTime: null,
+	ExecutorPicker: null,
+	Json: '{}',
+	Number: '0',
+	Secret: null,
+	Set: null,
+	String: ''
+};
 export const createNewInput = (inputSchema: FieldInfo[]) => {
 	const res: ExecutorInput = {};
 	for (const field of inputSchema) {
@@ -9,6 +20,9 @@ export const createNewInput = (inputSchema: FieldInfo[]) => {
 			isValid: true, /// will be changed automaticaly
 			value: field.initialValue === undefined ? null : field.initialValue
 		};
+		if (res[field.name]!.value === null) {
+			res[field.name]!.value = initialValues[field.type];
+		}
 	}
 	return res;
 };
