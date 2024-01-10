@@ -41,6 +41,7 @@ jobs:
             - dist
 
   build-backend:
+    resource_class: medium+
     description: Build backend with Release configuration
     docker:
         - image: mcr.microsoft.com/dotnet/sdk:8.0
