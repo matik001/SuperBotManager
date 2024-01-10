@@ -26,7 +26,6 @@ const CollapseWrapper = styled.div`
 const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEditorProps) => {
 	const { count: nextInputId, increment: incNextInputId } = useCounter(0);
 	const [inputsIds, setInputIds] = useState(() => inputs.map((_) => Math.random() * 1000000));
-	console.log(inputs);
 	const onDeleteInput = useCallback(
 		(idx: number) => {
 			const id = inputsIds[idx];
@@ -74,7 +73,7 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 						`${name}: ${
 							inputSchema.some((a) => a.name === name && a.type === 'Secret')
 								? MASK_ENCRYPTED
-								: val?.value
+								: val?.value ?? 'Empty'
 						}`
 				)
 				.join(', ')})`,

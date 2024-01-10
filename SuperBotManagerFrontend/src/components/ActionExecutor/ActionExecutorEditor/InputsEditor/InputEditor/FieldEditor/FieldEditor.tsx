@@ -73,12 +73,12 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 	return (
 		<>
 			<div style={{ marginRight: '15px', alignSelf: 'center' }}>{fieldSchema.name}</div>
-			<Tooltip placement="right" color="volcano" title={invalidMessage}>
-				<div
-				// style={{
-				// 	width: '200px'
-				// }}
-				>
+			<div
+			// style={{
+			// 	width: '200px'
+			// }}
+			>
+				<Tooltip placement="right" color="volcano" title={invalidMessage}>
 					<Tooltip title={fieldSchema.description}>
 						<Form.Item
 							validateStatus={invalidMessage ? 'warning' : undefined}
@@ -160,8 +160,8 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 							}
 						</Form.Item>
 					</Tooltip>
-				</div>
-			</Tooltip>
+				</Tooltip>
+			</div>
 		</>
 	);
 };

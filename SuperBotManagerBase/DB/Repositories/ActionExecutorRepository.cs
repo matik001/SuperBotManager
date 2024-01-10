@@ -51,7 +51,7 @@ namespace SuperBotManagerBase.DB.Repositories
             {
                 foreach(var secretField in secretFields)
                 {
-                    if(input.ContainsKey(secretField.Name) && input[secretField.Name] != null && !input[secretField.Name].IsEncrypted)
+                    if(input.ContainsKey(secretField.Name) && input[secretField.Name] != null && !string.IsNullOrWhiteSpace(input[secretField.Name].Value) && !input[secretField.Name].IsEncrypted)
                     {
                         var plainTextValue = input[secretField.Name].Value;
                         var newSecret = new Secret()
