@@ -34,6 +34,13 @@ namespace SuperBotManagerBase.Services
                 {
                     newInput[item.Key] = item.Value;
                 }
+
+                /// pass forward inputs from previous action, without overriding 
+                foreach(var item in previousAction.Input)
+                {
+                    if(!newInput.ContainsKey(item.Key))
+                        newInput[item.Key] = item.Value;
+                }
             }
             return newInput;
         }
