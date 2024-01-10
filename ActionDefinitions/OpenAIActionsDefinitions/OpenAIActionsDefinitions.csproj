@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
+    <ProjectReference Include="..\..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 
 </Project>

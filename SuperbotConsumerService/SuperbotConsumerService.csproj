@@ -18,7 +18,7 @@
     <ProjectReference Include="..\ActionConsumers\IntercityActionsConsumer\IntercityActionsConsumer.csproj" />
     <ProjectReference Include="..\ActionConsumers\OpenAIActionsConsumer\OpenAIActionsConsumer.csproj" />
     <ProjectReference Include="..\ActionConsumers\StorytelActionsConsumer\StorytelActionsConsumer.csproj" />
+    <ProjectReference Include="..\ActionConsumers\XKomActionsConsumer\XKomActionsConsumer.csproj" />
     <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
-    <ProjectReference Include="..\XKomActionsConsumer\XKomActionsConsumer.csproj" />
   </ItemGroup>
 </Project>
