@@ -42,7 +42,7 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 			return actionExecutorCreate({
 				actionDefinitionId: actionDefinition.id,
 				actionExecutorName: actionDefinition.actionDefinitionName,
-				runPeriod: 'Manual',
+				runMethod: 'Manual',
 				actionData: {
 					inputs: []
 				},
@@ -60,6 +60,7 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 			return actionExecutorRun(id);
 		},
 		onSuccess: () => {
+			/// TODO zorbic to bez spinnera
 			// queryClient.invalidateQueries({
 			// 	queryKey: executorKeys.prefix
 			// });

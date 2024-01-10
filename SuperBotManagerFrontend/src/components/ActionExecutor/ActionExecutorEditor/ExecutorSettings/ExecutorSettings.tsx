@@ -1,5 +1,5 @@
 import { Button, Input } from 'antd';
-import { ActionExecutorExtendedDTO, RunPeriod } from 'api/actionExecutorApi';
+import { ActionExecutorExtendedDTO, RunMethod } from 'api/actionExecutorApi';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
@@ -113,45 +113,18 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 							type: 'Set',
 							setOptions: [
 								{ display: 'Manual', value: 'Manual' },
-								{ display: 'Everyday', value: 'Everyday' },
-								{ display: 'Loop', value: 'Loop' },
-								{ display: 'TimePeriod', value: 'TimePeriod' }
+								{ display: 'Automatic', value: 'Automatic' }
 							]
 						}}
 						onChange={(value) =>
 							updateExecutor((a) => {
 								if (a) {
-									a.runPeriod = value?.value as RunPeriod;
-									if (!a.timeIntervalSeconds) {
-										a.timeIntervalSeconds = 300;
-									}
+									a.runMethod = value?.value as RunMethod;
 								}
 							})
 						}
-						value={{ isEncrypted: false, isValid: true, value: executor.runPeriod }}
+						value={{ isEncrypted: false, isValid: true, value: executor.runMethod }}
 					/>
-					{executor.runPeriod === 'TimePeriod' && (
-						<FieldEditor
-							fieldSchema={{
-								name: 'Run interval (sec)',
-								description: 'How often actions should be executed?',
-								isOptional: false,
-								type: 'Number'
-							}}
-							onChange={(value) =>
-								updateExecutor((a) => {
-									if (a) {
-										a.timeIntervalSeconds = parseInt(value?.value ?? '300');
-									}
-								})
-							}
-							value={{
-								value: executor.timeIntervalSeconds?.toString() ?? '300',
-								isEncrypted: false,
-								isValid: true
-							}}
-						/>
-					)}
 					<FieldEditor
 						fieldSchema={{
 							name: 'Run on finish',

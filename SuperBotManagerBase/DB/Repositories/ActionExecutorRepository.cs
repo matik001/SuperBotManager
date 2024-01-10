@@ -92,9 +92,9 @@ namespace SuperBotManagerBase.DB.Repositories
             }
         }
     }
-    public enum RunPeriod
+    public enum RunMethod
     {
-        Manual, Everyday, Loop, TimePeriod
+        Manual, Automatic, TimePeriod
     }
 
     [Table("actionexecutor")]
@@ -114,7 +114,7 @@ namespace SuperBotManagerBase.DB.Repositories
         public int ActionDefinitionId { get; set; }
         public virtual ActionDefinition ActionDefinition{ get; set; }
 
-        public RunPeriod RunPeriod { get; set; } = RunPeriod.Manual;
+        public RunMethod RunMethod { get; set; } = RunMethod.Manual;
         public DateTime? LastRunDate { get; set; }
         public int? TimeIntervalSeconds { get; set; }
 

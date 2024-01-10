@@ -11,9 +11,8 @@ namespace SuperBotManagerBackend.DTOs
         public ActionExecutorSchema ActionData { get; set; }
 
         public int ActionDefinitionId { get; set; }
-        public RunPeriod RunPeriod { get; set; } = RunPeriod.Manual;
+        public RunMethod RunMethod { get; set; } = RunMethod.Manual;
         public bool PreserveExecutedInputs { get; set; }
-        public int? TimeIntervalSeconds { get; set; }
         public int? ActionExecutorOnFinishId { get; set; }
     }
     public class ActionExecutorUpdateDTO : ActionExecutorCreateDTO

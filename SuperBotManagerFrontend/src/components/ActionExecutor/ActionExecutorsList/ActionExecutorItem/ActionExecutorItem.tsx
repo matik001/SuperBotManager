@@ -99,7 +99,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 					</div>
 					<div>
 						<div>
-							Type: <b>{actionExecutor.runPeriod}</b>
+							Type: <b>{actionExecutor.runMethod}</b>
 						</div>
 						<div>
 							Inputs: <b>{actionExecutor.actionData.inputs.length}</b>
@@ -114,32 +114,44 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 							</b>
 						</div>
 					</div>
-					<Tooltip
-						title={
-							noInputs
-								? 'No inputs to execute'
-								: !actionExecutor.isValid
-									? 'Settings are invalid'
-									: undefined
-						}
-						placement="bottom"
-						color="red"
-					>
-						<IconButton
-							disabled={!actionExecutor.isValid}
-							type="primary"
-							shape="round"
+					{actionExecutor.runMethod === 'Manual' ? (
+						<Tooltip
+							title={
+								noInputs
+									? 'No inputs to execute'
+									: !actionExecutor.isValid
+										? 'Settings are invalid'
+										: undefined
+							}
+							placement="bottom"
+							color="red"
+						>
+							<IconButton
+								disabled={!actionExecutor.isValid}
+								type="primary"
+								shape="round"
+								style={{
+									marginTop: 'auto',
+									marginBottom: '7px'
+								}}
+								loading={isQueueing}
+								onClick={onRun}
+							>
+								<IoIosPlay />
+								Run
+							</IconButton>
+						</Tooltip>
+					) : (
+						<div
 							style={{
 								marginTop: 'auto',
-								marginBottom: '7px'
+								marginBottom: '14px',
+								fontWeight: 'bold'
 							}}
-							loading={isQueueing}
-							onClick={onRun}
 						>
-							<IoIosPlay />
-							Run
-						</IconButton>
-					</Tooltip>
+							Automatic
+						</div>
+					)}
 					{/* {actionExecutor.actionExecutorName} ({actionExecutor.id}) */}
 				</Backdrop>
 			</Container>

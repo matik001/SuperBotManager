@@ -1,6 +1,6 @@
 import { ActionDefinitionDTO } from './actionDefinitionApi';
 import { appAxios } from './apiConfig';
-export type RunPeriod = 'Manual' | 'Everyday' | 'Loop' | 'TimePeriod';
+export type RunMethod = 'Manual' | 'Automatic';
 
 export interface FieldValue {
 	value: string | undefined;
@@ -15,9 +15,8 @@ export interface ActionExecutorCreateDTO {
 	actionExecutorName: string;
 	actionData: ActionExecutorSchema;
 	actionDefinitionId: number;
-	runPeriod: RunPeriod;
+	runMethod: RunMethod;
 	preserveExecutedInputs: boolean;
-	timeIntervalSeconds?: number;
 	actionExecutorOnFinishId?: number;
 }
 export interface ActionExecutorUpdateDTO extends ActionExecutorCreateDTO {
