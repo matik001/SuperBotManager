@@ -32,7 +32,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpGet]
         public IEnumerable<ActionDefinitionDTO> Get()
         {
-            var actionDefinitions = uow.ActionDefinitionRepository.GetAll().ToList();
+            var actionDefinitions = uow.ActionDefinitionRepository.GetAll().OrderBy(a=>a.ActionDefinitionName).ToList();
             var dtos = mapper.Map<IEnumerable<ActionDefinitionDTO>>(actionDefinitions);
             return dtos;
         }

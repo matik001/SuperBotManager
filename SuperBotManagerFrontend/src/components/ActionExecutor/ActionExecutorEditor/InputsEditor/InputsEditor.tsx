@@ -58,7 +58,6 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 		},
 		[incNextInputId, inputSchema, inputs, inputsIds, nextInputId, onChangeInputs]
 	);
-	console.log(inputs);
 	const isInputValid = (idx: number) => {
 		const input = inputs[idx];
 		if (!input) return false;

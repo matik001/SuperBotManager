@@ -22,8 +22,10 @@ foreach(var consumer in consumers)
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         options.UseNpgsql(connectionString);
     });
+    services.ConfigureEncryption(builder.Configuration);
     services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
     services.ConfigureRabbitMq(builder.Configuration);
+    services.AddScoped<IActionService, ActionService>();
 
     services.AddQueueMessageConsumer(consumer.ConsumerType, typeof(ActionQueueMessage), consumer.QueueName);
 

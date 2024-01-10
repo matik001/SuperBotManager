@@ -167,6 +167,7 @@ namespace SuperBotManagerBase.DB.Repositories
     public interface IActionExecutorRepository : IGenericRepository<ActionExecutor, int>
     {
         Task LoadDefinition(ActionExecutor actionExecutor);
+        Task LoadExecutorOnFinish(ActionExecutor actionExecutor);
     }
     public class ActionExecutorRepository : GenericRepository<ActionExecutor, int>, IActionExecutorRepository
     {
@@ -177,6 +178,10 @@ namespace SuperBotManagerBase.DB.Repositories
         public async Task LoadDefinition(ActionExecutor actionExecutor)
         {
             await this._dbContext.Entry(actionExecutor).Reference(a => a.ActionDefinition).LoadAsync();
+        }
+        public async Task LoadExecutorOnFinish(ActionExecutor actionExecutor)
+        {
+            await this._dbContext.Entry(actionExecutor).Reference(a => a.ActionExecutorOnFinish).LoadAsync();
         }
     }
 }

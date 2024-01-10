@@ -9,6 +9,7 @@ using SuperBotManagerBase.Configuration;
 using SuperBotManagerBase.DB;
 using SuperBotManagerBase.DB.Repositories;
 using SuperBotManagerBase.RabbitMq.Concreate;
+using SuperBotManagerBase.Services;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,19 +24,23 @@ namespace SuperBotManagerBackend.Controllers.v1
     {
         private readonly IAppUnitOfWork uow;
         private readonly IMapper mapper;
-        private readonly IActionProducer actionProducer;
+        private readonly IActionService actionService;
 
-        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IActionProducer actionProducer)
+        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IActionService actionService)
         {
             this.uow = uow;
             this.mapper = mapper;
-            this.actionProducer = actionProducer;
+            this.actionService = actionService;
         }
 
         [HttpGet]
         public IEnumerable<ActionExecutorDTO> Get()
         {
-            var actionDefinitions = uow.ActionExecutorRepository.GetAll().Include(a => a.ActionDefinition).ToList();
+            var actionDefinitions = uow.ActionExecutorRepository
+                                    .GetAll()
+                                    .Include(a => a.ActionDefinition)
+                                    .OrderByDescending(a=>a.ModifiedDate)
+                                    .ToList();
             var dtos = mapper.Map<IEnumerable<ActionExecutorExtendedDTO>>(actionDefinitions);
 
             return dtos;
@@ -97,48 +102,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpPost("{id}/execute")]
         public async Task Execute(int id)
         {
-            var executor = await uow.ActionExecutorRepository.GetById(id, a => a.Include(x => x.ActionDefinition));
-            var executorData = executor.ActionData.DeepClone();
-            await executorData.DecryptSecrets(executor.ActionDefinition.ActionDataSchema, uow);
-
-            if(!executor.IsValid)
-            {
-                throw HttpUtilsService.BadRequest("Executor is not valid, so cannot be run");
-            }
-            var newActions = executorData.Inputs.Select(input =>
-            {
-                var action = new Action()
-                {
-                    ActionExecutorId = executor.Id,
-                    ActionStatus = ActionStatus.Pending,
-                    ActionData = new ActionSchema()
-                    {
-                        Input = input.ToDictionary(a=>a.Key, a=>a.Value.Value),
-                        Output = new Dictionary<string, string>()
-                    },
-                };
-
-                return action;
-            }).ToList();
-            foreach(var action in newActions)
-            {
-                await uow.ActionRepository.Create(action);
-            }
-            executor.LastRunDate = DateTime.UtcNow;
-            await uow.ActionExecutorRepository.Update(executor);
-            await uow.SaveChangesAsync();
-
-            foreach(var action in newActions)
-            {
-                action.ActionExecutor = executor;
-                actionProducer.SendToExecute(action);
-            }
-            if(!executor.PreserveExecutedInputs)
-            {
-                executor.ActionData.Inputs.Clear();
-                await uow.ActionExecutorRepository.Update(executor);
-                await uow.SaveChangesAsync();
-            }
+            await actionService.Execute(id);
         }
 
     }

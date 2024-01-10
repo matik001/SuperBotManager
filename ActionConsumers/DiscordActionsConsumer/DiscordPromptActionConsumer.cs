@@ -1,29 +1,30 @@
 ﻿using Microsoft.Extensions.Logging;
 using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.DB;
+using SuperBotManagerBase.DB.Repositories;
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 using SuperBotManagerBase.Services;
 
 namespace DiscordActionsConsumer
 {
-    public class SendMessageInput
+    public class PromptActionInput
     {
         public string Message { get; set; }
         public string Token { get; set; }
         public bool TagEveryone { get; set; }
 
-        public SendMessageInput(Dictionary<string, string> fromInput) 
-        { 
-            Message = Utils.BuildMessage(fromInput, ["Tag everyone", "Token"]);
+        public PromptActionInput(Dictionary<string, string> fromInput) 
+        {
+            Message = Utils.BuildMessage(fromInput, ["Tag everyone", "Token "]);
             TagEveryone = fromInput["Tag everyone"] == "true";
             Token = fromInput["Token"];
         }
     }
-    [ServiceActionConsumer("discord-send-message")]
-    public class DiscordSendMessageActionConsumer : ActionQueueConsumer
+    [ServiceActionConsumer("discord-prompt")]
+    public class DiscordPromptActionConsumer : ActionQueueConsumer
     {
-        public DiscordSendMessageActionConsumer(ILogger<DiscordSendMessageActionConsumer> logger, IAppUnitOfWork uow, IActionService actionService) : base(logger, uow, actionService)
+        public DiscordPromptActionConsumer(ILogger<DiscordPromptActionConsumer> logger, IAppUnitOfWork uow, IActionService actionService) : base(logger, uow, actionService)
         {
         }
 
@@ -32,8 +33,8 @@ namespace DiscordActionsConsumer
             var input = new SendMessageInput(action.ActionData.Input);
             if(input.TagEveryone)
                 input.Message = $"@everyone {input.Message}";
-            await new DiscordBot(input.Token).SendMessage(input.Message);
-            return new Dictionary<string, string>();
+            var answer = await new DiscordBot(input.Token).Prompt(input.Message);
+            return new Dictionary<string, string> { { "Answer", answer } };
         }
     }
 }
