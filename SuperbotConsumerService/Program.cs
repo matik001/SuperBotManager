@@ -22,6 +22,7 @@ foreach(var consumer in consumers)
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         options.UseNpgsql(connectionString);
     });
+    services.AddSingleton<IConfigurationManager>(_=>builder.Configuration);
     services.ConfigureEncryption(builder.Configuration);
     services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
     services.ConfigureRabbitMq(builder.Configuration);

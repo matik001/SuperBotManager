@@ -4,6 +4,7 @@ using SuperBotManagerBase.DB;
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 using SuperBotManagerBase.Services;
+using SuperBotManagerBase.Utils;
 
 namespace DiscordActionsConsumer
 {
@@ -15,7 +16,7 @@ namespace DiscordActionsConsumer
 
         public SendMessageInput(Dictionary<string, string> fromInput) 
         { 
-            Message = Utils.BuildMessage(fromInput, ["Tag everyone", "Token"]);
+            Message = ConsumersUtils.BuildMessage("Message", fromInput, ["Tag everyone", "Token"]);
             TagEveryone = fromInput["Tag everyone"] == "true";
             Token = fromInput["Token"];
         }

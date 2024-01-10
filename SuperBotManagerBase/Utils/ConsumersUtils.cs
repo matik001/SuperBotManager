@@ -5,14 +5,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DiscordActionsConsumer
+namespace SuperBotManagerBase.Utils
 {
-    internal class Utils
-    { 
-        public static string BuildMessage(Dictionary<string, string> input, List<string> ignoreFields)
+    public class ConsumersUtils
+    {
+        public static string BuildMessage(string messageKey, Dictionary<string, string> input, List<string> ignoreFields)
         {
-            var msg = input["Message"];
-            ignoreFields.Add("Message");
+            var msg = input[messageKey];
+            ignoreFields.Add(messageKey);
 
             msg = Regex.Replace(msg, @"\{\{\{\s*(.+?)\s*\}\}\}", match =>
             {
@@ -23,19 +23,17 @@ namespace DiscordActionsConsumer
                 {
                     return value;
                 }
-                
+
                 return match.Value;
             });
 
-            var remainingField = input.Where(x => !ignoreFields.Contains(x.Key)).ToList();
-            foreach(var field in remainingField)
-            {
-                msg += $"\n{field.Key}: {field.Value}";
-            }
+            //var remainingField = input.Where(x => !ignoreFields.Contains(x.Key)).ToList();
+            //foreach(var field in remainingField)
+            //{
+            //    msg += $"\n{field.Key}: {field.Value}";
+            //}
 
-            return msg; 
+            return msg;
         }
     }
 }
-
-

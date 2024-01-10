@@ -24,12 +24,16 @@ namespace SuperBotManagerBase.Services
             this.uow = uow;
             this.actionProducer = actionProducer;
         }
-        private Dictionary<string, string> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, Dictionary<string, string> input)
+        private Dictionary<string, string> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, ActionSchema? previousAction = null)
         {
             var newInput = templateInput.ToDictionary(a => a.Key, a => a.Value.Value);
-            foreach(var item in input)
+            
+            if(previousAction != null)
             {
-                newInput[item.Key] = item.Value;
+                foreach(var item in previousAction.Output)
+                {
+                    newInput[item.Key] = item.Value;
+                }
             }
             return newInput;
         }
@@ -52,7 +56,7 @@ namespace SuperBotManagerBase.Services
                     ActionStatus = ActionStatus.Pending,
                     ActionData = new ActionSchema()
                     {
-                        Input = _buildExecuteInput(input, fromAction?.ActionData.Output ?? new Dictionary<string, string>()),
+                        Input = _buildExecuteInput(input, fromAction?.ActionData),
                         Output = new Dictionary<string, string>()
                     },
                 };

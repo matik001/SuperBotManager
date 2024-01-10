@@ -38,6 +38,8 @@
     <ProjectReference Include="..\ActionDefinitions\DiscordActionsDefinitions\DiscordActionsDefinitions.csproj" />
     <ProjectReference Include="..\ActionDefinitions\IntercityActionsDefinitions\IntercityActionsDefinitions.csproj" />
     <ProjectReference Include="..\ActionDefinitions\StorytelActionsDefinitions\StorytelActionsDefinitions.csproj" />
+    <ProjectReference Include="..\ActionDefinitions\XKomActionsDefinitions\XKomActionsDefinitions.csproj" />
+    <ProjectReference Include="..\OpenAIActionsDefinitions\OpenAIActionsDefinitions.csproj" />
     <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 
