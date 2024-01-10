@@ -33,24 +33,35 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 	fieldWidthPx = 200
 }) => {
 	const invalidMessage = useMemo(() => {
-		if (!fieldSchema.isOptional && (value?.value === undefined || value.value.length === 0))
+		if (
+			!fieldSchema.isOptional &&
+			(value === undefined || value.value === null || value.value.length === 0)
+		)
 			return 'Field cannot be empty';
 		return undefined;
-	}, [fieldSchema.isOptional, value?.value]);
+	}, [fieldSchema.isOptional, value]);
 	useEffect(() => {
 		const newValid = !invalidMessage;
-		if (value === undefined || value?.isValid === newValid) return;
-		onChange({
-			...value,
-			isValid: newValid
-		});
+		if (value?.isValid === newValid) return;
+		if (value === undefined) {
+			onChange({
+				isEncrypted: false,
+				isValid: true,
+				value: null
+			});
+		} else {
+			onChange({
+				...value,
+				isValid: newValid
+			});
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [invalidMessage]);
+	}, [invalidMessage, value?.value]);
 
 	const valueNotUndefined = useMemo(
 		() =>
 			value === undefined
-				? ({ isEncrypted: false, isValid: false, value: value } as FieldValue)
+				? ({ isEncrypted: false, isValid: false, value: null } as FieldValue)
 				: value,
 		[value]
 	);

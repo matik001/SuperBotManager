@@ -136,7 +136,7 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 							updateExecutor((a) => {
 								if (a) {
 									a.actionExecutorOnFinishId =
-										value?.value === '' || value?.value === undefined
+										value?.value === '' || value?.value === null || value === undefined
 											? undefined
 											: parseInt(value.value);
 								}

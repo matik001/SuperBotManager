@@ -8,7 +8,7 @@ import { IoMdTrash } from 'react-icons/io';
 import { IoDuplicate } from 'react-icons/io5';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { useCounter } from 'usehooks-ts';
-import { MASK_ENCRYPTED, duplicateInput } from 'utils/executorUtils';
+import { MASK_ENCRYPTED, createNewInput, duplicateInput } from 'utils/executorUtils';
 import InputEditor from './InputEditor/InputEditor';
 
 export interface InputsEditorProps {
@@ -26,7 +26,7 @@ const CollapseWrapper = styled.div`
 const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEditorProps) => {
 	const { count: nextInputId, increment: incNextInputId } = useCounter(0);
 	const [inputsIds, setInputIds] = useState(() => inputs.map((_) => Math.random() * 1000000));
-
+	console.log(inputs);
 	const onDeleteInput = useCallback(
 		(idx: number) => {
 			const id = inputsIds[idx];
@@ -37,7 +37,7 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 	);
 	const onAddInput = () => {
 		setInputIds([...inputsIds, nextInputId]);
-		onChangeInputs([...inputs, {}]);
+		onChangeInputs([...inputs, createNewInput(inputSchema)]);
 		incNextInputId();
 	};
 	const onDuplicateInput = useCallback(

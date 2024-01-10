@@ -19,7 +19,10 @@ namespace OpenAIActionsDefinitions
                     new FieldInfo("Key", FieldType.Secret, "OpenAI API key"),
                     new FieldInfo("System message", FieldType.String, "Tell ai what type of task it should perform", true),
                     new FieldInfo("Question", FieldType.String, "Question you want to ask an AI model"),
-                    new FieldInfo("Temperature", FieldType.Number, "How much creative model should be (between 0 and 1)"),
+                    new FieldInfo("Temperature", FieldType.Number, "How much creative model should be (between 0 and 1)")
+                    {
+                        InitialValue = "0.3",
+                    },
                     new FieldInfo("Model", FieldType.Set, "Picker a model you want to use.", true)
                     {
                         SetOptions = new List<SetOption>()
@@ -27,6 +30,7 @@ namespace OpenAIActionsDefinitions
                             new SetOption("GPT3.5", "GPT3.5"),
                             new SetOption("GPT4", "GPT4"),
                         },
+                        InitialValue = "GPT3.5",
                     },
                 },
                 OutputSchema = new List<FieldInfo>()

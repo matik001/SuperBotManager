@@ -20,6 +20,7 @@ export interface FieldInfo {
 	isOptional: boolean;
 	type: FieldType;
 	setOptions?: SetOption[];
+	initialValue?: string | null;
 }
 export interface ActionDefinitionSchema {
 	inputSchema: FieldInfo[];

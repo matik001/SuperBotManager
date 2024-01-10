@@ -3,7 +3,7 @@ import { appAxios } from './apiConfig';
 export type RunMethod = 'Manual' | 'Automatic';
 
 export interface FieldValue {
-	value: string | undefined;
+	value: string | null;
 	isEncrypted: boolean;
 	isValid: boolean;
 }
