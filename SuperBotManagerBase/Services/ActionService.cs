@@ -12,7 +12,7 @@ namespace SuperBotManagerBase.Services
 {
     public interface IActionService
     {
-        Task Execute(int executorId);
+        Task Execute(int executorId, DB.Repositories.Action? fromAction = null);
     }
     public class ActionService : IActionService
     {
@@ -24,8 +24,16 @@ namespace SuperBotManagerBase.Services
             this.uow = uow;
             this.actionProducer = actionProducer;
         }
-
-        public async Task Execute(int executorId)
+        private Dictionary<string, string> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, Dictionary<string, string> input)
+        {
+            var newInput = templateInput.ToDictionary(a => a.Key, a => a.Value.Value);
+            foreach(var item in input)
+            {
+                newInput[item.Key] = item.Value;
+            }
+            return newInput;
+        }
+        public async Task Execute(int executorId, DB.Repositories.Action? fromAction = null)
         {
             var executor = await uow.ActionExecutorRepository.GetById(executorId, a => a.Include(x => x.ActionDefinition));
             if(!executor.IsValid)
@@ -44,7 +52,7 @@ namespace SuperBotManagerBase.Services
                     ActionStatus = ActionStatus.Pending,
                     ActionData = new ActionSchema()
                     {
-                        Input = input.ToDictionary(a => a.Key, a => a.Value.Value),
+                        Input = _buildExecuteInput(input, fromAction?.ActionData.Output ?? new Dictionary<string, string>()),
                         Output = new Dictionary<string, string>()
                     },
                 };

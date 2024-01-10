@@ -14,7 +14,7 @@ namespace DiscordActionsConsumer
             var msg = input["Message"];
             ignoreFields.Add("Message");
 
-            Regex.Replace(msg, @"\{\{\{\s*(.+?)\s*\}\}\}", match =>
+            msg = Regex.Replace(msg, @"\{\{\{\s*(.+?)\s*\}\}\}", match =>
             {
                 string key = match.Groups[1].Value;
 
@@ -23,12 +23,15 @@ namespace DiscordActionsConsumer
                 {
                     return value;
                 }
-
-                // Jeśli klucz nie istnieje w słowniku, pozostaw oryginalny tekst
+                
                 return match.Value;
             });
 
-            input.Where(x => !ignoreFields.Contains(x.Key)).ToList().ForEach(x => msg += $"\n{x.Key}: {x.Value}");
+            var remainingField = input.Where(x => !ignoreFields.Contains(x.Key)).ToList();
+            foreach(var field in remainingField)
+            {
+                msg += $"\n{field.Key}: {field.Value}";
+            }
 
             return msg; 
         }

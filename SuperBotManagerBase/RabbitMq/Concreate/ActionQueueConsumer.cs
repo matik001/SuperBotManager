@@ -46,7 +46,7 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
             await uow.SaveChangesAsync();
 
             if(action.ActionExecutor.ActionExecutorOnFinishId != null)
-                await actionService.Execute(action.ActionExecutor.ActionExecutorOnFinishId.Value);
+                await actionService.Execute(action.ActionExecutor.ActionExecutorOnFinishId.Value, action);
 
             await uow.SaveChangesAsync();
         }
