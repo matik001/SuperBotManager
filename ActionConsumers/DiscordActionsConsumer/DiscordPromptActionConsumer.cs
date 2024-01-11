@@ -13,13 +13,15 @@ namespace DiscordActionsConsumer
     {
         public string Message { get; set; }
         public string Token { get; set; }
+        public bool Spam { get; set; }
         public bool TagEveryone { get; set; }
 
         public PromptActionInput(Dictionary<string, string> fromInput) 
         {
-            Message = ConsumersUtils.BuildMessage("Message", fromInput, ["Tag everyone", "Token "]);
+            Message = ConsumersUtils.BuildMessage("Message", fromInput);
             TagEveryone = fromInput["Tag everyone"] == "true";
             Token = fromInput["Token"];
+            Spam = fromInput["Spam"] == "true";
         }
     }
     [ServiceActionConsumer("discord-prompt")]
@@ -31,10 +33,10 @@ namespace DiscordActionsConsumer
 
         protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
         {
-            var input = new SendMessageInput(action.ActionData.Input);
+            var input = new PromptActionInput(action.ActionData.Input);
             if(input.TagEveryone)
                 input.Message = $"@everyone {input.Message}";
-            var answer = await new DiscordBot(input.Token).Prompt(input.Message);
+            var answer = await new DiscordBot(input.Token).Prompt(input.Message, input.Spam ? 5 : null);
             return new Dictionary<string, string> { { "Answer", answer } };
         }
     }

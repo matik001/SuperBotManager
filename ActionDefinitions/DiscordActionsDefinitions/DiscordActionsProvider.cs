@@ -42,6 +42,7 @@ namespace DiscordActionsDefinitions
                     new FieldInfo("Message", FieldType.String, "What message do you want to send?"),
                     new FieldInfo("Tag everyone", FieldType.Boolean, "Do you want to tag @everyone?"),
                     new FieldInfo("Token", FieldType.Secret, "How to get it: https://discordnet.dev/guides/getting_started/first-bot.html"),
+                    new FieldInfo("Spam", FieldType.Boolean, "Do you want to spam it, every 5 seconds?"),
                 },
                 OutputSchema = new List<FieldInfo>()
                 {

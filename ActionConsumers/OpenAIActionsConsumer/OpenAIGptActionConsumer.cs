@@ -22,7 +22,7 @@ namespace OpenAIActionsConsumer
 
         public GptActionInput(Dictionary<string, string> fromInput)
         {
-            Question = ConsumersUtils.BuildMessage("Question", fromInput, ["Key", "System message", "Model", "Temperature"]);
+            Question = ConsumersUtils.BuildMessage("Question", fromInput);
             Key = fromInput["Key"];
             SystemMessage = fromInput.ContainsKey("System message") ? fromInput["System message"] : null;
             Temperature = double.Parse(fromInput["Temperature"]);

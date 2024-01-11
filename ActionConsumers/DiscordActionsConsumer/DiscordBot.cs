@@ -28,7 +28,7 @@ namespace DiscordActionsConsumer
                 {
                     _client.MessageReceived += async (message) =>
                     {
-                          await onReceivedMessage(message);
+                        await onReceivedMessage(message);
                     };
                 }
                 _client.Ready += async () =>
@@ -40,7 +40,7 @@ namespace DiscordActionsConsumer
                 await _client.LoginAsync(TokenType.Bot, _token);
                 await _client.StartAsync();
                 await readyCompletionSource.Task;
-                var res =  await func(_client);
+                var res = await func(_client);
                 return res;
             }
         }
@@ -59,26 +59,35 @@ namespace DiscordActionsConsumer
                 return true;
             });
         }
-        public async Task<string> Prompt(string message)
+        public async Task<string> Prompt(string message, int? spamIntervalSecs = null)
         {
             var sentMessages = new List<RestUserMessage>();
-
             var receivedMessageCompletionSource = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
-
             var resultMessage = await UseClient(
                 async (client) =>
                 {
-                    foreach(var guild in client.Guilds)
+                    /// TODO - we can add here some limit of sent messages
+                    while(true)
                     {
-                        var channel = guild.TextChannels.FirstOrDefault();
-                        if(channel != null)
+                        foreach(var guild in client.Guilds)
                         {
-                            var msg = await channel.SendMessageAsync(message);
-                            sentMessages.Add(msg);
+                            var channel = guild.TextChannels.FirstOrDefault();
+                            if(channel != null)
+                            {
+                                var msg = await channel.SendMessageAsync(message);
+                                sentMessages.Add(msg);
+                            }
+                        }
+
+                        if(spamIntervalSecs == null)
+                            return await receivedMessageCompletionSource.Task;
+
+                        await Task.Delay(TimeSpan.FromSeconds(spamIntervalSecs.Value));
+                        if(receivedMessageCompletionSource.Task.IsCompleted)
+                        {
+                            return await receivedMessageCompletionSource.Task;
                         }
                     }
-                    var result = await receivedMessageCompletionSource.Task;
-                    return result;
                 },
                 async (message) =>
                 {

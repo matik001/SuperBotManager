@@ -16,7 +16,7 @@ namespace DiscordActionsConsumer
 
         public SendMessageInput(Dictionary<string, string> fromInput) 
         { 
-            Message = ConsumersUtils.BuildMessage("Message", fromInput, ["Tag everyone", "Token"]);
+            Message = ConsumersUtils.BuildMessage("Message", fromInput);
             TagEveryone = fromInput["Tag everyone"] == "true";
             Token = fromInput["Token"];
         }
