@@ -59,7 +59,11 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 		mutationFn: (id: number) => {
 			return actionExecutorRun(id);
 		},
-		onSuccess: () => {
+		onSuccess: (res, id) => {
+			queryClient.setQueryData<ActionExecutorDTO[]>(
+				executorKeys.list(),
+				(old) => old?.map((a) => (a.id === id ? { ...a, lastRunDate: new Date() } : a))
+			);
 			/// TODO zorbic to bez spinnera
 			// queryClient.invalidateQueries({
 			// 	queryKey: executorKeys.prefix
