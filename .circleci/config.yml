@@ -107,7 +107,7 @@ jobs:
       - run: > 
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
             docker rm -f botmanager_backend ;
-            docker run -v ~/containers/botmanager_backend:/app --name botmanager_backend --rm -d -p 6662:8080 mcr.microsoft.com/dotnet/aspnet:8.0 /bin/bash -c "cd /app ; dotnet SuperBotManagerBackend.dll" '
+            docker run -v ~/containers/botmanager_backend:/app --name botmanager_backend --network=my_network --rm -d -p 6662:8080 mcr.microsoft.com/dotnet/aspnet:8.0 /bin/bash -c "cd /app ; dotnet SuperBotManagerBackend.dll" '
       
 
       # copies files from pipeline to vps via ssh
