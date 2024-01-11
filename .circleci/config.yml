@@ -61,11 +61,18 @@ jobs:
           paths:
             - /root/.nuget/packages
       - run:
-          name: "Add appsettings.json"
+          name: "Add appsettings.json to backend"
           command: |
             cd SuperBotManagerBackend
-            echo $appsettings > appsettings_base64.json
+            echo $appsettings_backend > appsettings_base64.json
             base64 --decode appsettings_base64.json > appsettings.json
+      - run:
+          name: "Add appsettings.json to service"
+          command: |
+            cd SuperbotConsumerService
+            echo $appsettings_service > appsettings_base64.json
+            base64 --decode appsettings_base64.json > appsettings.json
+
       - run:
           name: "Build Application according to some given configuration"
           command: |
