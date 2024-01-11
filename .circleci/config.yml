@@ -41,7 +41,7 @@ jobs:
             - dist
 
   build-backend:
-    description: Build backend with Release configuration
+    description: Build backend and service with Release configuration
     docker:
         - image: mcr.microsoft.com/dotnet/sdk:8.0
     steps:
@@ -74,20 +74,37 @@ jobs:
             base64 --decode appsettings_base64.json > appsettings.json
 
       - run:
-          name: "Build Application according to some given configuration"
+          name: "Build Backend according to some given configuration"
           command: |
             cd SuperBotManagerBackend
             dotnet build "SuperBotManagerBackend.csproj" -c Release
+
       - run:
-          name: "Publish to a subfolder"
+          name: "Build Service according to some given configuration"
+          command: |
+            cd SuperbotConsumerService
+            dotnet build "SuperbotConsumerService.csproj" -c Release
+      - run:
+          name: "Publish backend"
           command: |
             cd SuperBotManagerBackend
             dotnet publish "SuperBotManagerBackend.csproj" -c Release -o ./backend_build /p:UseAppHost=false
+      
+      - run:
+          name: "Publish service"
+          command: |
+            cd SuperbotConsumerService
+            dotnet publish "SuperbotConsumerService.csproj" -c Release -o ./service_build /p:UseAppHost=false
 
       - persist_to_workspace:
           root: SuperBotManagerBackend
           paths:
             - backend_build
+
+      - persist_to_workspace:
+          root: SuperbotConsumerService
+          paths:
+            - service_build
       
   deploy:
     docker:
@@ -109,6 +126,11 @@ jobs:
       - run:
           name: Upload backend
           command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete ./backend_build/* $VPS_USER@$VPS_URL:~/containers/botmanager_backend
+
+      # Send service
+      - run:
+          name: Upload Service
+          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete ./service_build/* $VPS_USER@$VPS_URL:~/containers/botmanager_service
 
       # Start backend
       - run: > 
