@@ -120,7 +120,7 @@ jobs:
       # Deploy frontend
       - run:
           name: Upload frontend
-          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete ./dist/* $VPS_USER@$VPS_URL:~/static/botmanager_frontend
+          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete --chown=$VPS_USER:$VPS_USER ./dist/* $VPS_USER@$VPS_URL:~/static/botmanager_frontend
 
       # Send backend
       - run:
