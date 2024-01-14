@@ -25,13 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorytelActionsDefinitions"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordActionsDefinitions", "ActionDefinitions\DiscordActionsDefinitions\DiscordActionsDefinitions.csproj", "{D336DCF9-98E4-4726-BC47-22C6C73C4846}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAIActionsConsumer", "ActionConsumers\OpenAIActionsConsumer\OpenAIActionsConsumer.csproj", "{545463F8-514D-4728-BA7D-F34A78F6961C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAIActionsConsumer", "ActionConsumers\OpenAIActionsConsumer\OpenAIActionsConsumer.csproj", "{545463F8-514D-4728-BA7D-F34A78F6961C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAIActionsDefinitions", "ActionDefinitions\OpenAIActionsDefinitions\OpenAIActionsDefinitions.csproj", "{A68B45D0-11F5-472D-A1BE-918AC291D83E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XKomActionsConsumer", "ActionConsumers\XKomActionsConsumer\XKomActionsConsumer.csproj", "{E56EBA94-D70F-43E8-A69B-C2E196012D62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XKomActionsDefinitions", "ActionDefinitions\XKomActionsDefinitions\XKomActionsDefinitions.csproj", "{CA9CB6D2-690B-444B-B766-AC805E4D5116}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperbotScheduleBackgroundService", "SuperbotScheduleConsumer\SuperbotScheduleBackgroundService.csproj", "{F6130E87-A78C-40FF-9F56-26D7B8E06A3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{CA9CB6D2-690B-444B-B766-AC805E4D5116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA9CB6D2-690B-444B-B766-AC805E4D5116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA9CB6D2-690B-444B-B766-AC805E4D5116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6130E87-A78C-40FF-9F56-26D7B8E06A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6130E87-A78C-40FF-9F56-26D7B8E06A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6130E87-A78C-40FF-9F56-26D7B8E06A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6130E87-A78C-40FF-9F56-26D7B8E06A3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

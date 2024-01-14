@@ -66,7 +66,7 @@ namespace SuperBotManagerBackend.Controllers.v1
                 throw HttpUtilsService.BadRequest("Bad ActionExecutorCreateDTO format");
 
             await uow.ActionExecutorRepository.LoadDefinition(actionExecutor);
-            actionExecutor.UpdateIsValid();
+            actionExecutor.UpdateIsValidField();
             await actionExecutor.ActionData.EncryptSecrets(actionExecutor.ActionDefinition.ActionDataSchema, uow);
             actionExecutor.ActionDefinition = null;
 
@@ -82,7 +82,7 @@ namespace SuperBotManagerBackend.Controllers.v1
 
             mapper.Map(dto, executor);
 
-            executor.UpdateIsValid();
+            executor.UpdateIsValidField();
             await executor.ActionData.EncryptSecrets(executor.ActionDefinition.ActionDataSchema, uow);
 
             executor.ActionDefinition = null;
@@ -102,7 +102,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpPost("{id}/execute")]
         public async Task Execute(int id)
         {
-            await actionService.Execute(id);
+            await actionService.EnqueueExecution(id);
         }
 
     }

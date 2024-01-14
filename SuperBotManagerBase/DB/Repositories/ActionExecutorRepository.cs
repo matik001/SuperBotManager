@@ -123,8 +123,9 @@ namespace SuperBotManagerBase.DB.Repositories
         public virtual ActionExecutor ActionExecutorOnFinish { get; set; }
 
         public virtual ICollection<Action> Actions { get; set; }
+        public virtual ICollection<ActionSchedule> Schedules { get; set; }
 
-        public void UpdateIsValid()
+        public void UpdateIsValidField()
         {
             if(this.ActionDefinition == null)
                 throw new Exception("ActionDefinition is null");

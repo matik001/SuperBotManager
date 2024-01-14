@@ -12,12 +12,18 @@ using System.Threading.Tasks;
 
 namespace SuperbotConsumerService
 {
-    internal class ConsumerServiceInfo
+    interface IServiceInfo
+    {
+    }
+    internal class ConsumerServiceInfo : IServiceInfo
     {
         public Type ConsumerType { get; set; }
         public string QueueName { get; set; }
     }
-
+    internal class BackgroundServiceInfo : IServiceInfo
+    {
+        public Type ServiceType { get; set; }
+    }
     internal static class ServiceUtils
     {
         internal static IEnumerable<ConsumerServiceInfo> GetConsumersForAssembly(Assembly assembly)
@@ -36,7 +42,20 @@ namespace SuperbotConsumerService
 
             return consumerInfos;
         }
+        internal static IEnumerable<BackgroundServiceInfo> GetBackgroundServicesForAssembly(Assembly assembly)
+        {
+            var classes = assembly.GetClassesWithAttribute<BackgroundServiceAttribute>();
+            var servicesInfos = classes.Select(consumerType =>
+            {
+                var serviceInfo = new BackgroundServiceInfo
+                {
+                    ServiceType = consumerType,
+                };
+                return serviceInfo;
+            });
 
+            return servicesInfos;
+        }
         //where TMessageConsumer : IQueueConsumer<TQueueMessage> 
         //where TQueueMessage : class, IQueueMessage
         internal static void AddQueueMessageConsumer(this IServiceCollection services, Type TMessageConsumer, Type TQueueMessage, string queueName)

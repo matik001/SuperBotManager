@@ -10,10 +10,17 @@ using SuperBotManagerBase.Utils;
 using System.Reflection;
 
 
-var loadedAssemblies = AssemblyUtils.LoadAssembliesContainingName("Consumer");
-var consumers = loadedAssemblies.SelectMany(a => ServiceUtils.GetConsumersForAssembly(a)).ToList();
+var loadedConsumerAssemblies = AssemblyUtils.LoadAssembliesContainingName("Consumer");
+var consumers = loadedConsumerAssemblies.SelectMany(a => ServiceUtils.GetConsumersForAssembly(a)).ToList();
+
+var loadedServicesAssemblies = AssemblyUtils.LoadAssembliesContainingName("BackgroundService");
+var backgroundServices = loadedServicesAssemblies.SelectMany(a => ServiceUtils.GetBackgroundServicesForAssembly(a)).ToList();
+
+
+var jobsServices = consumers.Cast<IServiceInfo>().Union(backgroundServices).ToList();
+
 List<IHost> hosts = new List<IHost>();
-foreach(var consumer in consumers)
+foreach(var job in jobsServices)
 {
     var builder = Host.CreateApplicationBuilder(args);
     var services = builder.Services;
@@ -27,8 +34,17 @@ foreach(var consumer in consumers)
     services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
     services.ConfigureRabbitMq(builder.Configuration);
     services.AddScoped<IActionService, ActionService>();
+    if(job is BackgroundServiceInfo bgService)
+    {
+        var serviceCollectionExtensionsType = typeof(ServiceCollectionHostedServiceExtensions);
+        var addHostedServiceMethod = serviceCollectionExtensionsType.GetMethod("AddHostedService", new[] { typeof(IServiceCollection) });
+        addHostedServiceMethod.MakeGenericMethod(bgService.ServiceType).Invoke(null, new object[] { services });
 
-    services.AddQueueMessageConsumer(consumer.ConsumerType, typeof(ActionQueueMessage), consumer.QueueName);
+    }
+    else if(job is ConsumerServiceInfo consumer)
+    {
+        services.AddQueueMessageConsumer(consumer.ConsumerType, typeof(ActionQueueMessage), consumer.QueueName);
+    }
 
     var host = builder.Build();
     hosts.Add(host);

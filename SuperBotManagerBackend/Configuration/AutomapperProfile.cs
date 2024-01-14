@@ -13,11 +13,19 @@ namespace SuperBotManagerBackend.Configuration
             CreateMap<Role, RoleDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<ActionDefinition, ActionDefinitionDTO>().ReverseMap();
+
             CreateMap<ActionExecutor, ActionExecutorDTO>().ReverseMap();
+            CreateMap<ActionExecutor, ActionExecutorUpdateDTO>().ReverseMap();
             CreateMap<ActionExecutor, ActionExecutorCreateDTO>().ReverseMap();
             CreateMap<ActionExecutor, ActionExecutorExtendedDTO>().ReverseMap();
+
             CreateMap<Action, ActionDTO>().ReverseMap();
             CreateMap<Action, ActionCreateDTO>().ReverseMap();
+
+            CreateMap<ActionSchedule, ActionScheduleDTO>().ReverseMap();
+            CreateMap<ActionSchedule, ActionScheduleCreateDTO>().ReverseMap();
+            CreateMap<ActionSchedule, ActionExecutorUpdateDTO>().ReverseMap();
+
         }
     }
 }

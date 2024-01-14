@@ -13,6 +13,7 @@ namespace SuperBotManagerBase.DB
 
         IActionDefinitionRepository ActionDefinitionRepository { get; }
         IActionExecutorRepository ActionExecutorRepository { get; }
+        IActionScheduleRepository ActionScheduleRepository { get; }
         IActionRepository ActionRepository { get; }
         ISecretRepository SecretRepository { get; }
         Task<int> SaveChangesAsync();
@@ -145,6 +146,19 @@ namespace SuperBotManagerBase.DB
                     _secretRepository = new SecretRepository(_dbContext);
                 }
                 return _secretRepository;
+            }
+        }
+
+        IActionScheduleRepository _actionScheduleRepository;
+        public IActionScheduleRepository ActionScheduleRepository
+        {
+            get
+            {
+                if (_actionScheduleRepository == null)
+                {
+                    _actionScheduleRepository = new ActionScheduleRepository(_dbContext);
+                }
+                return _actionScheduleRepository;
             }
         }
 

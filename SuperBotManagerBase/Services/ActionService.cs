@@ -12,7 +12,7 @@ namespace SuperBotManagerBase.Services
 {
     public interface IActionService
     {
-        Task Execute(int executorId, DB.Repositories.Action? fromAction = null);
+        Task EnqueueExecution(int executorId, DB.Repositories.Action? fromAction = null);
     }
     public class ActionService : IActionService
     {
@@ -44,7 +44,7 @@ namespace SuperBotManagerBase.Services
             }
             return newInput;
         }
-        public async Task Execute(int executorId, DB.Repositories.Action? fromAction = null)
+        public async Task EnqueueExecution(int executorId, DB.Repositories.Action? fromAction = null)
         {
             var executor = await uow.ActionExecutorRepository.GetById(executorId, a => a.Include(x => x.ActionDefinition));
             if(!executor.IsValid)
