@@ -11,7 +11,7 @@ const FieldNumberEditor: React.FC<InnerFieldEditorProps> = ({
 	return (
 		<InputNumber
 			style={{ width: fieldWidthPx }}
-			placeholder="Provide a value"
+			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			value={value.value}
 			onChange={(val) => onChange({ ...value, value: val ?? '' })}
 		></InputNumber>

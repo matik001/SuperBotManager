@@ -19,6 +19,7 @@ export interface FieldInfo {
 	description: string;
 	isOptional: boolean;
 	type: FieldType;
+	placeholder?: string;
 	setOptions?: SetOption[];
 	initialValue?: string | null;
 }

@@ -12,7 +12,7 @@ const FieldSecretEditor: React.FC<InnerFieldEditorProps> = ({
 	return (
 		<Input.Password
 			style={{ width: fieldWidthPx }}
-			placeholder="Provide a value"
+			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			value={value.isEncrypted ? MASK_ENCRYPTED : value.value ?? undefined}
 			onChange={(e) => {
 				if (value.isEncrypted) {

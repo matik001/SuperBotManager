@@ -3,7 +3,7 @@ using SuperBotManagerBase.DB.Repositories;
 
 namespace IntercityActionsDefinitions
 {
-    [ActionsDefinitionProvider]
+    [ActionsDefinitionProvider("Intercity")]
     public class IntercityActionsProvider
     {
         public static ActionDefinition BuyTicket { get; } = new ActionDefinition()

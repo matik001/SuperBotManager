@@ -3,7 +3,7 @@ using SuperBotManagerBase.DB.Repositories;
 
 namespace XKomActionsDefinitions
 {
-    [ActionsDefinitionProvider]
+    [ActionsDefinitionProvider("Discord")]
     public class XKomActionsProvider
     {
         public static ActionDefinition OpenBoxes { get; } = new ActionDefinition()
@@ -16,8 +16,14 @@ namespace XKomActionsDefinitions
             {
                 InputSchema = new List<FieldInfo>()
                 {
-                    new FieldInfo("Email", FieldType.String, "Email for xkom"),
-                    new FieldInfo("Password", FieldType.Secret, "Password for xkom"),
+                    new FieldInfo("Email", FieldType.String, "Email for xkom")
+                    {
+                        Placeholder = "Enter an email"
+                    },
+                    new FieldInfo("Password", FieldType.Secret, "Password for xkom")
+                    {
+                        Placeholder = "Enter a password"
+                    },
                 },
                 OutputSchema = new List<FieldInfo>()
                 {

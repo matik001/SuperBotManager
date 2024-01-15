@@ -12,6 +12,7 @@ import {
 } from 'api/scheduleApi';
 import FieldExecutorPickerEditor from 'components/ActionExecutor/ActionExecutorEditor/InputsEditor/InputEditor/FieldEditor/FieldExecutorPickerEditor/FieldExecutorPickerEditor';
 import IconButton from 'components/UI/IconButton/IconButton';
+import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -25,8 +26,9 @@ interface ActionsScheduleProps {}
 
 const Container = styled.div`
 	background-color: ${(p) => p.theme.bgColor};
-	margin: 10px;
+	margin: 0 10px;
 	padding: 30px;
+	${ScrollableMixin}
 `;
 
 const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
@@ -199,7 +201,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 					<MdAdd />
 				</IconButton>
 			</Space>
-			<Table columns={columns} dataSource={data} />
+			<Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
 		</Container>
 	);
 };

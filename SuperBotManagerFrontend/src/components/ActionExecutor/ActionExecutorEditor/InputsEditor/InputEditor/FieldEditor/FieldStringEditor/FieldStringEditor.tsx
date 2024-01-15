@@ -11,7 +11,7 @@ const FieldStringEditor: React.FC<InnerFieldEditorProps> = ({
 	return (
 		<Input
 			style={{ width: fieldWidthPx }}
-			placeholder="Provide a value"
+			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			value={value.value ?? undefined}
 			onChange={(e) => onChange({ ...value, value: e.target.value })}
 		></Input>

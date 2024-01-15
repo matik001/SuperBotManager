@@ -3,7 +3,7 @@ using SuperBotManagerBase.DB.Repositories;
 
 namespace DiscordActionsDefinitions
 {
-    [ActionsDefinitionProvider]
+    [ActionsDefinitionProvider("Discord")]
     public class DiscordActionsProvider
     {
         public static ActionDefinition SendMessage { get; } = new ActionDefinition()
@@ -16,9 +16,15 @@ namespace DiscordActionsDefinitions
             {
                 InputSchema = new List<FieldInfo>()
                 {
-                    new FieldInfo("Message", FieldType.String, "What message do you want to send?"),
+                    new FieldInfo("Message", FieldType.String, "What message do you want to send?")
+                    {
+                        Placeholder = "Enter a message"
+                    },
                     new FieldInfo("Tag everyone", FieldType.Boolean, "Do you want to tag @everyone?"),
-                    new FieldInfo("Token", FieldType.Secret, "How to get it: https://discordnet.dev/guides/getting_started/first-bot.html"),
+                    new FieldInfo("Token", FieldType.Secret, "How to get it: https://discordnet.dev/guides/getting_started/first-bot.html")
+                    {
+                        Placeholder = "Enter a token"
+                    },
                 },
                 OutputSchema = new List<FieldInfo>()
                 {
@@ -39,9 +45,15 @@ namespace DiscordActionsDefinitions
             {
                 InputSchema = new List<FieldInfo>()
                 {
-                    new FieldInfo("Message", FieldType.String, "What message do you want to send?"),
+                    new FieldInfo("Message", FieldType.String, "What message do you want to send?")
+                    {
+                        Placeholder = "Enter a message"
+                    },
                     new FieldInfo("Tag everyone", FieldType.Boolean, "Do you want to tag @everyone?"),
-                    new FieldInfo("Token", FieldType.Secret, "How to get it: https://discordnet.dev/guides/getting_started/first-bot.html"),
+                    new FieldInfo("Token", FieldType.Secret, "How to get it: https://discordnet.dev/guides/getting_started/first-bot.html")
+                    {
+                        Placeholder = "Enter a token"
+                    },
                     new FieldInfo("Spam", FieldType.Boolean, "Do you want to spam it, every 5 seconds?"),
                 },
                 OutputSchema = new List<FieldInfo>()

@@ -41,6 +41,7 @@ namespace SuperBotManagerBase.DB.Repositories
         public FieldType Type { get; set; }
         public bool IsOptional { get; set; } = false;
         public string? InitialValue { get; set; } = null;
+        public string? Placeholder { get;set; } = null;
 
         public List<SetOption>? SetOptions{ get; set; } = null;
 

@@ -14,6 +14,7 @@ const FieldDateTimeEditor: React.FC<InnerFieldEditorProps> = ({
 			style={{ width: fieldWidthPx }}
 			value={value.value ? dayjs(value.value) : undefined}
 			showTime
+			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			onChange={(date) => onChange({ ...value, value: date?.toISOString() ?? null })}
 		></DatePicker>
 	);

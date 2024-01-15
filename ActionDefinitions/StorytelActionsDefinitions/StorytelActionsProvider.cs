@@ -3,7 +3,7 @@ using SuperBotManagerBase.DB.Repositories;
 
 namespace StorytelActionsDefinitions
 {
-    [ActionsDefinitionProvider]
+    [ActionsDefinitionProvider("Storytel")]
     public class StorytelActionsProvider
     {
         public static ActionDefinition SignUp { get; } = new ActionDefinition()
@@ -16,11 +16,26 @@ namespace StorytelActionsDefinitions
             {
                 InputSchema = new List<FieldInfo>()
                 {
-                    new FieldInfo("Email", FieldType.String, "Address email for your new account"),
-                    new FieldInfo("Password", FieldType.Secret, "Password for your new account"),
-                    new FieldInfo("Card number", FieldType.String, "Card number eg. 1234 1234 1234 1234"),
-                    new FieldInfo("Card CCV", FieldType.Secret, "Card CCV numer eg. 321"),
-                    new FieldInfo("Card expiration", FieldType.Date, "Card expiration date (only year and month matter)"),
+                    new FieldInfo("Email", FieldType.String, "Address email for your new account")
+                    {
+                        Placeholder = "Enter an email"
+                    },
+                    new FieldInfo("Password", FieldType.Secret, "Password for your new account")
+                    {
+                        Placeholder = "Enter a password"
+                    },
+                    new FieldInfo("Card number", FieldType.String, "Card number eg. 1234 1234 1234 1234")
+                    {
+                        Placeholder = "Enter a card number"
+                    },
+                    new FieldInfo("Card CCV", FieldType.Secret, "Card CCV numer eg. 321")
+                    {
+                        Placeholder = "Enter a card CCV"
+                    },
+                    new FieldInfo("Card expiration", FieldType.Date, "Card expiration date (only year and month matter)")
+                    {
+                        Placeholder = "Enter a card expiration date"
+                    },
                 },
                 OutputSchema = new List<FieldInfo>()
                 {
