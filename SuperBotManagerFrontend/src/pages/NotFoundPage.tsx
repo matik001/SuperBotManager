@@ -1,5 +1,5 @@
-import { Button } from 'antd';
 import notFoundImg from 'assets/NotFound.jpg';
+import IconButton from 'components/UI/IconButton/IconButton';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdHome } from 'react-icons/md';
@@ -11,15 +11,19 @@ interface NotFoundPageProps {}
 
 const Container = styled.div`
 	width: 100%;
-	height: 100vh;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	gap: 20px;
 `;
 const Text = styled.div`
 	font-size: 30px;
 	user-select: none;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 `;
 
 const Image = styled.img`
@@ -30,7 +34,6 @@ const Image = styled.img`
 	padding: 5px;
 `;
 const ImageEdgeBlur = styled.div`
-	margin-top: -50px;
 	flex: 0;
 	min-width: 0;
 	width: 40%;
@@ -56,27 +59,20 @@ const NotFoundPage: React.FC<NotFoundPageProps> = ({}) => {
 				<ImageEdgeBlur>
 					<Image src={notFoundImg}></Image>
 				</ImageEdgeBlur>
-				<Text>404 - {t('Not found')}</Text>
-				<Link
-					to="/"
-					style={{
-						textDecorationLine: 'none'
-					}}
-				>
-					<Button
+				<Text>
+					404 - {t('Not found')}
+					<Link
+						to="/"
 						style={{
-							fontSize: '26px',
-							height: '54px',
-							display: 'flex',
-							alignItems: 'center',
-							gap: '3px',
-							marginTop: '30px'
+							textDecorationLine: 'none'
 						}}
 					>
-						<MdHome />
-						{t('Back home')}
-					</Button>
-				</Link>
+						<IconButton type="primary">
+							<MdHome />
+							{t('Back home')}
+						</IconButton>
+					</Link>
+				</Text>
 			</Container>
 		</MainTemplatePage>
 	);

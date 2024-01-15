@@ -3,7 +3,7 @@ import { Button, Switch } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuthStore from 'store/authStore';
 import useUserStore from 'store/userStore';
 import { styled } from 'styled-components';
@@ -53,6 +53,25 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 			</Button> */}
 			{isAuthenticated ? (
 				<>
+					<Link to="/">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={
+								location.pathname == '/' || location.pathname == '/executors' ? 'primary' : 'text'
+							}
+						>
+							Executors
+						</Button>
+					</Link>
+
+					<Link to="/schedule">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={location.pathname == '/schedule' ? 'primary' : 'text'}
+						>
+							Schedule
+						</Button>
+					</Link>
 					<Button
 						loading={logoutMutation.isPending}
 						style={{ marginLeft: '10px', height: '40px' }}
@@ -64,21 +83,22 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 				</>
 			) : (
 				<>
-					<Button
-						style={{ marginLeft: '10px', height: '40px' }}
-						type={location.pathname == '/signin' ? 'primary' : 'text'}
-						onClick={() => navigate('/signin')}
-					>
-						{t('Sign in')}
-					</Button>
-
-					<Button
-						style={{ marginLeft: '10px', height: '40px' }}
-						type={location.pathname == '/signup' ? 'primary' : 'text'}
-						onClick={() => navigate('/signup')}
-					>
-						{t('Sign up')}
-					</Button>
+					<Link to="/signin">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={location.pathname == '/signin' ? 'primary' : 'text'}
+						>
+							{t('Sign in')}
+						</Button>
+					</Link>
+					<Link to="/signup">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={location.pathname == '/signup' ? 'primary' : 'text'}
+						>
+							{t('Sign up')}
+						</Button>
+					</Link>
 				</>
 			)}
 

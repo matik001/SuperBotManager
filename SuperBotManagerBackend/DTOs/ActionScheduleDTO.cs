@@ -4,7 +4,7 @@ namespace SuperBotManagerBackend.DTOs
 {
     public class ActionScheduleCreateDTO
     {
-        public string ActionSCheduleName { get; set; }
+        public string ActionScheduleName { get; set; }
         public int ExecutorId { get; set; }
         public DateTime NextRun { get; set; }
         public bool Enabled { get; set; }
@@ -17,7 +17,7 @@ namespace SuperBotManagerBackend.DTOs
     }
     public class ActionScheduleDTO : ActionScheduleUpdateDTO
     {
-        public ActionExecutor Executor { get; set; }
+        public ActionExecutorDTO Executor { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

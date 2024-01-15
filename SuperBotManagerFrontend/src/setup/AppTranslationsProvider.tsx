@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import i18n from 'i18next';
@@ -44,6 +45,7 @@ const AppTranslationsProvider: React.FC<AppTranslationsProviderProps> = ({ child
 		dayjs.locale(i18n.language);
 		dayjs.extend(relativeTime);
 		dayjs.extend(localizedFormat);
+		dayjs.extend(duration);
 	}, [i18n.language]);
 
 	/// todo: dodac pobieranie tlumaczen z backendu tylko potrzebnych, zamiast tak jak teraz wszystkich

@@ -10,7 +10,7 @@ using SuperBotManagerBase.Services;
 
 namespace SuperBotManagerBackend.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ScheduleController : ControllerBase
     {
@@ -49,12 +49,18 @@ namespace SuperBotManagerBackend.Controllers.v1
 
         // POST api/<ScheduleController>
         [HttpPost]
-        public async Task Post([FromBody] ActionScheduleDTO dto)
+        public async Task Post([FromBody] ActionScheduleCreateDTO dto)
         {
             var schedule = mapper.Map<ActionSchedule>(dto);
             if(schedule == null)
                 throw HttpUtilsService.BadRequest("Bad ActionScheduleDTO format");
-
+            if(schedule.ExecutorId == 0)
+            {
+                var executor = await uow.ActionExecutorRepository.GetAll().FirstOrDefaultAsync();
+                if(executor == null)
+                    throw HttpUtilsService.BadRequest("No executors availiable for schedule");
+                schedule.ExecutorId = executor.Id;
+            }
             await uow.ActionScheduleRepository.Create(schedule);
             await uow.SaveChangesAsync();
         }
@@ -63,7 +69,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody] ActionScheduleDTO dto)
         {
-            var schedule = await uow.ActionScheduleRepository.GetById(id, a => a.Include(x => x.Executor));
+            var schedule = await uow.ActionScheduleRepository.GetById(id);
             mapper.Map(dto, schedule);
             if(schedule == null)
                 throw HttpUtilsService.BadRequest("Bad ActionScheduleDTO format");
