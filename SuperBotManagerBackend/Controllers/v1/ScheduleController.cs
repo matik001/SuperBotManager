@@ -67,12 +67,13 @@ namespace SuperBotManagerBackend.Controllers.v1
 
         // PUT api/<ScheduleController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ActionScheduleDTO dto)
+        public async Task Put(int id, [FromBody] ActionScheduleUpdateDTO dto)
         {
             var schedule = await uow.ActionScheduleRepository.GetById(id);
             mapper.Map(dto, schedule);
             if(schedule == null)
                 throw HttpUtilsService.BadRequest("Bad ActionScheduleDTO format");
+
             await uow.ActionScheduleRepository.Update(schedule);
             await uow.SaveChangesAsync();
         }

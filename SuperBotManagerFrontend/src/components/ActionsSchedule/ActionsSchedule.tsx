@@ -82,6 +82,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			key: 'executorId',
 			render: (_, obj) => (
 				<FieldExecutorPickerEditor
+					fieldWidthPx={200}
 					fieldSchema={{
 						description: 'Pick an executor',
 						isOptional: false,

@@ -35,12 +35,16 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
             await uow.ActionRepository.Update(action);
             await uow.SaveChangesAsync();
 
+            action.ActionData.Input = await ActionSchema.DecryptDict(uow, action.ActionData.Input);
             var output = await ExecuteAsync(action);
 
             logger.LogInformation($"Executed: {action.Id} ({action.ActionExecutor.ActionExecutorName} - {action.ActionExecutor.ActionDefinition.ActionDefinitionName})");
             action.ActionStatus = ActionStatus.Finished;
             action.ActionData.Output = output;
-            //action.ActionData.Encrypt();
+
+            action.ActionData.Input = await ActionSchema.EncryptDict(uow, action.ActionData.Input);
+            action.ActionData.Output = await ActionSchema.EncryptDict(uow, action.ActionData.Output);
+
             await uow.ActionRepository.Update(action);
 
             await uow.SaveChangesAsync();

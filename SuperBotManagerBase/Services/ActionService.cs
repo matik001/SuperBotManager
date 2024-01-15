@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace SuperBotManagerBase.Services
 {
@@ -24,13 +25,13 @@ namespace SuperBotManagerBase.Services
             this.uow = uow;
             this.actionProducer = actionProducer;
         }
-        private Dictionary<string, string> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, ActionSchema? previousAction = null)
+        private async Task<Dictionary<string, string>> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, ActionSchema? previousAction = null)
         {
             var newInput = templateInput.ToDictionary(a => a.Key, a => a.Value.Value);
-            
             if(previousAction != null)
             {
-                foreach(var item in previousAction.Output)
+                var output = await ActionSchema.DecryptDict(uow, previousAction.Output);
+                foreach(var item in output)
                 {
                     newInput[item.Key] = item.Value;
                 }
@@ -44,6 +45,9 @@ namespace SuperBotManagerBase.Services
             }
             return newInput;
         }
+/// <summary>
+/// formAction is encrypted
+/// </summary>
         public async Task EnqueueExecution(int executorId, DB.Repositories.Action? fromAction = null)
         {
             var executor = await uow.ActionExecutorRepository.GetById(executorId, a => a.Include(x => x.ActionDefinition));
@@ -55,7 +59,7 @@ namespace SuperBotManagerBase.Services
             var executorData = executor.ActionData.DeepClone();
             await executorData.DecryptSecrets(executor.ActionDefinition.ActionDataSchema, uow);
 
-            var newActions = executorData.Inputs.Select(input =>
+            var newActions = await Task.WhenAll(executorData.Inputs.Select(async input =>
             {
                 var action = new DB.Repositories.Action()
                 {
@@ -63,13 +67,14 @@ namespace SuperBotManagerBase.Services
                     ActionStatus = ActionStatus.Pending,
                     ActionData = new ActionSchema()
                     {
-                        Input = _buildExecuteInput(input, fromAction?.ActionData),
+                        Input = await _buildExecuteInput(input, fromAction?.ActionData),
                         Output = new Dictionary<string, string>()
                     },
                 };
+                action.ActionData.Input = await ActionSchema.EncryptDict(uow, action.ActionData.Input);
 
                 return action;
-            }).ToList();
+            }));
             foreach(var action in newActions)
             {
                 await uow.ActionRepository.Create(action);

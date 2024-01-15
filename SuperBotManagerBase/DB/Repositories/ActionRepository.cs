@@ -12,6 +12,38 @@ namespace SuperBotManagerBase.DB.Repositories
     {
         public Dictionary<string, string> Input { get; set; } = new Dictionary<string, string>();
         public Dictionary<string, string> Output { get; set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        ///  Save uow
+        /// </summary>
+        public static async Task<Dictionary<string, string>> EncryptDict(IAppUnitOfWork uow, Dictionary<string, string> dict)
+        {
+            var resDict = new Dictionary<string, string>();
+            foreach(var item in dict)
+            {
+                var secret = new Secret()
+                {
+                    Id = Guid.NewGuid(),
+                    DecryptedSecretValue = item.Value
+                };
+                await uow.SecretRepository.Create(secret);
+                resDict.Add(item.Key, secret.Id.ToString());
+            }
+            return resDict;
+        }
+        public static async Task<Dictionary<string, string>> DecryptDict(IAppUnitOfWork uow, Dictionary<string, string> dict)
+        {
+            var resDict = new Dictionary<string, string>();
+
+            foreach(var item in dict)
+            {
+                var secret = await uow.SecretRepository.GetById(Guid.Parse(item.Value));
+                resDict.Add(item.Key, secret.DecryptedSecretValue);
+            }
+            return resDict;
+        }
+
+
     }
 
     public enum ActionStatus
