@@ -3,7 +3,7 @@ using SuperBotManagerBase.DB.Repositories;
 
 namespace XKomActionsDefinitions
 {
-    [ActionsDefinitionProvider("Discord")]
+    [ActionsDefinitionProvider("X-Kom")]
     public class XKomActionsProvider
     {
         public static ActionDefinition OpenBoxes { get; } = new ActionDefinition()

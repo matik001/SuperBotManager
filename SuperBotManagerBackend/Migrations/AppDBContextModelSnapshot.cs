@@ -87,6 +87,10 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ActionDefinitionGroup")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ActionDefinitionIcon")
                         .IsRequired()
                         .HasColumnType("text");
@@ -427,6 +431,43 @@ namespace SuperBotManagerBackend.Migrations
                     b.ToTable("userrole");
                 });
 
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.VaultItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("SecretId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("VaultGroupName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("SecretId");
+
+                    b.ToTable("vaultitem");
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.HasOne("SuperBotManagerBase.DB.Repositories.Role", null)
@@ -533,6 +574,23 @@ namespace SuperBotManagerBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.VaultItem", b =>
+                {
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", "Owner")
+                        .WithMany("VaultItems")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.Secret", "Secret")
+                        .WithMany()
+                        .HasForeignKey("SecretId");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Secret");
+                });
+
             modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionDefinition", b =>
                 {
                     b.Navigation("ActionExecutors");
@@ -559,6 +617,8 @@ namespace SuperBotManagerBackend.Migrations
                     b.Navigation("UserPasswords");
 
                     b.Navigation("UserRoles");
+
+                    b.Navigation("VaultItems");
                 });
 #pragma warning restore 612, 618
         }

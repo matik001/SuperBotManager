@@ -16,6 +16,7 @@ namespace SuperBotManagerBase.DB
         IActionScheduleRepository ActionScheduleRepository { get; }
         IActionRepository ActionRepository { get; }
         ISecretRepository SecretRepository { get; }
+        IVaultItemRepository VaultItemRepository { get; }
         Task<int> SaveChangesAsync();
     }
     public class AppUnitOfWork : IAppUnitOfWork
@@ -159,6 +160,19 @@ namespace SuperBotManagerBase.DB
                     _actionScheduleRepository = new ActionScheduleRepository(_dbContext);
                 }
                 return _actionScheduleRepository;
+            }
+        }
+
+        IVaultItemRepository _vaultItemRepository;
+        public IVaultItemRepository VaultItemRepository
+        {
+            get
+            {
+                if (_vaultItemRepository == null)
+                {
+                    _vaultItemRepository = new VaultItemRepository(_dbContext);
+                }
+                return _vaultItemRepository;
             }
         }
 

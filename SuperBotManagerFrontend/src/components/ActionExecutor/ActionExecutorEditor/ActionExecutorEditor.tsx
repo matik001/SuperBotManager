@@ -6,6 +6,7 @@ import {
 	actionExecutorGetOne,
 	executorKeys
 } from 'api/actionExecutorApi';
+import { vaultItemGetAll, vaultItemKeys } from 'api/vaultItem';
 import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import deepEqual from 'deep-equal';
@@ -47,6 +48,17 @@ const ActionExecutorEditor: React.FC<ActionExecutorEditorProps> = ({ id, onSave 
 		queryKey: executorKeys.one(id),
 		queryFn: ({ signal }) => actionExecutorGetOne(id, signal)
 	});
+	const { data: vaultItems, isFetching: isFetchingVault } = useQuery({
+		queryKey: vaultItemKeys.list(),
+		queryFn: ({ signal }) => vaultItemGetAll(signal)
+	});
+	const executorVaultItems = useMemo(
+		() =>
+			vaultItems?.filter(
+				(a) => a.vaultGroupName === actionExecutor?.actionDefinition.actionDefinitionGroup
+			),
+		[actionExecutor?.actionDefinition.actionDefinitionGroup, vaultItems]
+	);
 	const [executorLocal, updateExecutorLocal] = useImmer<ActionExecutorExtendedDTO | undefined>(
 		undefined
 	);
@@ -84,13 +96,14 @@ const ActionExecutorEditor: React.FC<ActionExecutorEditorProps> = ({ id, onSave 
 				onDelete={deleteExecutorMutation.mutate}
 			/>
 			<Content>
-				{!isFetching && executorLocal && !deleteExecutorMutation.isPending ? (
+				{!isFetching && executorLocal && !deleteExecutorMutation.isPending && !isFetchingVault ? (
 					<>
 						<ExecutorSettings executor={executorLocal} updateExecutor={updateExecutorLocal} />
 						<InputsEditor
 							style={{ marginTop: '10px' }}
 							inputs={executorLocal.actionData.inputs}
 							inputSchema={executorLocal.actionDefinition.actionDataSchema.inputSchema}
+							executorVaultItems={executorVaultItems}
 							onChangeInputs={(newInputs) =>
 								updateExecutorLocal((action) => {
 									action!.actionData.inputs = newInputs;

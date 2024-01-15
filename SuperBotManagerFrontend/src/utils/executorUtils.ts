@@ -1,5 +1,6 @@
 import { FieldInfo, FieldType } from 'api/actionDefinitionApi';
 import { ExecutorInput } from 'api/actionExecutorApi';
+import { VaultItemDTO } from 'api/vaultItem';
 
 const initialValues: Record<FieldType, string | null> = {
 	Boolean: 'false',
@@ -12,9 +13,23 @@ const initialValues: Record<FieldType, string | null> = {
 	Set: null,
 	String: ''
 };
-export const createNewInput = (inputSchema: FieldInfo[]) => {
+export const createNewInput = (
+	inputSchema: FieldInfo[],
+	vaultItems: VaultItemDTO[] | undefined
+) => {
 	const res: ExecutorInput = {};
 	for (const field of inputSchema) {
+		if (field.type === 'Secret') {
+			const vaultItem = vaultItems?.find((a) => a.fieldName === field.name);
+			if (vaultItem?.secretId) {
+				res[field.name] = {
+					isEncrypted: true,
+					isValid: true,
+					value: vaultItem.secretId.toString()
+				};
+				continue;
+			}
+		}
 		res[field.name] = {
 			isEncrypted: false,
 			isValid: true, /// will be changed automaticaly

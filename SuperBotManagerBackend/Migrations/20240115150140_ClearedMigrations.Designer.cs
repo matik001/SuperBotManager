@@ -12,8 +12,8 @@ using SuperBotManagerBase.DB;
 namespace SuperBotManagerBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240109054827_AddedCascadeDelete")]
-    partial class AddedCascadeDelete
+    [Migration("20240115150140_ClearedMigrations")]
+    partial class ClearedMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,6 +90,10 @@ namespace SuperBotManagerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ActionDefinitionGroup")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ActionDefinitionIcon")
                         .IsRequired()
                         .HasColumnType("text");
@@ -153,7 +157,7 @@ namespace SuperBotManagerBackend.Migrations
                     b.Property<bool>("PreserveExecutedInputs")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("RunPeriod")
+                    b.Property<int>("RunMethod")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TimeIntervalSeconds")
@@ -166,6 +170,46 @@ namespace SuperBotManagerBackend.Migrations
                     b.HasIndex("ActionExecutorOnFinishId");
 
                     b.ToTable("actionexecutor");
+                });
+
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionSchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActionSCheduleName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ExecutorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IntervalSec")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("NextRun")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExecutorId");
+
+                    b.ToTable("actionschedule");
                 });
 
             modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.RefreshToken", b =>
@@ -390,6 +434,43 @@ namespace SuperBotManagerBackend.Migrations
                     b.ToTable("userrole");
                 });
 
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.VaultItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("SecretId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("VaultGroupName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("SecretId");
+
+                    b.ToTable("vaultitem");
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.HasOne("SuperBotManagerBase.DB.Repositories.Role", null)
@@ -425,11 +506,23 @@ namespace SuperBotManagerBackend.Migrations
 
                     b.HasOne("SuperBotManagerBase.DB.Repositories.ActionExecutor", "ActionExecutorOnFinish")
                         .WithMany()
-                        .HasForeignKey("ActionExecutorOnFinishId");
+                        .HasForeignKey("ActionExecutorOnFinishId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ActionDefinition");
 
                     b.Navigation("ActionExecutorOnFinish");
+                });
+
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionSchedule", b =>
+                {
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.ActionExecutor", "Executor")
+                        .WithMany("Schedules")
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Executor");
                 });
 
             modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.RefreshToken", b =>
@@ -484,6 +577,23 @@ namespace SuperBotManagerBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.VaultItem", b =>
+                {
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.User", "Owner")
+                        .WithMany("VaultItems")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperBotManagerBase.DB.Repositories.Secret", "Secret")
+                        .WithMany()
+                        .HasForeignKey("SecretId");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Secret");
+                });
+
             modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionDefinition", b =>
                 {
                     b.Navigation("ActionExecutors");
@@ -492,6 +602,8 @@ namespace SuperBotManagerBackend.Migrations
             modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.ActionExecutor", b =>
                 {
                     b.Navigation("Actions");
+
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("SuperBotManagerBase.DB.Repositories.Role", b =>
@@ -508,6 +620,8 @@ namespace SuperBotManagerBackend.Migrations
                     b.Navigation("UserPasswords");
 
                     b.Navigation("UserRoles");
+
+                    b.Navigation("VaultItems");
                 });
 #pragma warning restore 612, 618
         }

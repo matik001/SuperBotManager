@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SuperBotManagerBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedQueueNameAndClearMigrations : Migration
+    public partial class ClearedMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,7 @@ namespace SuperBotManagerBackend.Migrations
                     ActionDefinitionName = table.Column<string>(type: "text", nullable: false),
                     ActionDefinitionQueueName = table.Column<string>(type: "text", nullable: false),
                     ActionDefinitionDescription = table.Column<string>(type: "text", nullable: false),
+                    ActionDefinitionGroup = table.Column<string>(type: "text", nullable: false),
                     ActionDefinitionIcon = table.Column<string>(type: "text", nullable: false),
                     ActionDataSchema = table.Column<string>(type: "text", nullable: false),
                     PreserveExecutedInputs = table.Column<bool>(type: "boolean", nullable: false),
@@ -91,7 +92,7 @@ namespace SuperBotManagerBackend.Migrations
                     PreserveExecutedInputs = table.Column<bool>(type: "boolean", nullable: false),
                     IsValid = table.Column<bool>(type: "boolean", nullable: false),
                     ActionDefinitionId = table.Column<int>(type: "integer", nullable: false),
-                    RunPeriod = table.Column<int>(type: "integer", nullable: false),
+                    RunMethod = table.Column<int>(type: "integer", nullable: false),
                     LastRunDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     TimeIntervalSeconds = table.Column<int>(type: "integer", nullable: true),
                     ActionExecutorOnFinishId = table.Column<int>(type: "integer", nullable: true),
@@ -111,7 +112,8 @@ namespace SuperBotManagerBackend.Migrations
                         name: "FK_actionexecutor_actionexecutor_ActionExecutorOnFinishId",
                         column: x => x.ActionExecutorOnFinishId,
                         principalTable: "actionexecutor",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,6 +239,35 @@ namespace SuperBotManagerBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "vaultitem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VaultGroupName = table.Column<string>(type: "text", nullable: false),
+                    FieldName = table.Column<string>(type: "text", nullable: false),
+                    SecretId = table.Column<Guid>(type: "uuid", nullable: true),
+                    OwnerId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_vaultitem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_vaultitem_secret_SecretId",
+                        column: x => x.SecretId,
+                        principalTable: "secret",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_vaultitem_user_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "user",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "action",
                 columns: table => new
                 {
@@ -256,16 +287,34 @@ namespace SuperBotManagerBackend.Migrations
                         name: "FK_action_actionexecutor_ActionExecutorId",
                         column: x => x.ActionExecutorId,
                         principalTable: "actionexecutor",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "actiondefinition",
-                columns: new[] { "Id", "ActionDataSchema", "ActionDefinitionDescription", "ActionDefinitionIcon", "ActionDefinitionName", "ActionDefinitionQueueName", "CreatedDate", "ModifiedDate", "PreserveExecutedInputs" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "actionschedule",
+                columns: table => new
                 {
-                    { -2067914952, "{\"InputSchema\":[{\"Name\":\"Trip date\",\"Description\":\"What day do You want ticket for?\",\"Type\":3,\"IsOptional\":false},{\"Name\":\"Ticket owner\",\"Description\":\"Owner of the ticket (real Firstname and Lastname)\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"From\",\"Description\":\"First station where you begin trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"To\",\"Description\":\"Last station - end of trip\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Login\",\"Description\":\"Login for intercity\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for intercity\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Discount\",\"Description\":\"Pick your discount\",\"Type\":7,\"IsOptional\":false,\"SetOptions\":[{\"Display\":\"None\",\"Value\":\"None\"},{\"Display\":\"Student\",\"Value\":\"Student\"}]}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if ticket was ordered. You have 10 minutes to pay for it.\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}", "Buy ticket for intercity", "/intercity.jpg", "Intercity - buy ticket", "intercity-buy-ticket", new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc), true },
-                    { 775138330, "{\"InputSchema\":[{\"Name\":\"Email\",\"Description\":\"Address email for your new account\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Password\",\"Description\":\"Password for your new account\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Card number\",\"Description\":\"Card number eg. 1234 1234 1234 1234\",\"Type\":0,\"IsOptional\":false},{\"Name\":\"Card CCV\",\"Description\":\"Card CCV numer eg. 321\",\"Type\":2,\"IsOptional\":false},{\"Name\":\"Card expiration\",\"Description\":\"Card expiration date (only year and month matter)\",\"Type\":4,\"IsOptional\":false}],\"OutputSchema\":[{\"Name\":\"Successful\",\"Description\":\"True if account was created\",\"Type\":5,\"IsOptional\":false},{\"Name\":\"Message\",\"Description\":\"Result message\",\"Type\":0,\"IsOptional\":false}]}", "Create an account in storytel", "/storytel.png", "Storytel - sign up", "storytel-sign-up", new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc), false }
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActionSCheduleName = table.Column<string>(type: "text", nullable: false),
+                    ExecutorId = table.Column<int>(type: "integer", nullable: false),
+                    NextRun = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Enabled = table.Column<bool>(type: "boolean", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    IntervalSec = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_actionschedule", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_actionschedule_actionexecutor_ExecutorId",
+                        column: x => x.ExecutorId,
+                        principalTable: "actionexecutor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -298,6 +347,11 @@ namespace SuperBotManagerBackend.Migrations
                 column: "ActionExecutorOnFinishId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_actionschedule_ExecutorId",
+                table: "actionschedule",
+                column: "ExecutorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_refreshtoken_UserId",
                 table: "refreshtoken",
                 column: "UserId");
@@ -321,6 +375,16 @@ namespace SuperBotManagerBackend.Migrations
                 name: "IX_userrole_UserId",
                 table: "userrole",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_vaultitem_OwnerId",
+                table: "vaultitem",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_vaultitem_SecretId",
+                table: "vaultitem",
+                column: "SecretId");
         }
 
         /// <inheritdoc />
@@ -333,13 +397,13 @@ namespace SuperBotManagerBackend.Migrations
                 name: "action");
 
             migrationBuilder.DropTable(
+                name: "actionschedule");
+
+            migrationBuilder.DropTable(
                 name: "refreshtoken");
 
             migrationBuilder.DropTable(
                 name: "revokedtokens");
-
-            migrationBuilder.DropTable(
-                name: "secret");
 
             migrationBuilder.DropTable(
                 name: "userpassword");
@@ -348,10 +412,16 @@ namespace SuperBotManagerBackend.Migrations
                 name: "userrole");
 
             migrationBuilder.DropTable(
+                name: "vaultitem");
+
+            migrationBuilder.DropTable(
                 name: "actionexecutor");
 
             migrationBuilder.DropTable(
                 name: "role");
+
+            migrationBuilder.DropTable(
+                name: "secret");
 
             migrationBuilder.DropTable(
                 name: "user");

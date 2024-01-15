@@ -2,7 +2,7 @@ import { Form, Tooltip } from 'antd';
 import { FieldInfo, FieldType } from 'api/actionDefinitionApi';
 import { FieldValue } from 'api/actionExecutorApi';
 import React, { ReactNode, useEffect, useMemo } from 'react';
-import { styled } from 'styled-components';
+import { CSSProperties, styled } from 'styled-components';
 import FieldBooleanEditor from './FieldBooleanEditor/FieldBooleanEditor';
 import FieldDateEditor from './FieldDateEditor/FieldDateEditor';
 import FieldDateTimeEditor from './FieldDateTimeEditor/FieldDateTimeEditor';
@@ -17,12 +17,14 @@ interface FieldEditorProps {
 	value: FieldValue | undefined;
 	onChange: (newValue: FieldValue | undefined) => void;
 	fieldWidthPx?: number;
+	labelStyle?: CSSProperties;
 }
 export interface InnerFieldEditorProps {
 	fieldSchema: FieldInfo;
 	value: FieldValue;
 	onChange: (newValue: FieldValue) => void;
 	fieldWidthPx?: number;
+	labelStyle?: CSSProperties;
 }
 
 const Container = styled.div``;
@@ -30,7 +32,8 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 	fieldSchema,
 	onChange,
 	value,
-	fieldWidthPx = 200
+	fieldWidthPx = 200,
+	labelStyle
 }) => {
 	const invalidMessage = useMemo(() => {
 		if (
@@ -72,7 +75,9 @@ const FieldEditor: React.FC<FieldEditorProps> = ({
 
 	return (
 		<>
-			<div style={{ marginRight: '15px', alignSelf: 'center' }}>{fieldSchema.name}</div>
+			<div style={{ marginRight: '15px', alignSelf: 'center', ...(labelStyle ?? {}) }}>
+				{fieldSchema.name}
+			</div>
 			<div
 			// style={{
 			// 	width: '200px'

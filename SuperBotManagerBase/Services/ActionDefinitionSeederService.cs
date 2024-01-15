@@ -43,10 +43,12 @@ namespace SuperBotManagerBase.Services
 
             var actionDefinitions = providersTypes.SelectMany(provider =>
             {
+                var group = provider.GetCustomAttribute<ActionsDefinitionProviderAttribute>().ActionsGroupName;
                 var properties = provider.GetProperties().Where(p => p.PropertyType == typeof(ActionDefinition));
                 return properties.Select(p =>
                 {
                     var action = p.GetValue(null, null) as ActionDefinition;
+                    action.ActionDefinitionGroup = group;
                     action.Id = GetDeterministicHashCode(action.ActionDefinitionQueueName);
                     return action;
                 });

@@ -26,6 +26,8 @@ namespace SuperBotManagerBase.DB.Repositories
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<RevokedToken> RevokedTokens { get; set; }
 
+        public virtual ICollection<VaultItem> VaultItems { get; set; }
+
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

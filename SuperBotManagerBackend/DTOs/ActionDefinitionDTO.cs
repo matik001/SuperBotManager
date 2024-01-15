@@ -11,6 +11,7 @@ namespace SuperBotManagerBackend.DTOs
         public string ActionDefinitionName { get; set; }
         public string ActionDefinitionDescription { get; set; }
         public string ActionDefinitionIcon { get; set; }
+        public string ActionDefinitionGroup { get; set; }
         public bool PreserveExecutedInputs { get; set; }
         public ActionDefinitionSchema ActionDataSchema { get; set; }
         public DateTime CreatedDate { get; set; }

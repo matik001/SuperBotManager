@@ -32,6 +32,7 @@ export interface ActionDefinitionDTO {
 	actionDefinitionName: string;
 	actionDefinitionDescription: string;
 	actionDefinitionIcon: string;
+	actionDefinitionGroup: string;
 	preserveExecutedInputs: boolean;
 
 	actionDataSchema: ActionDefinitionSchema;

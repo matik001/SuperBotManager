@@ -25,12 +25,14 @@ namespace SuperBotManagerBackend.Controllers.v1
         private readonly IAppUnitOfWork uow;
         private readonly IMapper mapper;
         private readonly IActionService actionService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IActionService actionService)
+        public ActionExecutorController(IAppUnitOfWork uow, IMapper mapper, IActionService actionService, IHttpContextAccessor httpContextAccessor)
         {
             this.uow = uow;
             this.mapper = mapper;
             this.actionService = actionService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]

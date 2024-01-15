@@ -4,6 +4,7 @@ import NotFoundPage from 'pages/NotFoundPage';
 import SchedulePage from 'pages/SchedulePage';
 import SignInPage from 'pages/SignInPage';
 import SignUpPage from 'pages/SignUpPage';
+import VaultPage from 'pages/VaultPage';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import useAuthStore from 'store/authStore';
 
@@ -20,6 +21,7 @@ const Router = () => {
 						<Route path="/executors" element={<ActionExecutorsPage />} />
 						<Route path="/executor/edit/:id" element={<ActionExecutorEditPage />} />
 						<Route path="/schedule" element={<SchedulePage />} />
+						<Route path="/vault" element={<VaultPage />} />
 						<Route path="/" element={<Navigate to="/executors" />} />
 					</>
 				) : (

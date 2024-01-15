@@ -72,6 +72,14 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 							Schedule
 						</Button>
 					</Link>
+					<Link to="/vault">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={location.pathname == '/vault' ? 'primary' : 'text'}
+						>
+							Vault
+						</Button>
+					</Link>
 					<Button
 						loading={logoutMutation.isPending}
 						style={{ marginLeft: '10px', height: '40px' }}

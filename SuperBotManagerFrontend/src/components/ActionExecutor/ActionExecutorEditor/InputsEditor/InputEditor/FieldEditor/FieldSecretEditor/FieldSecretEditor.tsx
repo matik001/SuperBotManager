@@ -11,6 +11,7 @@ const FieldSecretEditor: React.FC<InnerFieldEditorProps> = ({
 }) => {
 	return (
 		<Input.Password
+			autoComplete="new-password"
 			style={{ width: fieldWidthPx }}
 			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			value={value.isEncrypted ? MASK_ENCRYPTED : value.value ?? undefined}

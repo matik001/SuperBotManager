@@ -24,6 +24,7 @@ namespace SuperBotManagerBase.DB
         public DbSet<ActionExecutor> ActionExecutors { get; set; }
         public DbSet<Action> Actions { get; set; }
         public DbSet<Secret> Secrets { get; set; }
+        public DbSet<VaultItem> VaultItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

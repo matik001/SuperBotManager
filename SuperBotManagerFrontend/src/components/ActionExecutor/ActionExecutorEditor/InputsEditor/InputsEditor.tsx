@@ -1,6 +1,7 @@
 import { Collapse, CollapseProps, Popconfirm, Space, Tooltip } from 'antd';
 import { FieldInfo } from 'api/actionDefinitionApi';
 import { ExecutorInput } from 'api/actionExecutorApi';
+import { VaultItemDTO } from 'api/vaultItem';
 import IconButton from 'components/UI/IconButton/IconButton';
 import { useCallback, useState } from 'react';
 import { AiOutlineExclamationCircle, AiOutlinePlus } from 'react-icons/ai';
@@ -16,6 +17,7 @@ export interface InputsEditorProps {
 	inputSchema: FieldInfo[];
 	onChangeInputs: (inputs: ExecutorInput[]) => void;
 	style?: CSSProperties;
+	executorVaultItems: VaultItemDTO[] | undefined;
 }
 const collapseTitleClassname = 'CollapseTitleClass';
 const CollapseWrapper = styled.div`
@@ -23,7 +25,13 @@ const CollapseWrapper = styled.div`
 		align-items: center !important;
 	}
 `;
-const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEditorProps) => {
+const InputsEditor = ({
+	inputs,
+	inputSchema,
+	onChangeInputs,
+	style,
+	executorVaultItems
+}: InputsEditorProps) => {
 	const { count: nextInputId, increment: incNextInputId } = useCounter(0);
 	const [inputsIds, setInputIds] = useState(() => inputs.map((_) => Math.random() * 1000000));
 	const onDeleteInput = useCallback(
@@ -36,7 +44,7 @@ const InputsEditor = ({ inputs, inputSchema, onChangeInputs, style }: InputsEdit
 	);
 	const onAddInput = () => {
 		setInputIds([...inputsIds, nextInputId]);
-		onChangeInputs([...inputs, createNewInput(inputSchema)]);
+		onChangeInputs([...inputs, createNewInput(inputSchema, executorVaultItems)]);
 		incNextInputId();
 	};
 	const onDuplicateInput = useCallback(
