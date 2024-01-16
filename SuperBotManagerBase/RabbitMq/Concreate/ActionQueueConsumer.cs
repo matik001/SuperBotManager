@@ -47,6 +47,8 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
 
                 await uow.ActionRepository.Update(action);
 
+                await uow.SaveChangesAsync();
+
                 if(action.ActionExecutor.ActionExecutorOnFinishId != null)
                     await actionService.EnqueueExecution(action.ActionExecutor.ActionExecutorOnFinishId.Value, action.RunStartType, action);
 
