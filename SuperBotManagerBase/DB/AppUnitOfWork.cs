@@ -17,6 +17,7 @@ namespace SuperBotManagerBase.DB
         IActionRepository ActionRepository { get; }
         ISecretRepository SecretRepository { get; }
         IVaultItemRepository VaultItemRepository { get; }
+        void UntrackAll();
         Task<int> SaveChangesAsync();
     }
     public class AppUnitOfWork : IAppUnitOfWork
@@ -180,9 +181,14 @@ namespace SuperBotManagerBase.DB
         {
             return await _dbContext.SaveChangesAsync();
         }
+        public void UntrackAll()
+        {
+            _dbContext.ChangeTracker.Clear();
+        }
         public void Dispose()
         {
             _dbContext.Dispose();
         }
+
     }  
 }
