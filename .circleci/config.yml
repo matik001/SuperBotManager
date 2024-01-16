@@ -136,13 +136,13 @@ jobs:
       - run: > 
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
             docker rm -f botmanager_backend ;
-            docker run -v ~/containers/botmanager_backend:/app --name botmanager_backend --network=my_network --rm -d -p 6662:8080 mcr.microsoft.com/dotnet/aspnet:8.0 /bin/bash -c "cd /app ; dotnet SuperBotManagerBackend.dll" '
+            docker run --restart=always -v ~/containers/botmanager_backend:/app --name botmanager_backend --network=my_network --rm -d -p 6662:8080 mcr.microsoft.com/dotnet/aspnet:8.0 /bin/bash -c "cd /app ; dotnet SuperBotManagerBackend.dll" '
       
     # Start service
       - run: > 
             ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
             docker rm -f botmanager_service ;
-            docker run -v ~/containers/botmanager_service:/app --name botmanager_service --network=my_network --rm -d mcr.microsoft.com/dotnet/runtime:8.0 /bin/bash -c "cd /app ; dotnet SuperbotConsumerService.dll" '
+            docker run --restart=always -v ~/containers/botmanager_service:/app --name botmanager_service --network=my_network --rm -d mcr.microsoft.com/dotnet/runtime:8.0 /bin/bash -c "cd /app ; dotnet SuperbotConsumerService.dll" '
       
       # copies files from pipeline to vps via ssh
       # - run: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete . $VPS_USER@$VPS_URL:~/containers/superchess
