@@ -60,6 +60,8 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
                 uow.UntrackAll();
                 logger.LogError(ex, $"Error while processing message: {message.Action.Id}");
                 message.Action.ActionStatus = ActionStatus.Error;
+                message.Action.ActionData.Output.Add("Error message", ex.Message);
+                message.Action.ActionData.Output.Add("Stacktrace", ex.StackTrace);
                 await uow.ActionRepository.Update(message.Action);
                 await uow.SaveChangesAsync();
                 throw;
