@@ -20,8 +20,8 @@ namespace SuperBotManagerBase.DB.Repositories
 
         public virtual ICollection<UserPassword> UserPasswords { get; set; }
 
-        public virtual ICollection<UserRole> UserRoles { get; set; }
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; } = [];
+        public virtual ICollection<Role> Roles { get; set; } = [];
 
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<RevokedToken> RevokedTokens { get; set; }

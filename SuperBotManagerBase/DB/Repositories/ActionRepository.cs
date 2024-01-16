@@ -80,6 +80,10 @@ namespace SuperBotManagerBase.DB.Repositories
     {
         Pending, InProgress, Finished, Error
     }
+    public enum RunStartType
+    {
+        Manual, Scheduled
+    }
     [Table("action")]
     public class Action : IEntity<int>
     {
@@ -88,11 +92,18 @@ namespace SuperBotManagerBase.DB.Repositories
 
         public ActionSchema ActionData { get; set; }
         public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
-
+        public RunStartType RunStartType { get; set; } = RunStartType.Manual;
 
         [ForeignKey("ActionExecutor")]
         public int? ActionExecutorId { get; set; }
         public virtual ActionExecutor? ActionExecutor { get; set; }
+
+
+        [ForeignKey("ActionOnFinish")]
+        public int? ActionOnFinishId { get; set; }
+        public virtual Action ActionOnFinish { get; set; }
+
+
 
         public int? ErrorId { get; set; }
         /// TODO Error object

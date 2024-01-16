@@ -7,21 +7,15 @@ using System.Reflection.Metadata;
 
 namespace SuperBotManagerBase.DB.Repositories
 {
-    [Table("userrole")]
     public class UserRole : IEntity<int>
     {
         [Key]
-        [Column("UserRoleId")]
         public int Id { get; set; }
 
-        [ForeignKey("User")]
         public int UserId { get; set; }
-        
-        [ForeignKey("Role")]
         public int RoleId { get; set; }
-
-        public virtual User User { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual User User { get; set; } = null!;
+        public virtual Role Role { get; set; } = null!;
 
 
         public DateTime CreatedDate { get; set; }
