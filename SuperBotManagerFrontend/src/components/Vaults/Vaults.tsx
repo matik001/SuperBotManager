@@ -17,12 +17,12 @@ interface VaultsProps {
 const Container = styled.div`
 	padding: 30px;
 	margin: 10px;
+	${ScrollableMixin}
 `;
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	gap: 10px;
-	${ScrollableMixin}
 `;
 
 const GroupIcon = styled.img`
@@ -128,7 +128,6 @@ const Vaults: React.FC<VaultsProps> = ({ user }) => {
 									groupDefinitions[0].actionDefinitionIcon) ||
 								'';
 							const isGroupChanged = vaultItems.some((f) => f.plainValue !== null);
-							console.log(vaultItems);
 							return (
 								<Group key={groupName}>
 									<GroupTitle>

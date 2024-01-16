@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { styled, useTheme } from 'styled-components';
+import { MASK_ENCRYPTED } from 'utils/executorUtils';
 
 interface QueueItemProps {
 	action: ActionDTO;
@@ -32,15 +33,15 @@ const InputContainer = styled.div`
 	row-gap: 4px;
 	align-items: center;
 	font-size: 14px;
+	grid-auto-rows: min-content;
 `;
 const InputOutputContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 30px;
+	gap: 40px;
 `;
 const InputOutputTitle = styled.div`
 	grid-column: span 2;
-	text-align: center;
 	font-size: 26px;
 	font-weight: 300;
 	margin-bottom: 14px;
@@ -107,9 +108,7 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 
 			<motion.div
 				style={{ overflow: 'hidden' }}
-				exit={{
-					display: isOpen ? 'block' : 'none'
-				}}
+				initial={{ height: '0px' }}
 				animate={{ height: isOpen ? '100%' : '0px' }}
 				transition={{ ease: 'easeOut', duration: 0.3 }}
 			>
@@ -121,15 +120,27 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 						</InputOutputTitle>
 
 						{Object.entries(action.actionData.input).map(([key, value]) => {
+							const fieldDef = executor.actionDefinition.actionDataSchema.inputSchema.find(
+								(a) => a.name === key
+							);
 							return (
 								<>
 									<div>{key}</div>
-									<Input
-										onClick={(e) => e.stopPropagation()}
-										width="200px"
-										readOnly
-										value={value}
-									></Input>
+									{fieldDef?.type === 'Secret' ? (
+										<Input.Password
+											width="200px"
+											readOnly
+											onClick={(e) => e.stopPropagation()}
+											value={MASK_ENCRYPTED}
+										/>
+									) : (
+										<Input
+											onClick={(e) => e.stopPropagation()}
+											width="200px"
+											readOnly
+											value={value}
+										></Input>
+									)}
 								</>
 							);
 						})}

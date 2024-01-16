@@ -159,7 +159,6 @@ const InputsEditor = ({
 	// 		theme.infoColor
 	// 	]
 	// );
-	console.log(inputSchema);
 
 	return (
 		<div style={{ ...style }}>
