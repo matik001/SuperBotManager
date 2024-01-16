@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { FloatButton } from 'antd';
 import { ActionDefinitionDTO } from 'api/actionDefinitionApi';
 import {
 	ActionExecutorDTO,
@@ -10,6 +11,7 @@ import {
 import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import React from 'react';
+import { MdOutlineRefresh } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useBoolean } from 'usehooks-ts';
@@ -31,7 +33,11 @@ const Container = styled.div`
 `;
 
 const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
-	const { data: actionExecutors, isFetching } = useQuery({
+	const {
+		data: actionExecutors,
+		isFetching,
+		refetch
+	} = useQuery({
 		queryKey: executorKeys.list(),
 		queryFn: ({ signal }) => actionExecutorGetAll(signal)
 	});
@@ -84,6 +90,8 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 		<>
 			{(isFetching || addActionExecutorMutation.isPending) && <Spinner />}
 			<Container>
+				{!isFetching && <FloatButton icon={<MdOutlineRefresh />} onClick={() => refetch()} />}
+
 				<ActionDefinitionPicker
 					onClose={closeModalAdd}
 					isOpen={isModalAddOpen}
