@@ -64,6 +64,14 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 						</Button>
 					</Link>
 
+					<Link to="/queue">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={location.pathname == '/queue' ? 'primary' : 'text'}
+						>
+							Queue
+						</Button>
+					</Link>
 					<Link to="/schedule">
 						<Button
 							style={{ marginLeft: '10px', height: '40px' }}

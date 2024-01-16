@@ -23,6 +23,7 @@ const FieldSetEditor: React.FC<InnerFieldEditorProps> = ({
 	}, [fieldSchema, onChange, value]);
 	return (
 		<Select
+			disabled={value.disabled}
 			style={{ width: fieldWidthPx }}
 			value={value.value}
 			onChange={(val) => onChange({ ...value, value: val })}

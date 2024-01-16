@@ -45,6 +45,7 @@ const FieldExecutorPickerEditor: React.FC<InnerFieldEditorProps> = ({
 
 	return (
 		<Select
+			disabled={value.disabled}
 			loading={isFetchingExecutors}
 			style={{ width: fieldWidthPx }}
 			value={value.value}

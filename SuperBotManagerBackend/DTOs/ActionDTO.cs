@@ -5,19 +5,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SuperBotManagerBackend.DTOs
 {
-    public class ActionCreateDTO
-    {
-        public ActionSchema ActionData { get; set; }
-        public int ActionExecutorId { get; set; }
-    }
-    public class ActionDTO
+    public class ActionUpdateDTO
     {
         public int Id { get; set; }
 
         public ActionSchema ActionData { get; set; }
+    }
+    public class ActionDTO : ActionUpdateDTO
+    {
         public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
-
-        public int? ActionExecutorId { get; set; }
+        public int ActionExecutorId { get; set; }
 
         public int? ErrorId { get; set; }
         /// TODO Error object

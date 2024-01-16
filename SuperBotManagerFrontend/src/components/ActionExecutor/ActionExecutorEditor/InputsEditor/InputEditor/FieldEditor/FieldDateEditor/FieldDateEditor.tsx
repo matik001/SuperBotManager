@@ -11,6 +11,7 @@ const FieldDateEditor: React.FC<InnerFieldEditorProps> = ({
 }) => {
 	return (
 		<DatePicker
+			disabled={value.disabled}
 			style={{ width: fieldWidthPx }}
 			value={value.value ? dayjs(value.value) : undefined}
 			placeholder={fieldSchema.placeholder || 'Provide a value'}

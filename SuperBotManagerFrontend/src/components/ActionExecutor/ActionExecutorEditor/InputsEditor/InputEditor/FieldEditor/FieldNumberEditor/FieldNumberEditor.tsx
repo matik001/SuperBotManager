@@ -10,6 +10,7 @@ const FieldNumberEditor: React.FC<InnerFieldEditorProps> = ({
 }) => {
 	return (
 		<InputNumber
+			disabled={value.disabled}
 			style={{ width: fieldWidthPx }}
 			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			value={value.value}

@@ -25,5 +25,9 @@
 	"Backend error": "Bład serwera",
 	"Loading": "Ładowanie",
 	"Change": "Zmień",
-	"Save": "Zapisz"
+	"Save": "Zapisz",
+	"InProgress": "W trakcie",
+	"Pending": "Oczekuje",
+	"Error": "Błąd",
+	"Finished": "Zakończono"
 }

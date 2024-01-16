@@ -26,8 +26,6 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
 
         public async Task ConsumeAsync(ActionQueueMessage message)
         {
-            /// be careful executor i descrypted
-            
             var action = message.Action;
 
             logger.LogInformation($"Processing: {action.Id} ({action.ActionExecutor.ActionExecutorName} - {action.ActionExecutor.ActionDefinition.ActionDefinitionName})");
@@ -35,15 +33,15 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
             await uow.ActionRepository.Update(action);
             await uow.SaveChangesAsync();
 
-            action.ActionData.Input = await ActionSchema.DecryptDict(uow, action.ActionData.Input);
+            action.ActionData = await ActionSchema.Decrypt(uow, action.ActionData, action.ActionExecutor.ActionDefinition.ActionDataSchema);
+
             var output = await ExecuteAsync(action);
 
             logger.LogInformation($"Executed: {action.Id} ({action.ActionExecutor.ActionExecutorName} - {action.ActionExecutor.ActionDefinition.ActionDefinitionName})");
             action.ActionStatus = ActionStatus.Finished;
             action.ActionData.Output = output;
 
-            action.ActionData.Input = await ActionSchema.EncryptDict(uow, action.ActionData.Input);
-            action.ActionData.Output = await ActionSchema.EncryptDict(uow, action.ActionData.Output);
+            action.ActionData = await ActionSchema.Encrypt(uow, action.ActionData, action.ActionExecutor.ActionDefinition.ActionDataSchema);
 
             await uow.ActionRepository.Update(action);
 

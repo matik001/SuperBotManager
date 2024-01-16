@@ -33,7 +33,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpGet]
         public IEnumerable<ActionDTO> Get()
         {
-            var actionDefinitions = uow.ActionRepository.GetAll().ToList();
+            var actionDefinitions = uow.ActionRepository.GetAll().OrderByDescending(a=>a.ModifiedDate).ToList();
             var dtos = mapper.Map<IEnumerable<ActionDTO>>(actionDefinitions);
             return dtos;
         }
@@ -47,19 +47,9 @@ namespace SuperBotManagerBackend.Controllers.v1
             return dto;
         }
 
-        //// POST api/<ValuesController>
-        [HttpPost]
-        public async Task Post([FromBody] ActionCreateDTO dto)
-        {
-            var action = mapper.Map<Action>(dto);
-            if(action == null)
-                throw HttpUtilsService.BadRequest("Bad ActionDTO format");
-            await uow.ActionRepository.Create(action);
-            await uow.SaveChangesAsync();
-        }
-
+      
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ActionCreateDTO dto)
+        public async Task Put(int id, [FromBody] ActionUpdateDTO dto)
         {
             var action = await uow.ActionRepository.GetById(id);
             mapper.Map(dto, action);
@@ -67,12 +57,6 @@ namespace SuperBotManagerBackend.Controllers.v1
             await uow.SaveChangesAsync();
         }
 
-        [HttpDelete("{id}")]
-        public async Task Delete(int id)
-        {
-            await uow.ActionRepository.Delete(id);
-            await uow.SaveChangesAsync();
-        }
 
 
     }

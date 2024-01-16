@@ -10,6 +10,7 @@ const FieldStringEditor: React.FC<InnerFieldEditorProps> = ({
 }) => {
 	return (
 		<Input
+			disabled={value.disabled}
 			style={{ width: fieldWidthPx }}
 			placeholder={fieldSchema.placeholder ?? 'Provide a value'}
 			value={value.value ?? undefined}

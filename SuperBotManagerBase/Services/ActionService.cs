@@ -25,19 +25,20 @@ namespace SuperBotManagerBase.Services
             this.uow = uow;
             this.actionProducer = actionProducer;
         }
-        private async Task<Dictionary<string, string>> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, ActionSchema? previousAction = null)
+        private async Task<Dictionary<string, string>> _buildExecuteInput(Dictionary<string, FieldValue> templateInput, DB.Repositories.Action? previousAction = null)
         {
             var newInput = templateInput.ToDictionary(a => a.Key, a => a.Value.Value);
             if(previousAction != null)
             {
-                var output = await ActionSchema.DecryptDict(uow, previousAction.Output);
-                foreach(var item in output)
+                var previousActionData = await ActionSchema.Decrypt(uow, previousAction.ActionData, previousAction.ActionExecutor.ActionDefinition.ActionDataSchema);
+
+                foreach(var item in previousActionData.Output)
                 {
                     newInput[item.Key] = item.Value;
                 }
 
                 /// pass forward inputs from previous action, without overriding 
-                foreach(var item in previousAction.Input)
+                foreach(var item in previousActionData.Input)
                 {
                     if(!newInput.ContainsKey(item.Key))
                         newInput[item.Key] = item.Value;
@@ -55,7 +56,6 @@ namespace SuperBotManagerBase.Services
             {
                 throw new Exception("Executor is not valid, so cannot be run");
             }
-
             var executorData = executor.ActionData.DeepClone();
             await executorData.DecryptSecrets(executor.ActionDefinition.ActionDataSchema, uow);
 
@@ -67,11 +67,11 @@ namespace SuperBotManagerBase.Services
                     ActionStatus = ActionStatus.Pending,
                     ActionData = new ActionSchema()
                     {
-                        Input = await _buildExecuteInput(input, fromAction?.ActionData),
+                        Input = await _buildExecuteInput(input, fromAction),
                         Output = new Dictionary<string, string>()
                     },
                 };
-                action.ActionData.Input = await ActionSchema.EncryptDict(uow, action.ActionData.Input);
+                action.ActionData = await ActionSchema.Encrypt(uow, action.ActionData, executor.ActionDefinition.ActionDataSchema);
 
                 return action;
             }));

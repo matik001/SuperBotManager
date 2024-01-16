@@ -6,6 +6,7 @@ export interface FieldValue {
 	value: string | null;
 	isEncrypted: boolean;
 	isValid: boolean;
+	disabled?: boolean;
 }
 export type ExecutorInput = Record<string, FieldValue | undefined>;
 export interface ActionExecutorSchema {
@@ -38,7 +39,7 @@ export const executorKeys = {
 	one: (id: number) => [...executorKeys.prefix, 'one', id] as const
 };
 export const actionExecutorGetAll = async (signal: AbortSignal) => {
-	const res = await appAxios.get<ActionExecutorDTO[]>('/v1/ActionExecutor', {
+	const res = await appAxios.get<ActionExecutorExtendedDTO[]>('/v1/ActionExecutor', {
 		signal: signal
 	});
 	return res.data;

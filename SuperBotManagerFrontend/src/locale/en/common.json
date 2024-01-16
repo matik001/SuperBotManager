@@ -24,5 +24,9 @@
 	"Server error": "Server error",
 	"Loading": "Loading",
 	"Change": "Change",
-	"Save": "Save"
+	"Save": "Save",
+	"InProgress": "In progress",
+	"Pending": "Pending",
+	"Error": "Error",
+	"Finished": "Finished"
 }
