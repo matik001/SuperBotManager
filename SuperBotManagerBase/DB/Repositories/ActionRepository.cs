@@ -99,9 +99,9 @@ namespace SuperBotManagerBase.DB.Repositories
         public virtual ActionExecutor? ActionExecutor { get; set; }
 
 
-        [ForeignKey("ActionOnFinish")]
-        public int? ActionOnFinishId { get; set; }
-        public virtual Action ActionOnFinish { get; set; }
+        [ForeignKey("ForwardedFromAction")]
+        public int? ForwardedFromActionId { get; set; }
+        public virtual Action ForwardedFromAction { get; set; }
 
 
 

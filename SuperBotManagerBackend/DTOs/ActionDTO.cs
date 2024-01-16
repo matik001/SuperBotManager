@@ -14,7 +14,10 @@ namespace SuperBotManagerBackend.DTOs
     public class ActionDTO : ActionUpdateDTO
     {
         public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
+        public RunStartType RunStartType { get; set; } = RunStartType.Manual;
+
         public int ActionExecutorId { get; set; }
+        public int? ForwardedFromActionId { get; set; }
 
         public int? ErrorId { get; set; }
         /// TODO Error object

@@ -81,18 +81,26 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 					)}
 					{t(action.actionStatus)}
 				</div>
-				<Space style={{ width: '250px' }}>
+				<Space style={{ width: '300px' }} align="center">
 					<img
 						style={{ width: '30px', height: '30px', borderRadius: '6px' }}
 						src={executor.actionDefinition.actionDefinitionIcon}
 					></img>
-					<h4>{executor.actionExecutorName}</h4>
+					<b>{executor.actionExecutorName}</b>{' '}
+					<span style={{ marginLeft: '-9px', fontSize: '12px', display: 'block' }}>
+						({action.id})
+					</span>
 				</Space>
 
-				<div style={{ marginRight: 'auto' }}>
-					Forwared to: <b>{executor.actionExecutorOnFinishId}</b>
+				<div style={{ width: '200px' }}>
+					Start type: <b>{action.runStartType}</b>
 				</div>
-				<div>
+				{action.forwardedFromActionId && (
+					<div>
+						Previous action id: <b>{action.forwardedFromActionId}</b>
+					</div>
+				)}
+				<div style={{ marginLeft: 'auto' }}>
 					Created: <b>{dayjs(action.createdDate).toNow()}</b>
 				</div>
 			</HeadInfo>

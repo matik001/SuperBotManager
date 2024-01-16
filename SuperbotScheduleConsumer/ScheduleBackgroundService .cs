@@ -33,7 +33,7 @@ namespace SuperbotSchedule
                     var schedules = uow.ActionScheduleRepository.GetAll().Where(a => a.Enabled && a.NextRun <= currentTime).ToList();
                     foreach(var schedule in schedules)
                     {
-                        await actionService.EnqueueExecution(schedule.ExecutorId);
+                        await actionService.EnqueueExecution(schedule.ExecutorId, RunStartType.Scheduled);
                         logger.LogInformation($"Scheduled executor {schedule.ExecutorId} with schedule {schedule.ActionSCheduleName}");
 
                         if(schedule.Type == ActionScheduleType.Once)

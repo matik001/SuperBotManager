@@ -14,6 +14,9 @@ export interface ActionDTO extends ActionUpdateDTO {
 	actionStatus: ActionStatus;
 	actionExecutorId: number;
 
+	runStartType: 'Manual' | 'Scheduled';
+	forwardedFromActionId?: number;
+
 	createdDate: Date;
 	modifiedDate: Date;
 }

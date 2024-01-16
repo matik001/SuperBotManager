@@ -32,7 +32,7 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
             action.ActionExecutor.ActionDefinition.ActionExecutors = null;
 
             action.ActionExecutor.Actions = null;
-
+            action.ForwardedFromAction = null;
             producer.PublishMessage(msg, action.ActionExecutor.ActionDefinition.ActionDefinitionQueueName);
             action.ActionExecutor.ActionDefinition.ActionExecutors = prevExecutors; ;
             action.ActionExecutor.Actions = prevActions; ;

@@ -104,7 +104,7 @@ namespace SuperBotManagerBackend.Controllers.v1
         [HttpPost("{id}/execute")]
         public async Task Execute(int id)
         {
-            await actionService.EnqueueExecution(id);
+            await actionService.EnqueueExecution(id, RunStartType.Manual);
         }
 
     }

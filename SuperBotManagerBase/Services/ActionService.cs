@@ -13,7 +13,7 @@ namespace SuperBotManagerBase.Services
 {
     public interface IActionService
     {
-        Task EnqueueExecution(int executorId, DB.Repositories.Action? fromAction = null);
+        Task EnqueueExecution(int executorId, RunStartType runStartType, DB.Repositories.Action? fromAction = null);
     }
     public class ActionService : IActionService
     {
@@ -49,7 +49,7 @@ namespace SuperBotManagerBase.Services
 /// <summary>
 /// formAction is encrypted
 /// </summary>
-        public async Task EnqueueExecution(int executorId, DB.Repositories.Action? fromAction = null)
+        public async Task EnqueueExecution(int executorId, RunStartType runStartType, DB.Repositories.Action? fromAction = null)
         {
             var executor = await uow.ActionExecutorRepository.GetById(executorId, a => a.Include(x => x.ActionDefinition));
             if(!executor.IsValid)
@@ -70,6 +70,8 @@ namespace SuperBotManagerBase.Services
                         Input = await _buildExecuteInput(input, fromAction),
                         Output = new Dictionary<string, string>()
                     },
+                    RunStartType = runStartType,
+                    ForwardedFromActionId = fromAction?.Id
                 };
                 action.ActionData = await ActionSchema.Encrypt(uow, action.ActionData, executor.ActionDefinition.ActionDataSchema);
 

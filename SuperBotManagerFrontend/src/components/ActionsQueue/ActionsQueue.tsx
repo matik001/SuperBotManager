@@ -23,7 +23,8 @@ const ActionsQueue: React.FC<ActionsQueueProps> = ({}) => {
 	} = useQuery({
 		queryKey: actionKeys.list(),
 		queryFn: ({ signal }) => actionGetAll(signal),
-		refetchInterval: 4000 /// if more users it can be decreased or we can use signalr
+		refetchOnMount: 'always',
+		refetchInterval: 3000 /// if more users it can be decreased or we can use signalr
 	});
 	const { data: executors, isFetching: isFetchingExecutors } = useQuery({
 		queryKey: executorKeys.list(),
