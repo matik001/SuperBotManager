@@ -130,17 +130,17 @@ jobs:
       # Send frontend
       - run:
           name: Upload frontend
-          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete --chown=$VPS_USER:$VPS_USER ./dist/ $VPS_USER@$VPS_URL:~/static/botmanager_frontend
+          command: sudo rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete --chown=$VPS_USER:$VPS_USER ./dist/ $VPS_USER@$VPS_URL:~/static/botmanager_frontend
 
       # Send backend
       - run:
           name: Upload backend
-          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete --chown=$VPS_USER:$VPS_USER ./backend_build/ $VPS_USER@$VPS_URL:~/containers/botmanager_backend
+          command: sudo rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete --chown=$VPS_USER:$VPS_USER ./backend_build/ $VPS_USER@$VPS_URL:~/containers/botmanager_backend
 
       # Send service
       - run:
           name: Upload Service
-          command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc  --delete --chown=$VPS_USER:$VPS_USER ./service_build/ $VPS_USER@$VPS_URL:~/containers/botmanager_service
+          command: sudo rsync -e "ssh -o StrictHostKeyChecking=no" -arvc  --delete --chown=$VPS_USER:$VPS_USER ./service_build/ $VPS_USER@$VPS_URL:~/containers/botmanager_service
 
       # Start backend
       - run: > 
