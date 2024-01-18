@@ -18,6 +18,7 @@ namespace SuperBotManagerBase.Utils
         public static List<Assembly> LoadAssembliesContainingName(string name)
         {
             var loadedAssemblies = new List<Assembly>();
+            Console.WriteLine($"Loading assemblies with name: {name} from folder {System.AppDomain.CurrentDomain.BaseDirectory}");
             foreach(string dll in Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory, "*.dll", SearchOption.AllDirectories))
             {
                 if(!dll.Contains(name))

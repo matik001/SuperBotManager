@@ -117,7 +117,17 @@ jobs:
       - attach_workspace:
           at: .
     
-      # Deploy frontend
+      # Stop backend
+      - run: > 
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
+            docker rm -f botmanager_backend '
+      
+      # Stop service
+      - run: > 
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
+            docker rm -f botmanager_service '
+
+      # Send frontend
       - run:
           name: Upload frontend
           command: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete --chown=$VPS_USER:$VPS_USER ./dist/* $VPS_USER@$VPS_URL:~/static/botmanager_frontend
@@ -135,23 +145,13 @@ jobs:
       # Start backend
       - run: > 
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
-            docker rm -f botmanager_backend ;
             docker run --restart=always -v ~/containers/botmanager_backend:/app --name botmanager_backend --network=my_network -d -p 6662:8080 mcr.microsoft.com/dotnet/aspnet:8.0 /bin/bash -c "cd /app ; dotnet SuperBotManagerBackend.dll" '
       
     # Start service
       - run: > 
             ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
-            docker rm -f botmanager_service ;
             docker run --restart=always -v ~/containers/botmanager_service:/app --name botmanager_service --network=my_network -d mcr.microsoft.com/dotnet/runtime:8.0 /bin/bash -c "cd /app ; dotnet SuperbotConsumerService.dll" '
-      
-      # copies files from pipeline to vps via ssh
-      # - run: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete . $VPS_USER@$VPS_URL:~/containers/superchess
-      # - run: > 
-      #     ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL "
-      #       export PORT=5555 ; 
-      #       export DB_CONNECTION_STRING=$DB_CONNECTION_STRING ; 
-      #       cd ~/projects/url_shortener ;
-      #       docker compose -f docker-compose.prod.yaml up --build -d"
+            
 workflows:  
   build-and-deploy:
     jobs:
