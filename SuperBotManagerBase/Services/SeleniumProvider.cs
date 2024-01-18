@@ -20,6 +20,7 @@ namespace SuperBotManagerBase.Services
         private readonly bool headless;
         private readonly string hostname;
         private readonly int port;
+        private readonly string proxy;
         public SeleniumProvider(IConfigurationManager configurationManager)
         {
             var section = configurationManager.GetSection("Selenium");
@@ -31,6 +32,7 @@ namespace SuperBotManagerBase.Services
             local = section.GetValue<bool>("Local");
             hostname = section.GetValue<string>("Hostname");
             port = section.GetValue<int>("Port");
+            proxy = section.GetValue<string>("Proxy");
         }
 
         public IWebDriver GetDriver()
@@ -41,6 +43,16 @@ namespace SuperBotManagerBase.Services
                 options.AddArgument("--headless=new");
             options.AddArgument("--no-sandbox");
             options.AddArgument("--window-size=1295,825");
+            if(!string.IsNullOrEmpty(proxy)) {
+                var httpproxy = new Proxy
+                {
+                    Kind = ProxyKind.Manual,
+                    HttpProxy = proxy,
+                    SslProxy = proxy
+                };
+                options.Proxy = httpproxy;
+            }
+
 
             if(local)
             {

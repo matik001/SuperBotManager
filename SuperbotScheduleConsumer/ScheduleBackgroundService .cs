@@ -46,8 +46,8 @@ namespace SuperbotSchedule
                         }
                         await uow.ActionScheduleRepository.Update(schedule);
                     }
-
-                    await uow.SaveChangesAsync();
+                    if(schedules.Count > 0)
+                        await uow.SaveChangesAsync();
                     await Task.Delay(10000, stoppingToken); /// TODO : make it configurable
                 }
             }

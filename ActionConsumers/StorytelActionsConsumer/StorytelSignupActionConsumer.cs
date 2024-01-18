@@ -29,16 +29,19 @@ namespace StorytelActionsConsumer
     [ServiceActionConsumer("storytel-sign-up")]
     public class StorytelSignupActionConsumer : ActionQueueConsumer
     {
+        ISeleniumProvider seleniumProvider;
 
-        public StorytelSignupActionConsumer(ILogger<ActionQueueConsumer> logger, IAppUnitOfWork uow, IActionService actionService) : base(logger, uow, actionService)
+        public StorytelSignupActionConsumer(ILogger<ActionQueueConsumer> logger, IAppUnitOfWork uow, IActionService actionService, ISeleniumProvider seleniumProvider) : base(logger, uow, actionService)
         {
+            this.seleniumProvider = seleniumProvider;
         }
 
 
         protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
         {
             var input = new StorytelSignupInput(action.ActionData.Input);
-            new StorytelBot().CreateAccount(input);
+            using var driver = seleniumProvider.GetDriver();
+            new StorytelBot(driver).CreateAccount(input);
             return new Dictionary<string, string> {  };
         }
     }
