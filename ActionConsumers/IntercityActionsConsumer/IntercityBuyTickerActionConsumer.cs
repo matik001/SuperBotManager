@@ -1,12 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using SuperBotManagerBase.Attributes;
 using SuperBotManagerBase.DB;
 using SuperBotManagerBase.RabbitMq.Concreate;
 using SuperBotManagerBase.RabbitMq.Core;
 using SuperBotManagerBase.Services;
 using SuperBotManagerBase.Utils;
+using System.Drawing;
 
-namespace IntercityActionConsumer
+namespace IntercityActionsConsumer
 {
     public enum ICDiscount
     {
@@ -24,42 +28,81 @@ namespace IntercityActionConsumer
 
         public ICBuyTicketActionInput(Dictionary<string, string> fromInput)
         {
-            //Question = ConsumersUtils.BuildMessage("Question", fromInput);
-            //Key = fromInput["Key"];
-            //SystemMessage = fromInput.ContainsKey("System message") ? fromInput["System message"] : null;
-            //Temperature = double.Parse(fromInput["Temperature"]);
-            //Model = fromInput["Model"] switch
-            //{
-            //    "GPT4" => Model.GPT4_Turbo,
-            //    "GPT3.5" => Model.ChatGPTTurbo,
-            //    _ => Model.GPT4_Turbo,
-            //};
+            TicketOwner = fromInput["Ticket owner"];
+            From = fromInput["From"];
+            To = fromInput["To"];
+            Login = fromInput["Login"];
+            Password = fromInput["Password"];
+            TripDate = DateTime.Parse(fromInput["Trip date"]);
+
+            Enum.TryParse<ICDiscount>(fromInput["Discount"], out var _discount);
+            Discount = _discount;
+
         }
     }
     [ServiceActionConsumer("intercity-buy-ticket")]
     public class IntercityBuyTicketActionConsumer : ActionQueueConsumer
     {
-
-        public IntercityBuyTicketActionConsumer(ILogger<ActionQueueConsumer> logger, IAppUnitOfWork uow, IActionService actionService) : base(logger, uow, actionService)
+        ISeleniumProvider seleniumProvider;
+        public IntercityBuyTicketActionConsumer(ILogger<ActionQueueConsumer> logger, IAppUnitOfWork uow, IActionService actionService, ISeleniumProvider seleniumProvider) : base(logger, uow, actionService)
         {
+            this.seleniumProvider = seleniumProvider;
         }
 
 
         protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
         {
-            //GptActionInput input = new GptActionInput(action.ActionData.Input);
+            var input = new ICBuyTicketActionInput(action.ActionData.Input);
 
-            //var api = new OpenAIAPI(input.Key);
-            //var chat = api.Chat.CreateConversation();
-            //chat.Model = input.Model;
-            //chat.RequestParameters.Temperature = input.Temperature;
-            //if(string.IsNullOrEmpty(input.SystemMessage))
-            //    chat.AppendSystemMessage(input.SystemMessage);
+            var ticketInfo = new IntercityTicketPage.TicketInfo()
+            {
+                DiscountCnt = input.Discount == ICDiscount.None ? 0 : 1,
+                NormalCnt = input.Discount == ICDiscount.None ? 1 : 0,
+                DiscountType = input.Discount == ICDiscount.Student ? "Studenci do 26 lat" : "",
+                PreferredCarriageType = CarriageType.Any,
+                PreferredSitType = SitType.Window
+            };
+            var loginData = new IntercityLoginPage.ICLoginData(input.Login, input.Password);
+            while(true)
+            {
+                using var driver = seleniumProvider.GetDriver();
+                
+                try
+                {
+                    IntercitySearchPage searchPage = new IntercitySearchPage(driver);
+                    var page = searchPage.NavigateToSearching()
+                        .SearchConnections(input.From, input.To, input.TripDate)
+                        .SearchTicket(ticketInfo);
 
-            //chat.AppendUserInput(input.Question);
 
-            //var response = await chat.GetResponseFromChatbotAsync();
-            return new Dictionary<string, string> {  };
+                    //Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                    //Console.WriteLine(screenshot.AsBase64EncodedString);
+
+                    while(page.IsAnnouncement() || !page.CanSit())
+                    {
+                        driver.Navigate().Back();
+                        page = new IntercityTicketPage(driver).SearchTicket(ticketInfo);
+                    }
+
+                    page.OrderTicket(input.TicketOwner)
+                        .Login(loginData)
+                        .PayLater()
+                        .GoOn();
+
+                    break;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    // driver.Manage().Cookies.DeleteAllCookies();
+                    // (driver as IJavaScriptExecutor).ExecuteScript("sessionStorage.clear();");
+                    // (driver as IJavaScriptExecutor).ExecuteScript("localStorage.clear();");
+                    continue;
+                }
+            }
+
+
+            return new Dictionary<string, string> { };
         }
     }
 

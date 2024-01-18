@@ -34,6 +34,7 @@ foreach(var job in jobsServices)
     services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
     services.ConfigureRabbitMq(builder.Configuration);
     services.AddScoped<IActionService, ActionService>();
+    services.AddScoped<ISeleniumProvider, SeleniumProvider>();
     if(job is BackgroundServiceInfo bgService)
     {
         var serviceCollectionExtensionsType = typeof(ServiceCollectionHostedServiceExtensions);
