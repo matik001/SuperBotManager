@@ -26,7 +26,20 @@ services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddDbContext<AppDBContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SuperBotManagerBackend"));
+    if(System.Diagnostics.Debugger.IsAttached)
+    {
+        options.UseMySQL(connectionString, b => b
+            .MigrationsAssembly("SuperBotManagerBackend"))
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
+    }
+    else
+    {
+        options.UseMySQL(connectionString, b => b
+            .MigrationsAssembly("SuperBotManagerBackend"));
+        };
+    //options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SuperBotManagerBackend"));
 });
 services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 services.AddScoped<IActionDefinitionSeederService, ActionDefinitionSeederService>();

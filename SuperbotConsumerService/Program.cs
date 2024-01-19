@@ -9,7 +9,6 @@ using SuperBotManagerBase.Services;
 using SuperBotManagerBase.Utils;
 using System.Reflection;
 
-
 var loadedConsumerAssemblies = AssemblyUtils.LoadAssembliesContainingName("Consumer");
 var consumers = loadedConsumerAssemblies.SelectMany(a => ServiceUtils.GetConsumersForAssembly(a)).ToList();
 
@@ -27,7 +26,19 @@ foreach(var job in jobsServices)
     services.AddDbContext<AppDBContext>(options =>
     {
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        options.UseNpgsql(connectionString);
+        if(System.Diagnostics.Debugger.IsAttached)
+        {
+            options.UseMySQL(connectionString, b => b
+                .MigrationsAssembly("SuperBotManagerBackend"))
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
+        }
+        else
+        {
+            options.UseMySQL(connectionString, b => b
+                .MigrationsAssembly("SuperBotManagerBackend"));
+        };
     });
     services.AddSingleton<IConfigurationManager>(_=>builder.Configuration);
     services.ConfigureEncryption(builder.Configuration);

@@ -12,6 +12,7 @@ namespace SuperBotManagerBase.DB
         public AppDBContext(DbContextOptions<AppDBContext> options)
             : base(options)
         {
+            this.Database.SetCommandTimeout(300);
         }
 
         public DbSet<User> Users { get; set; }
@@ -89,9 +90,9 @@ namespace SuperBotManagerBase.DB
                   j => j
                       .HasOne(ur => ur.User)
                       .WithMany(u => u.UserRoles)
-                      .HasForeignKey(ur => ur.UserId),
-                  j =>
-                  {
+                      .HasForeignKey(ur => ur.UserId)
+                      ,
+                  j => {
                       j.ToTable("userrole");
                   });
 
