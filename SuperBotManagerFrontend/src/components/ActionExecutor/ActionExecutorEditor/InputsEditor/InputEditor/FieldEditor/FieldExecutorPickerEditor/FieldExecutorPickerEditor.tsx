@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Select, SelectProps } from 'antd';
 import { actionExecutorGetAll, executorKeys } from 'api/actionExecutorApi';
 import React, { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { InnerFieldEditorProps } from '../FieldEditor';
 
 const FieldExecutorPickerEditor: React.FC<InnerFieldEditorProps> = ({
@@ -14,7 +15,7 @@ const FieldExecutorPickerEditor: React.FC<InnerFieldEditorProps> = ({
 		queryKey: executorKeys.list(),
 		queryFn: ({ signal }) => actionExecutorGetAll(signal)
 	});
-
+	const { t } = useTranslation();
 	const options = useMemo<SelectProps['options']>(() => {
 		if (!executors) return [];
 		let newOptions = (
@@ -28,14 +29,14 @@ const FieldExecutorPickerEditor: React.FC<InnerFieldEditorProps> = ({
 		if (fieldSchema.isOptional) {
 			newOptions = [
 				{
-					label: 'None',
+					label: t('None'),
 					value: ''
 				},
 				...newOptions!
 			];
 		}
 		return newOptions;
-	}, [executors, fieldSchema.isOptional]);
+	}, [executors, fieldSchema.isOptional, t]);
 
 	useEffect(() => {
 		if (value.value === undefined && options && options.length > 0) {

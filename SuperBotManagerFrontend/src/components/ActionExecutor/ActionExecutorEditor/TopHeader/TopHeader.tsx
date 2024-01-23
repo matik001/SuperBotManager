@@ -1,5 +1,6 @@
 import { Button, Popconfirm, Tooltip } from 'antd';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoMdTrash } from 'react-icons/io';
 import { IoArrowBack } from 'react-icons/io5';
 import { styled } from 'styled-components';
@@ -41,13 +42,14 @@ const TopHeader: React.FC<TopHeaderProps> = ({
 	onDelete
 }) => {
 	const [isUnsavedMsgPopupOpen, setUnsavedMsgPopupOpen] = useState(false);
+	const { t } = useTranslation();
 	return (
 		<Container>
 			<Popconfirm
-				title="Are you sure?"
-				description="You have unsaved changes!"
-				okText="Yes"
-				cancelText="No"
+				title={t('Do you want to leave?')}
+				description={t('Unsaved changes will be lost.')}
+				okText={t('Yes')}
+				cancelText={t('No')}
 				onConfirm={onGoBack}
 				onCancel={() => {}}
 				open={isUnsavedMsgPopupOpen}
@@ -75,11 +77,11 @@ const TopHeader: React.FC<TopHeaderProps> = ({
 
 			<Row>
 				<Button disabled={!canSave} type="primary" onClick={() => onSave()}>
-					Save
+					{t('Save')}
 				</Button>
 				<Popconfirm
-					title="Are you sure?"
-					description="You will delete also connected actions!"
+					title={t('Are you sure?')}
+					description={t('You will delete also connected actions!')}
 					placement="bottomLeft"
 					okText="Yes"
 					cancelText="No"
@@ -87,7 +89,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({
 					onCancel={() => {}}
 					// onPopupClick={(e) => (!hasUnsaveChanges && onGoBack()) || setUnsavedMsgPopupOpen(true)}
 				>
-					<Tooltip title="Delete">
+					<Tooltip title={t('Delete')}>
 						<Button loading={isDeleting} danger type="default" icon={<IoMdTrash />}></Button>
 					</Tooltip>
 				</Popconfirm>

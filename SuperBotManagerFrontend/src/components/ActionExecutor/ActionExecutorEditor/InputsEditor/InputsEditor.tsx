@@ -4,6 +4,7 @@ import { ExecutorInput } from 'api/actionExecutorApi';
 import { VaultItemDTO } from 'api/vaultItem';
 import IconButton from 'components/UI/IconButton/IconButton';
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AiOutlineExclamationCircle, AiOutlinePlus } from 'react-icons/ai';
 import { IoMdTrash } from 'react-icons/io';
 import { IoDuplicate } from 'react-icons/io5';
@@ -47,6 +48,7 @@ const InputsEditor = ({
 		onChangeInputs([...inputs, createNewInput(inputSchema, executorVaultItems)]);
 		incNextInputId();
 	};
+	const { t } = useTranslation();
 	const onDuplicateInput = useCallback(
 		(idx: number) => {
 			const inputCopy = duplicateInput(inputs[idx], inputSchema);
@@ -75,13 +77,13 @@ const InputsEditor = ({
 		// useMemo(() =>
 		inputs.map((input, idx) => ({
 			key: inputsIds[idx],
-			label: `Input ${idx + 1} (${Object.entries(input)
+			label: `${t('Input')} ${idx + 1} (${Object.entries(input)
 				.map(
 					([name, val]) =>
 						`${name}: ${
 							inputSchema.some((a) => a.name === name && a.type === 'Secret')
 								? MASK_ENCRYPTED
-								: val?.value ?? 'Empty'
+								: val?.value ?? ''
 						}`
 				)
 				.join(', ')})`,
@@ -96,14 +98,14 @@ const InputsEditor = ({
 					>
 						{/* <IoMdTrash /> */}
 						<IoDuplicate />
-						Duplicate
+						{t('Duplicate')}
 					</IconButton>
 					<Popconfirm
-						title="Delete input"
+						title={t('Delete input?')}
 						description="Are you sure to delete this input?"
 						onConfirm={() => onDeleteInput(idx)}
-						okText="Yes"
-						cancelText="No"
+						okText={t('Yes')}
+						cancelText={t('No')}
 						onPopupClick={(e) => e.stopPropagation()}
 					>
 						<IconButton
@@ -113,7 +115,7 @@ const InputsEditor = ({
 							onClick={(e) => e.stopPropagation()}
 						>
 							<IoMdTrash />
-							Delete
+							{t('Delete')}
 						</IconButton>
 					</Popconfirm>
 					{!isInputValid(idx) && (
@@ -125,7 +127,7 @@ const InputsEditor = ({
 								alignItems: 'center'
 							}}
 						>
-							<Tooltip title="Input is not correct" color="volcano">
+							<Tooltip title={t('Input is not correct')} color="volcano">
 								<AiOutlineExclamationCircle />
 							</Tooltip>
 						</div>
@@ -172,7 +174,7 @@ const InputsEditor = ({
 					marginBottom: '12px'
 				}}
 			>
-				Inputs
+				{t('Inputs')}
 				<IconButton type="text" shape="circle" onClick={onAddInput} style={{ fontSize: '20px' }}>
 					<AiOutlinePlus />
 				</IconButton>

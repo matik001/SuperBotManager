@@ -1,6 +1,7 @@
 import { Tag, Tooltip } from 'antd';
 import { ActionDefinitionDTO } from 'api/actionDefinitionApi';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { styled } from 'styled-components';
 
 interface ActionDefinitionItemProps {
@@ -31,6 +32,7 @@ const ActionDefinitionItem: React.FC<ActionDefinitionItemProps> = ({
 	actionDefinition,
 	onClick
 }) => {
+	const { t } = useTranslation();
 	return (
 		<ItemContainer onClick={onClick}>
 			<img
@@ -47,7 +49,7 @@ const ActionDefinitionItem: React.FC<ActionDefinitionItemProps> = ({
 					{actionDefinition.actionDefinitionDescription}
 				</div>
 				<div style={{ margin: '2px 0' }}>
-					<span style={{ marginRight: '10px' }}>Input fields</span>
+					<span style={{ marginRight: '10px' }}>{t('Input fields')}</span>
 					{actionDefinition.actionDataSchema.inputSchema.map((field) => (
 						<Tooltip color="orange" key={field.name} title={field.description}>
 							<Tag color="geekblue-inverse">
@@ -57,7 +59,7 @@ const ActionDefinitionItem: React.FC<ActionDefinitionItemProps> = ({
 					))}
 				</div>
 				<div>
-					<span style={{ marginRight: '10px' }}>Output fields</span>
+					<span style={{ marginRight: '10px' }}>{t('Output fields')}</span>
 					{actionDefinition.actionDataSchema.outputSchema.map((field) => (
 						<Tooltip color="orange" key={field.name} title={field.description}>
 							<Tag color="green-inverse">

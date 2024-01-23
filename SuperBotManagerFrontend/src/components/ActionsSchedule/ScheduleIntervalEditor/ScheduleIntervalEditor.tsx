@@ -3,6 +3,7 @@ import { ActionScheduleDTO } from 'api/scheduleApi';
 import IconButton from 'components/UI/IconButton/IconButton';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdAdd } from 'react-icons/md';
 
 interface ScheduleIntervalEditorProps {
@@ -10,22 +11,23 @@ interface ScheduleIntervalEditorProps {
 	onChangeInterval: (newInterval: number) => void;
 }
 const ScheduleIntervalEditor = ({ schedule, onChangeInterval }: ScheduleIntervalEditorProps) => {
+	const { t } = useTranslation();
 	const options = [
-		{ value: 60 * 60 * 1000, label: 'Every hour' },
-		{ value: 24 * 60 * 60 * 1000, label: 'Every day' },
-		{ value: 7 * 24 * 60 * 60 * 1000, label: 'Every week' }
+		{ value: 60 * 60 * 1000, label: t('Every hour') },
+		{ value: 24 * 60 * 60 * 1000, label: t('Every day') },
+		{ value: 7 * 24 * 60 * 60 * 1000, label: t('Every week') }
 	];
 	if (!options.some((x) => x.value === schedule.intervalSec)) {
 		options.push({
 			value: schedule.intervalSec,
-			label: `Every ${dayjs.duration({ seconds: schedule.intervalSec }).humanize()}`
+			label: t('Every {{x}}', { x: dayjs.duration({ seconds: schedule.intervalSec }).humanize() })
 		});
 	}
 	const [customInterval, setCustomInterval] = useState(schedule.intervalSec);
 	return (
 		<>
 			<Select
-				style={{ width: 340 }}
+				style={{ width: 315 }}
 				onChange={(newInterval) => {
 					onChangeInterval(newInterval);
 				}}
@@ -39,7 +41,7 @@ const ScheduleIntervalEditor = ({ schedule, onChangeInterval }: ScheduleInterval
 							<InputNumber
 								style={{ width: '130px' }}
 								suffix="sec"
-								placeholder="Please enter item"
+								placeholder="Please enter time"
 								value={customInterval}
 								min={10}
 								onChange={(val) => {
@@ -49,12 +51,13 @@ const ScheduleIntervalEditor = ({ schedule, onChangeInterval }: ScheduleInterval
 								// onKeyDown={(e) => e.stopPropagation()}
 							/>
 							<IconButton
+								style={{ padding: '4px' }}
 								type="text"
 								onClick={(e) => {
 									onChangeInterval(customInterval);
 								}}
 							>
-								<MdAdd /> Add custom interval
+								<MdAdd /> {t('Add custom interval')}
 							</IconButton>
 						</Space>
 					</>

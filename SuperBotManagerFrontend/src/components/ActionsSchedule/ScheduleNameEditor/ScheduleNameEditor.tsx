@@ -1,6 +1,7 @@
 import { Input } from 'antd';
 import { ActionScheduleDTO } from 'api/scheduleApi';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ScheduleNameEditorProps {
 	schedule: ActionScheduleDTO;
@@ -14,7 +15,7 @@ const ScheduleNameEditor = ({ schedule, onChangeName }: ScheduleNameEditorProps)
 	useEffect(() => {
 		setTempName(schedule.actionScheduleName);
 	}, [schedule.actionScheduleName]);
-
+	const { t } = useTranslation();
 	if (isEditing) {
 		return (
 			<Input
@@ -40,7 +41,7 @@ const ScheduleNameEditor = ({ schedule, onChangeName }: ScheduleNameEditorProps)
 					setIsEditing((a) => !a);
 				}}
 			>
-				{tempName ? tempName : 'Set name'}
+				{tempName ? tempName : t('Set name')}
 			</div>
 		);
 	}

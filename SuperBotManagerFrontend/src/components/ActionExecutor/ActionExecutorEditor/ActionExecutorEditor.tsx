@@ -26,7 +26,7 @@ const Container = styled.div`
 	margin: 15px;
 	border-radius: 15px;
 	overflow: hidden;
-	max-width: 1100px;
+	max-width: 1130px;
 	margin-left: auto;
 	margin-right: auto;
 	height: calc(100% - 15px);

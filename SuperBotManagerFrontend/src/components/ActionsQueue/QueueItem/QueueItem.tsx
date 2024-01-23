@@ -93,8 +93,8 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 					</span>
 				</Space>
 
-				<div style={{ width: '200px' }}>
-					Start type: <b>{action.runStartType}</b>
+				<div style={{ width: '240px' }}>
+					{t('Start type')}: <b>{t(action.runStartType)}</b>
 				</div>
 				{action.forwardedFromActionId && (
 					<div>
@@ -102,7 +102,7 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 					</div>
 				)}
 				<div style={{ marginLeft: 'auto' }}>
-					Created: <b>{dayjs(action.createdDate).toNow()}</b>
+					{t('Created')}: <b>{t('{{x}} ago', { x: dayjs(action.createdDate).toNow(true) })}</b>
 				</div>
 			</HeadInfo>
 
@@ -116,7 +116,7 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 				<InputOutputContainer>
 					<InputContainer>
 						<InputOutputTitle>
-							{Object.keys(action.actionData.input).length === 0 ? 'No input' : 'Input'}
+							{Object.keys(action.actionData.input).length === 0 ? t('No input') : t('Input')}
 						</InputOutputTitle>
 
 						{Object.entries(action.actionData.input).map(([key, value]) => {
@@ -147,7 +147,7 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 					</InputContainer>
 					<InputContainer>
 						<InputOutputTitle>
-							{Object.keys(action.actionData.output).length === 0 ? 'No output' : 'Output'}
+							{Object.keys(action.actionData.output).length === 0 ? t('No output') : t('Output')}
 						</InputOutputTitle>
 						{Object.entries(action.actionData.output).map(([key, value]) => {
 							return (

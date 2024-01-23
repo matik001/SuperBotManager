@@ -6,6 +6,7 @@ import IconButton from 'components/UI/IconButton/IconButton';
 import dayjs from 'dayjs';
 import { rgba } from 'polished';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { AiFillSetting } from 'react-icons/ai';
 import { IoIosPlay } from 'react-icons/io';
 import { themeDark } from 'setup/AppThemeProvider';
@@ -56,6 +57,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 
 	const noInputs = actionExecutor.actionData.inputs.length === 0;
 	const theme = useTheme();
+	const { t, i18n } = useTranslation();
 
 	return (
 		<ConfigProvider
@@ -69,7 +71,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 		>
 			<Container $imgUrl={actionDefinition?.actionDefinitionIcon ?? ''}>
 				<Backdrop>
-					<Tooltip title="Settings">
+					<Tooltip title={t('Settings')}>
 						<Button
 							styles={{
 								icon: {
@@ -99,18 +101,20 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 					</div>
 					<div>
 						<div>
-							Type: <b>{actionExecutor.runMethod}</b>
+							{t('Type')}: <b>{t(actionExecutor.runMethod)}</b>
 						</div>
 						<div>
-							Inputs: <b>{actionExecutor.actionData.inputs.length}</b>
+							{t('Inputs')}: <b>{actionExecutor.actionData.inputs.length}</b>
 						</div>
 						<div>
-							In queue: <b>{0}</b>
+							{t('In queue')}: <b>{0}</b>
 						</div>
 						<div>
-							Last run:{' '}
+							{t('Last run')}:{' '}
 							<b style={{ fontSize: '12px' }}>
-								{actionExecutor.lastRunDate ? dayjs(actionExecutor.lastRunDate).toNow() : 'never'}
+								{actionExecutor.lastRunDate
+									? t('{{x}} ago', { x: dayjs(actionExecutor.lastRunDate).toNow(true) })
+									: t('never')}
 							</b>
 						</div>
 					</div>
@@ -118,9 +122,9 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 						<Tooltip
 							title={
 								noInputs
-									? 'No inputs to execute'
+									? t('No inputs to execute')
 									: !actionExecutor.isValid
-										? 'Settings are invalid'
+										? t('Settings are invalid')
 										: undefined
 							}
 							placement="bottom"
@@ -132,13 +136,14 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 								shape="round"
 								style={{
 									marginTop: 'auto',
-									marginBottom: '7px'
+									marginBottom: '7px',
+									marginLeft: i18n.language === 'pl' ? '-10px' : undefined
 								}}
 								loading={isQueueing}
 								onClick={onRun}
 							>
 								<IoIosPlay />
-								Run
+								{t('Run')}
 							</IconButton>
 						</Tooltip>
 					) : (
@@ -149,7 +154,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 								fontWeight: 'bold'
 							}}
 						>
-							Automatic
+							{t('Automatic')}
 						</div>
 					)}
 					{/* {actionExecutor.actionExecutorName} ({actionExecutor.id}) */}

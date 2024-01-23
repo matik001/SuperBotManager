@@ -60,7 +60,7 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 								location.pathname == '/' || location.pathname == '/executors' ? 'primary' : 'text'
 							}
 						>
-							Executors
+							{t('Executors')}
 						</Button>
 					</Link>
 
@@ -69,7 +69,7 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 							style={{ marginLeft: '10px', height: '40px' }}
 							type={location.pathname == '/queue' ? 'primary' : 'text'}
 						>
-							Queue
+							{t('Queue')}
 						</Button>
 					</Link>
 					<Link to="/schedule">
@@ -77,7 +77,7 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 							style={{ marginLeft: '10px', height: '40px' }}
 							type={location.pathname == '/schedule' ? 'primary' : 'text'}
 						>
-							Schedule
+							{t('Schedule')}
 						</Button>
 					</Link>
 					<Link to="/vault">
@@ -85,7 +85,7 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 							style={{ marginLeft: '10px', height: '40px' }}
 							type={location.pathname == '/vault' ? 'primary' : 'text'}
 						>
-							Vault
+							{t('Vault')}
 						</Button>
 					</Link>
 					<Button

@@ -1,3 +1,6 @@
+import { ConfigProvider } from 'antd';
+import enEN from 'antd/locale/en_US';
+import plPL from 'antd/locale/pl_PL';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -41,17 +44,25 @@ const AppTranslationsProvider: React.FC<AppTranslationsProviderProps> = ({ child
 		setIsLoading(false);
 	}, []);
 	const { t, i18n } = useTranslation();
+	dayjs.locale(i18n.language); // must be here, to update before rerender when changing lang
 	useEffect(() => {
-		dayjs.locale(i18n.language);
 		dayjs.extend(relativeTime);
 		dayjs.extend(localizedFormat);
 		dayjs.extend(duration);
-	}, [i18n.language]);
+	}, []);
 
 	/// todo: dodac pobieranie tlumaczen z backendu tylko potrzebnych, zamiast tak jak teraz wszystkich
 	/// gdy projekt sie bardzo rozwinie i będzie wiecej plikow niz tylko common.json bedzie to mialo sens
 
-	return <>{isLoading ? <LoadingPage /> : children}</>;
+	return (
+		<>
+			{isLoading ? (
+				<LoadingPage />
+			) : (
+				<ConfigProvider locale={i18n.language === 'pl' ? plPL : enEN}>{children}</ConfigProvider>
+			)}
+		</>
+	);
 };
 
 export default AppTranslationsProvider;

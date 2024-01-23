@@ -16,6 +16,7 @@ import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import dayjs from 'dayjs';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoMdTrash } from 'react-icons/io';
 import { MdAdd } from 'react-icons/md';
 import { styled } from 'styled-components';
@@ -37,7 +38,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 		queryFn: ({ signal }) => scheduleGetAll(signal),
 		refetchInterval: 10000
 	});
-
+	const { t } = useTranslation();
 	const queryClient = useQueryClient();
 	const changeScheduleMutation = useMutation({
 		mutationFn: (schedule: ActionScheduleUpdateDTO) => schedulePut(schedule),
@@ -53,7 +54,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 	});
 	const columns: TableProps<ActionScheduleDTO>['columns'] = [
 		{
-			title: 'Enabled',
+			title: t('Enabled'),
 			dataIndex: 'enabled',
 			key: 'enabled',
 			render: (_, obj) => {
@@ -66,7 +67,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			}
 		},
 		{
-			title: 'Name',
+			title: t('Name'),
 			dataIndex: 'actionScheduleName',
 			key: 'actionScheduleName',
 			render: (_, obj) => (
@@ -79,7 +80,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			)
 		},
 		{
-			title: 'Executor',
+			title: t('Executor'),
 			dataIndex: 'executorId',
 			key: 'executorId',
 			render: (_, obj) => (
@@ -103,7 +104,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			)
 		},
 		{
-			title: 'Next run',
+			title: t('Next run'),
 			dataIndex: 'nextRun',
 			key: 'nextRun',
 			render: (_, schedule) => {
@@ -118,7 +119,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			}
 		},
 		{
-			title: 'Type',
+			title: t('Type'),
 			key: 'type',
 			dataIndex: 'type',
 			render: (_, schedule) => (
@@ -127,8 +128,8 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 						style={{ width: 120 }}
 						value={schedule.type}
 						options={[
-							{ value: 'Once', label: 'Once' },
-							{ value: 'Period', label: 'Period' }
+							{ value: 'Once', label: t('Once') },
+							{ value: 'Period', label: t('Period') }
 						]}
 						onChange={(newType) => {
 							changeScheduleMutation.mutate({ ...schedule, type: newType });
@@ -138,7 +139,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			)
 		},
 		{
-			title: 'Interval',
+			title: t('Interval'),
 			key: 'intervalSec',
 			dataIndex: 'intervalSec',
 			render: (_, schedule) => {
@@ -154,20 +155,20 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 			}
 		},
 		{
-			title: 'Action',
+			title: t('Action'),
 			key: 'action',
 			render: (_, record) => (
 				<Space size="middle">
 					<Popconfirm
-						title="Delete input"
-						description="Are you sure to delete this schedule?"
+						title={t('Delete schedule?')}
+						description={t('Are you sure to delete this schedule?')}
 						onConfirm={() => deleteScheduleMutation.mutate(record.id)}
-						okText="Yes"
-						cancelText="No"
+						okText={t('Yes')}
+						cancelText={t('No')}
 					>
 						<IconButton danger type="default">
 							<IoMdTrash />
-							Delete
+							{t('Delete')}
 						</IconButton>
 					</Popconfirm>
 				</Space>
@@ -182,7 +183,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 				deleteScheduleMutation.isPending ||
 				changeScheduleMutation.isPending) && <Spinner />}
 			<Space align="center" style={{ marginBottom: '10px' }}>
-				<h1 style={{ fontWeight: 300, fontSize: '32px' }}>Schedule</h1>
+				<h1 style={{ fontWeight: 300, fontSize: '32px' }}>{t('Schedule')}</h1>
 				<IconButton
 					shape="circle"
 					style={{ marginLeft: '0px', fontSize: '26px' }}
@@ -190,7 +191,7 @@ const ActionsSchedule: React.FC<ActionsScheduleProps> = ({}) => {
 					onClick={() =>
 						addScheduleMutation.mutate({
 							enabled: false,
-							actionScheduleName: 'New schedule',
+							actionScheduleName: t('New schedule'),
 							executorId: 0,
 							intervalSec: 120,
 							nextRun: new Date(new Date().getTime() + 60000),

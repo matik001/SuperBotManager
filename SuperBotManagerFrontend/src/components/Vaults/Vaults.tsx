@@ -7,6 +7,7 @@ import FieldEditor from 'components/ActionExecutor/ActionExecutorEditor/InputsEd
 import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import React, { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { styled } from 'styled-components';
 import { useImmer } from 'use-immer';
 
@@ -107,6 +108,7 @@ const Vaults: React.FC<VaultsProps> = ({ user }) => {
 			queryClient.invalidateQueries({ queryKey: vaultItemKeys.prefix });
 		}
 	});
+	const { t } = useTranslation();
 	return (
 		<Container>
 			{/* <div style={{ fontSize: '32px', fontWeight: 300 }}>{`${user.userName}'s`} Vaults</div> */}
@@ -191,7 +193,7 @@ const Vaults: React.FC<VaultsProps> = ({ user }) => {
 												type="primary"
 												onClick={() => updateGroupMutation.mutate(groupName)}
 											>
-												Save
+												{t('Save')}
 											</Button>
 											<Button
 												disabled={!isGroupChanged}
@@ -199,7 +201,7 @@ const Vaults: React.FC<VaultsProps> = ({ user }) => {
 												type="primary"
 												danger
 											>
-												Cancel
+												{t('Cancel')}
 											</Button>
 										</div>
 									</GroupContent>

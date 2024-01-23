@@ -8,6 +8,7 @@ import {
 import { ScrollableMixin } from 'components/UI/Scrollable/Scrollable';
 import Spinner from 'components/UI/Spinners/Spinner';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdSearch } from 'react-icons/md';
 import styled, { useTheme } from 'styled-components';
 import ActionDefinitionItem from './ActionDefinitionItem/ActionDefinitionItem';
@@ -44,6 +45,7 @@ const ActionDefinitionPicker: React.FC<ActionDefinitionPickerProps> = ({
 	useEffect(() => {
 		if (isOpen) setSearchPhrase('');
 	}, [isOpen]);
+	const { t } = useTranslation();
 	return (
 		<Modal
 			style={{ userSelect: 'none' }}
@@ -65,11 +67,11 @@ const ActionDefinitionPicker: React.FC<ActionDefinitionPickerProps> = ({
 						marginBottom: '20px'
 					}}
 				>
-					<div style={{ flexGrow: 1, fontSize: '30px' }}>Pick an action to create</div>
+					<div style={{ flexGrow: 1, fontSize: '30px' }}>{t('Pick an action to create')}</div>
 					<Input
 						prefix={<MdSearch />}
 						value={searchPhrase}
-						placeholder="Search"
+						placeholder={t('Search')}
 						style={{ width: '250px', fontSize: '18px', marginLeft: '10px' }}
 						onChange={(text) => setSearchPhrase(text.target.value)}
 					/>
