@@ -50,7 +50,7 @@ namespace DiscordActionsDefinitions
                         Placeholder = "Enter a message"
                     },
                     new FieldInfo("Tag everyone", FieldType.Boolean, "Do you want to tag @everyone?"),
-                    new FieldInfo("Token", FieldType.Secret, "How to get it: https://discordnet.dev/guides/getting_started/first-bot.html")
+                    new FieldInfo("Token", FieldType.Secret, "How to get it: https://www.writebots.com/discord-bot-token/")
                     {
                         Placeholder = "Enter a token"
                     },

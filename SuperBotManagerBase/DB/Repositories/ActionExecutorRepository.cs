@@ -116,7 +116,6 @@ namespace SuperBotManagerBase.DB.Repositories
 
         public RunMethod RunMethod { get; set; } = RunMethod.Manual;
         public DateTime? LastRunDate { get; set; }
-        public int? TimeIntervalSeconds { get; set; }
 
         [ForeignKey("ActionExecutorOnFinish")]
         public int? ActionExecutorOnFinishId { get; set; }
