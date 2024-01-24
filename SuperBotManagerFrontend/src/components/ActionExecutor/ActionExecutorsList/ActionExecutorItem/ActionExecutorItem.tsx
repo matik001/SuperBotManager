@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button, ConfigProvider, Tooltip, theme as antdTheme } from 'antd';
+import { actionGetAll, actionKeys } from 'api/actionApi';
 import { actionDefinitionGetAll, definitionKeys } from 'api/actionDefinitionApi';
 import { ActionExecutorDTO } from 'api/actionExecutorApi';
 import IconButton from 'components/UI/IconButton/IconButton';
@@ -53,6 +54,17 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 		queryFn: ({ signal }) => actionDefinitionGetAll(signal),
 		select: (data) => data.find((a) => a.id === actionExecutor.actionDefinitionId)
 	});
+	const { data: actions } = useQuery({
+		queryKey: actionKeys.list(),
+		queryFn: ({ signal }) => actionGetAll(signal)
+	});
+	const amountInQueue =
+		actions?.filter(
+			(a) =>
+				(a.actionExecutorId === actionExecutor.id && a.actionStatus === 'InProgress') ||
+				a.actionStatus === 'Pending'
+		).length ?? 0;
+
 	const { darkAlgorithm } = antdTheme;
 
 	const noInputs = actionExecutor.actionData.inputs.length === 0;
@@ -107,7 +119,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 							{t('Inputs')}: <b>{actionExecutor.actionData.inputs.length}</b>
 						</div>
 						<div>
-							{t('In queue')}: <b>{0}</b>
+							{t('In queue')}: <b>{amountInQueue}</b>
 						</div>
 						<div>
 							{t('Last run')}:{' '}

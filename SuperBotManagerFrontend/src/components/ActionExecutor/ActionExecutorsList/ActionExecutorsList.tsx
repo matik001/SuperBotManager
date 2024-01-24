@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FloatButton } from 'antd';
+import { actionKeys } from 'api/actionApi';
 import { ActionDefinitionDTO } from 'api/actionDefinitionApi';
 import {
 	ActionExecutorDTO,
@@ -90,7 +91,17 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 		<>
 			{(isFetching || addActionExecutorMutation.isPending) && <Spinner />}
 			<Container>
-				{!isFetching && <FloatButton icon={<MdOutlineRefresh />} onClick={() => refetch()} />}
+				{!isFetching && (
+					<FloatButton
+						icon={<MdOutlineRefresh />}
+						onClick={() => {
+							refetch(),
+								queryClient.invalidateQueries({
+									queryKey: actionKeys.prefix
+								});
+						}}
+					/>
+				)}
 
 				<ActionDefinitionPicker
 					onClose={closeModalAdd}
