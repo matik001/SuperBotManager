@@ -17,7 +17,8 @@ namespace XKomActionsConsumer
         public XKomClient()
         {
             var options = new RestClientOptions(BaseURL);
-            options.Authenticator = new JwtAuthenticator("token");
+            //options.Authenticator = new JwtAuthenticator("token");
+            options.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
             client = new RestClient(options);
         }
 
@@ -33,7 +34,8 @@ namespace XKomActionsConsumer
         {
             var request = new RestRequest("Token", Method.Post);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.AddHeader("X-Api-Key", "bekorcfmGwGMw9Nh");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddHeader("X-Api-Key", "jfsTOgOL23CN2G8Y");
             request.AddParameter("grant_type", "password");
             request.AddParameter("username", email);
             request.AddParameter("password", password);
