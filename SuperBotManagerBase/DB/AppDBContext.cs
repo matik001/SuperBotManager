@@ -122,7 +122,7 @@ namespace SuperBotManagerBase.DB
             builder.Entity<ActionExecutor>()
                 .HasOne(e => e.ActionExecutorOnFinish)
                 .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Action>()
                .HasOne(e => e.ForwardedFromAction)
