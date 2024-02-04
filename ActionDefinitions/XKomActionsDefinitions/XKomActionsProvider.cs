@@ -24,12 +24,18 @@ namespace XKomActionsDefinitions
                     {
                         Placeholder = "Enter a password"
                     },
+                    new FieldInfo("Box", FieldType.Set, "What box do you want to open?")
+                    {
+                        SetOptions = new List<SetOption>()
+                        {
+                            new SetOption("Standard box", "1"),
+                            new SetOption("Mega box", "2"),
+                            new SetOption("Giga box", "3"),
+                        },
+                    },
                 },
                 OutputSchema = new List<FieldInfo>()
                 {
-                    new FieldInfo("Box1", FieldType.String, "Won equipment from box 1"),
-                    new FieldInfo("Box2", FieldType.String, "Won equipment from box 2"),
-                    new FieldInfo("Box3", FieldType.String, "Won equipment from box 3"),
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 10), DateTimeKind.Utc),

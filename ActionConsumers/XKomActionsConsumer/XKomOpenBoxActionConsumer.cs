@@ -14,11 +14,12 @@ namespace XKomActionsConsumer
     {
         public string Email { get; set; }
         public string Password { get; set; }
-
+        public string Box { get; set; }
         public XKomOpenBoxInput(Dictionary<string, string> fromInput)
         {
             Email = fromInput["Email"];
             Password = fromInput["Password"];
+            Box = fromInput["Box"];
         }
     }
 
@@ -34,7 +35,7 @@ namespace XKomActionsConsumer
             var input = new XKomOpenBoxInput(action.ActionData.Input);
             var client = new XKomClient();
             await client.Login(input.Email, input.Password);
-            await client.OpenBox(3);
+            await client.OpenBoxWithBearer(int.Parse(input.Box));
             return new Dictionary<string, string>();
 
         }
