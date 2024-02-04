@@ -61,8 +61,8 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 	const amountInQueue =
 		actions?.filter(
 			(a) =>
-				(a.actionExecutorId === actionExecutor.id && a.actionStatus === 'InProgress') ||
-				a.actionStatus === 'Pending'
+				a.actionExecutorId === actionExecutor.id &&
+				(a.actionStatus === 'InProgress' || a.actionStatus === 'Pending')
 		).length ?? 0;
 
 	const { darkAlgorithm } = antdTheme;

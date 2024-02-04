@@ -67,7 +67,7 @@ namespace MailActionsConsumer
                 message.To.Add(new MailboxAddress("", info.To));
                 message.Subject = info.Subject;
                 message.Body = new TextPart("plain") { Text = info.Body};
-
+                client.Send(message);
                 client.Disconnect(true);
             }
         }
