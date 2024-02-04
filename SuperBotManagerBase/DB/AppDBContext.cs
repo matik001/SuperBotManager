@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OpenQA.Selenium.Interactions;
 using SuperBotManagerBase.DB.Repositories;
 using SuperBotManagerBase.Services;
 using System.Reflection.Emit;
@@ -122,6 +123,11 @@ namespace SuperBotManagerBase.DB
                 .HasOne(e => e.ActionExecutorOnFinish)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Action>()
+               .HasOne(e => e.ForwardedFromAction)
+               .WithOne()
+               .OnDelete(DeleteBehavior.Cascade);
 
             //builder.Entity<ActionExecutor>()
             //    .HasOne(e => e.ActionExecutorOnFinish)

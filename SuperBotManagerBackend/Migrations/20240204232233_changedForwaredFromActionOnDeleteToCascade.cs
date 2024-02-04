@@ -1,0 +1,60 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace SuperBotManagerBackend.Migrations
+{
+    /// <inheritdoc />
+    public partial class changedForwaredFromActionOnDeleteToCascade : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_action_action_ForwardedFromActionId",
+                table: "action");
+
+            migrationBuilder.DropIndex(
+                name: "IX_action_ForwardedFromActionId",
+                table: "action");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_action_ForwardedFromActionId",
+                table: "action",
+                column: "ForwardedFromActionId",
+                unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_action_action_ForwardedFromActionId",
+                table: "action",
+                column: "ForwardedFromActionId",
+                principalTable: "action",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_action_action_ForwardedFromActionId",
+                table: "action");
+
+            migrationBuilder.DropIndex(
+                name: "IX_action_ForwardedFromActionId",
+                table: "action");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_action_ForwardedFromActionId",
+                table: "action",
+                column: "ForwardedFromActionId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_action_action_ForwardedFromActionId",
+                table: "action",
+                column: "ForwardedFromActionId",
+                principalTable: "action",
+                principalColumn: "Id");
+        }
+    }
+}
