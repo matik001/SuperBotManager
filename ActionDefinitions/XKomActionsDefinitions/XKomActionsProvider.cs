@@ -36,6 +36,9 @@ namespace XKomActionsDefinitions
                 },
                 OutputSchema = new List<FieldInfo>()
                 {
+                    new FieldInfo("ItemName", FieldType.String, "Name of the item"),
+                    new FieldInfo("CatalogPrice", FieldType.Number, "Catalog price of item"),
+                    new FieldInfo("PromotionGainValue", FieldType.Number, "Promotion gain value"),
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 1, 10), DateTimeKind.Utc),

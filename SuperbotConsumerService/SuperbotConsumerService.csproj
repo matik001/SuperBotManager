@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ActionConsumers\DiscordActionsConsumer\DiscordActionsConsumer.csproj" />
     <ProjectReference Include="..\ActionConsumers\OpenAIActionsConsumer\OpenAIActionsConsumer.csproj" />
+    <ProjectReference Include="..\ActionConsumers\XKomActionsConsumer\XKomActionsConsumer.csproj" />
     <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
     <ProjectReference Include="..\SuperbotScheduleConsumer\SuperbotScheduleBackgroundService.csproj" />
   </ItemGroup>

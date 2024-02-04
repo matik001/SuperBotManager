@@ -34,10 +34,14 @@ namespace XKomActionsConsumer
         {
             var input = new XKomOpenBoxInput(action.ActionData.Input);
             var client = new XKomClient();
-            await client.Login(input.Email, input.Password);
-            await client.OpenBoxWithBearer(int.Parse(input.Box));
-            return new Dictionary<string, string>();
-
+            //await client.Login(input.Email, input.Password);
+            var res = await client.OpenBoxWithBearer(int.Parse(input.Box));
+            return new Dictionary<string, string>
+            {
+                { "ItemName", res.Item.Name },
+                { "CatalogPrice", res.Item.CatalogPrice.ToString() },
+                { "PromotionGainValue", res.PromotionGain.Value.ToString() }
+            };
         }
     }
 }
