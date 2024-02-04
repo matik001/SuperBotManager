@@ -50,7 +50,8 @@ namespace XKomActionsDefinitions
                 {
                     new FieldInfo("From", FieldType.String, "From whom you got the mail"),
                     new FieldInfo("Subject", FieldType.String, "Subject of the mail"),
-                    new FieldInfo("Body", FieldType.String, "Body of the mail"),
+                    new FieldInfo("TextBody", FieldType.String, "Body of the mail (text format)"),
+                    new FieldInfo("HtmlBody", FieldType.String, "Body of the mail (html format)"),
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 2, 4), DateTimeKind.Utc),
@@ -88,8 +89,18 @@ namespace XKomActionsDefinitions
                     {
                         Placeholder = "Enter password"
                     },
-                    new FieldInfo("Subject", FieldType.String, "Subject of the mail"),
-                    new FieldInfo("Body", FieldType.String, "Body of the mail"),
+                    new FieldInfo("To", FieldType.String, "To whom You want to send an email?")
+                    {
+                        Placeholder = "Enter an email"
+                    },
+                    new FieldInfo("Subject", FieldType.String, "Subject of the mail")
+                    {
+                        Placeholder = "Enter a subject"
+                    },
+                    new FieldInfo("Body", FieldType.String, "Body of the mail")
+                    {
+                        Placeholder = "Enter body of the message"
+                    },
                 },
                 OutputSchema = new List<FieldInfo>()
                 {

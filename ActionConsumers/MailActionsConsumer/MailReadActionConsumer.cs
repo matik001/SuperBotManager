@@ -39,9 +39,23 @@ namespace MailActionsConsumer
         protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
         {
             ReadMailActionInput input = new ReadMailActionInput(action.ActionData.Input);
+            while(true)
+            {
+                var mail = MailUtils.ReadOne(input);
+                if(mail != null)
+                {
+                    return new Dictionary<string, string> { 
+                        { "From", string.Join(",", ((System.Net.Mail.MailAddressCollection)mail.From).Select(a=>a.Address)) },
+                        { "FromName", string.Join(",", mail.From.Select(a=>a.Name)) },
+                        { "Subject", mail.Subject },
+                        { "TextBody", mail.TextBody },
+                        { "HtmlBody", mail.HtmlBody },
+                    };
+                }
+                Thread.Sleep(10000);
 
-
-            return new Dictionary<string, string> { { "Response", "response" } };
+            }
+           
         }
     }
 }
