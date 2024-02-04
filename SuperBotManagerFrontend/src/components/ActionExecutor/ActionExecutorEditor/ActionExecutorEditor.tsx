@@ -55,9 +55,9 @@ const ActionExecutorEditor: React.FC<ActionExecutorEditorProps> = ({ id, onSave 
 	const executorVaultItems = useMemo(
 		() =>
 			vaultItems?.filter(
-				(a) => a.vaultGroupName === actionExecutor?.actionDefinition.actionDefinitionGroup
+				(a) => a.vaultGroupName === actionExecutor?.actionDefinition?.actionDefinitionGroup
 			),
-		[actionExecutor?.actionDefinition.actionDefinitionGroup, vaultItems]
+		[actionExecutor?.actionDefinition?.actionDefinitionGroup, vaultItems]
 	);
 	const [executorLocal, updateExecutorLocal] = useImmer<ActionExecutorExtendedDTO | undefined>(
 		undefined
