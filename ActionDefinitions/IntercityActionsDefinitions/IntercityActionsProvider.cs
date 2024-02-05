@@ -20,6 +20,7 @@ namespace IntercityActionsDefinitions
                     new FieldInfo("Ticket owner", FieldType.String, "Owner of the ticket (real Firstname and Lastname)"),
                     new FieldInfo("From", FieldType.String, "First station where you begin trip"),
                     new FieldInfo("To", FieldType.String, "Last station - end of trip"),
+                    new FieldInfo("Ala ma kota", FieldType.DateTime, "Last station - end of trip"),
                     new FieldInfo("Login", FieldType.String, "Login for intercity"),
                     new FieldInfo("Password", FieldType.Secret, "Password for intercity"),
                     new FieldInfo("Discount", FieldType.Set, "Pick your discount")
