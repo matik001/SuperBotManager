@@ -125,7 +125,7 @@ const ActionExecutorItem: React.FC<ActionExecutorItemProps> = ({
 							{t('Last run')}:{' '}
 							<b style={{ fontSize: '12px' }}>
 								{actionExecutor.lastRunDate
-									? t('{{x}} ago', { x: dayjs(actionExecutor.lastRunDate).toNow(true) })
+									? t('{{x}} ago', { x: dayjs.utc(actionExecutor.lastRunDate).toNow(true) })
 									: t('never')}
 							</b>
 						</div>

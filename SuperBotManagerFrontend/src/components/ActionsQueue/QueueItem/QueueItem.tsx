@@ -102,7 +102,7 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 					</div>
 				)}
 				<div style={{ marginLeft: 'auto' }}>
-					{t('Created')}: <b>{t('{{x}} ago', { x: dayjs(action.createdDate).toNow(true) })}</b>
+					{t('Created')}: <b>{t('{{x}} ago', { x: dayjs.utc(action.createdDate).toNow(true) })}</b>
 				</div>
 			</HeadInfo>
 

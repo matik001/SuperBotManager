@@ -72,17 +72,17 @@ const ExecutorSettings: React.FC<ExecutorSettingsProps> = ({ executor, updateExe
 					ID: <b>{executor.id}</b>
 				</ContentItem>
 				<ContentItem>
-					{t('Created')}: <b>{dayjs(executor.createdDate).format('L LTS')}</b>
+					{t('Created')}: <b>{dayjs.utc(executor.createdDate).format('L LTS')}</b>
 				</ContentItem>
 				<ContentItem>
-					{t('Modified')}: <b>{dayjs(executor.modifiedDate).format('L LTS')}</b>
+					{t('Modified')}: <b>{dayjs.utc(executor.modifiedDate).format('L LTS')}</b>
 				</ContentItem>
 				<ContentItem>
 					{t('In queue')}: <b>0</b>
 				</ContentItem>
 				<ContentItem>
 					{t('Last run')}:{' '}
-					<b>{executor.lastRunDate ? dayjs(executor.lastRunDate).toNow() : t('never')}</b>
+					<b>{executor.lastRunDate ? dayjs.utc(executor.lastRunDate).toNow() : t('never')}</b>
 				</ContentItem>
 			</Column>
 			<Column style={{ margin: 'auto' }}>
