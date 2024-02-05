@@ -49,6 +49,7 @@ namespace XKomActionsDefinitions
                 OutputSchema = new List<FieldInfo>()
                 {
                     new FieldInfo("From", FieldType.String, "From whom you got the mail"),
+                    new FieldInfo("FromName", FieldType.String, "From whom you got the mail"),
                     new FieldInfo("Subject", FieldType.String, "Subject of the mail"),
                     new FieldInfo("TextBody", FieldType.String, "Body of the mail (text format)"),
                     new FieldInfo("HtmlBody", FieldType.String, "Body of the mail (html format)"),
