@@ -105,6 +105,7 @@ namespace XKomActionsDefinitions
                 },
                 OutputSchema = new List<FieldInfo>()
                 {
+                    new FieldInfo("Server reponse", FieldType.String, "Server's free reponse"),
                 },
             },
             CreatedDate = DateTime.SpecifyKind(new DateTime(2024, 2, 4), DateTimeKind.Utc),

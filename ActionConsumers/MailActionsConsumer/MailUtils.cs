@@ -55,7 +55,7 @@ namespace MailActionsConsumer
         }
 
   
-        public static void Send(MailSendActionInput info)
+        public static string Send(MailSendActionInput info)
         {
             using(var client = new SmtpClient())
             {
@@ -67,8 +67,9 @@ namespace MailActionsConsumer
                 message.To.Add(new MailboxAddress("", info.To));
                 message.Subject = info.Subject;
                 message.Body = new TextPart("plain") { Text = info.Body};
-                client.Send(message);
+                var res = client.Send(message);
                 client.Disconnect(true);
+                return res;
             }
         }
     }

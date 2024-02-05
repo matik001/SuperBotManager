@@ -43,8 +43,8 @@ namespace MailActionsConsumer
         {
             MailSendActionInput input = new MailSendActionInput(action.ActionData.Input);
 
-            MailUtils.Send(input);
-            return new Dictionary<string, string> { };
+            var res = MailUtils.Send(input);
+            return new Dictionary<string, string> { {"Server reponse", res }};
         }
     }
 }
