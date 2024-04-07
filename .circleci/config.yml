@@ -119,7 +119,7 @@ jobs:
     
       # Stop backend
       - run: > 
-          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
+          ssh -vvv -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL '
             docker rm -f botmanager_backend '
       
       # Stop service
