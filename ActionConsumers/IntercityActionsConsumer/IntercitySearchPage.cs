@@ -14,6 +14,7 @@ namespace IntercityActionsConsumer
 
         private static By BY_TO_CITY = By.Id("stname-1");
         private static By BY_CONFIRM_TO = By.XPath("//input[@id='stname-1']/following-sibling::ul/li/a");
+        private static By BY_COOKIE_ACCEPT = By.Id("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll");
 
 
         private static By BY_DATE = By.Id("date_picker");
@@ -46,14 +47,36 @@ namespace IntercityActionsConsumer
             var timeInput = _driver.FindElement(BY_TIME);
             var searchBtn = _driver.FindElement(BY_SEARCH_BTN);
 
+            try
+            {
+                var acceptCookieBtn = _driver.FindElements(BY_COOKIE_ACCEPT);
+                if(acceptCookieBtn.Count > 0)
+                {
+                    acceptCookieBtn[0].Click();
+                    Thread.Sleep(1000);
+                }
+            }
+            catch(Exception)
+            {
+                // ignore
+            }
+
+            /// can be stale
+            fromInput = _driver.FindElement(BY_FROM_CITY);
+            toInput = _driver.FindElement(BY_TO_CITY);
+            dateInput = _driver.FindElement(BY_DATE);
+            timeInput = _driver.FindElement(BY_TIME);
+            searchBtn = _driver.FindElement(BY_SEARCH_BTN);
+
+
             fromInput.SendKeys(Keys.LeftControl + "a");
             fromInput.SendKeys(from);
-            _driver.FindElement(BY_CONFIRM_FROM).Click();
+            _driver.WaitUntilClicable(BY_CONFIRM_FROM).ScrollTo(_driver).Click();
 
 
             fromInput.SendKeys(Keys.LeftControl + "a");
             toInput.SendKeys(to);
-            _driver.FindElement(BY_CONFIRM_TO).Click();
+            _driver.WaitUntilClicable(BY_CONFIRM_TO).ScrollTo(_driver).Click();
 
 
             dateInput.SendKeys(Keys.LeftControl + "a");
