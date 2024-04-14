@@ -42,6 +42,7 @@
     <ProjectReference Include="..\ActionDefinitions\OpenAIActionsDefinitions\OpenAIActionsDefinitions.csproj" />
     <ProjectReference Include="..\ActionDefinitions\StorytelActionsDefinitions\StorytelActionsDefinitions.csproj" />
     <ProjectReference Include="..\ActionDefinitions\XKomActionsDefinitions\XKomActionsDefinitions.csproj" />
+    <ProjectReference Include="..\BleBoxActionsDefinitions\BleBoxActionsDefinitions.csproj" />
     <ProjectReference Include="..\SuperBotManagerBase\SuperBotManagerBase.csproj" />
   </ItemGroup>
 
