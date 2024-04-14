@@ -17,9 +17,9 @@ namespace BleBoxActionsConsumer
         {
             BleBoxIP = fromInput["BleBoxIP"];
             Color = fromInput["Color"];
-            if(fromInput.ContainsKey("FadeMs"))
+            if(fromInput.ContainsKey("FadeMs") && !string.IsNullOrEmpty(fromInput["FadeMs"]) )
                 FadeMs = int.Parse(fromInput["FadeMs"]);
-            if(fromInput.ContainsKey("ForTime"))
+            if(fromInput.ContainsKey("ForTime") && !string.IsNullOrEmpty(fromInput["ForTime"]))
                 ForTime = int.Parse(fromInput["ForTime"]);
         }
     }
