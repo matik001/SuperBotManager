@@ -37,7 +37,7 @@ namespace StorytelActionsConsumer
         }
 
 
-        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
+        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action, CancellationToken cancelToken)
         {
             var input = new StorytelSignupInput(action.ActionData.Input);
             using var driver = seleniumProvider.GetDriver();

@@ -30,7 +30,7 @@ namespace XKomActionsConsumer
         {
         }
 
-        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
+        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action, CancellationToken cancelToken)
         {
             var input = new XKomOpenBoxInput(action.ActionData.Input);
             var client = new XKomClient();

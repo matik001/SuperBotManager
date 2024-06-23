@@ -44,6 +44,7 @@ services.AddDbContext<AppDBContext>(options =>
 services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 services.AddScoped<IActionDefinitionSeederService, ActionDefinitionSeederService>();
 services.AddScoped<IAuthService, AuthService>();
+services.AddScoped(typeof(ILogService<>), typeof(LogService<>));
 services.AddScoped<IActionService, ActionService>();
 services.AddControllers().AddNewtonsoftJson(options =>
         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));

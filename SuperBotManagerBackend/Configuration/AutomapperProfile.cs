@@ -29,6 +29,9 @@ namespace SuperBotManagerBackend.Configuration
 
             CreateMap<VaultItem, VaultItemDTO>().ReverseMap();
             CreateMap<VaultItem, VaultItemUpdateDTO>().ReverseMap();
+
+            CreateMap<Log, LogDTO>().ReverseMap();
+            CreateMap<Log, LogCreateDTO>().ReverseMap();
         }
     }
 }

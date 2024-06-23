@@ -31,12 +31,12 @@ namespace DiscordActionsConsumer
         {
         }
 
-        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
+        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action, CancellationToken cancelToken)
         {
             var input = new PromptActionInput(action.ActionData.Input);
             if(input.TagEveryone)
                 input.Message = $"@everyone {input.Message}";
-            var answer = await new DiscordBot(input.Token).Prompt(input.Message, input.Spam ? 5 : null);
+            var answer = await new DiscordBot(input.Token).Prompt(input.Message, input.Spam ? 5 : null, cancelToken);
             return new Dictionary<string, string> { { "Answer", answer } };
         }
     }

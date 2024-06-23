@@ -78,7 +78,7 @@ namespace SuperBotManagerBase.DB.Repositories
 
     public enum ActionStatus
     {
-        Pending, InProgress, Finished, Error
+        Pending, InProgress, Finished, Error, Canceled
     }
     public enum RunStartType
     {

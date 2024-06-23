@@ -50,7 +50,7 @@ namespace IntercityActionsConsumer
         }
 
 
-        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
+        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action, CancellationToken cancelToken)
         {
             var input = new ICBuyTicketActionInput(action.ActionData.Input);
 
@@ -65,6 +65,9 @@ namespace IntercityActionsConsumer
             var loginData = new IntercityLoginPage.ICLoginData(input.Login, input.Password);
             while(true)
             {
+                if(cancelToken.IsCancellationRequested)
+                    return new Dictionary<string, string> { };
+
                 using var driver = seleniumProvider.GetDriver();
                 
                 try
@@ -80,6 +83,10 @@ namespace IntercityActionsConsumer
 
                     while(page.IsAnnouncement() || !page.CanSit())
                     {
+                        if(cancelToken.IsCancellationRequested)
+                            return new Dictionary<string, string> { };
+
+
                         driver.Navigate().Back();
                         page = new IntercityTicketPage(driver).SearchTicket(ticketInfo);
                     }

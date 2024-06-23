@@ -17,6 +17,7 @@ namespace SuperBotManagerBase.DB
         IActionRepository ActionRepository { get; }
         ISecretRepository SecretRepository { get; }
         IVaultItemRepository VaultItemRepository { get; }
+        ILogRepository LogRepository { get; }
         void UntrackAll();
         Task<int> SaveChangesAsync();
     }
@@ -174,6 +175,19 @@ namespace SuperBotManagerBase.DB
                     _vaultItemRepository = new VaultItemRepository(_dbContext);
                 }
                 return _vaultItemRepository;
+            }
+        }
+
+        ILogRepository _logRepository;
+        public ILogRepository LogRepository
+        {
+            get
+            {
+                if(_logRepository == null)
+                {
+                    _logRepository = new LogRepository(_dbContext);
+                }
+                return _logRepository;
             }
         }
 

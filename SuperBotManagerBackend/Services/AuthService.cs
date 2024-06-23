@@ -12,6 +12,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using BC = BCrypt.Net.BCrypt;
 
 namespace SuperBotManagerBackend.Services
@@ -21,6 +22,8 @@ namespace SuperBotManagerBackend.Services
         Task<UserTokensDTO> SignIn(UserSignInRequestDTO loginReq);
         Task<UserTokensDTO> SignUp(UserSignUpRequestDTO signinReq);
         Task<UserTokensDTO> RefreshToken(RefreshTokenRequstDTO refreshToken);
+        Task<User> GetCurrentUser(Func<IQueryable<User>, IQueryable<User>> queryFn = null);
+
         Task Logout();
     }
 
@@ -134,12 +137,25 @@ namespace SuperBotManagerBackend.Services
 
             return result;
         }
-        public async Task Logout()
+        public async Task<User> GetCurrentUser(Func<IQueryable<User>, IQueryable<User>> queryFn = null)
         {
+            if(queryFn == null)
+                queryFn = a => a;
+
             var userIdStr = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var userId = int.Parse(userIdStr);
+            var user = await uow.UserRepository.GetById(userId, a=>queryFn(a).Include(x=>x.Roles));
+                
+            if(user == null)
+            {
+                return null;
+            }
+            return user;
+        }
+        public async Task Logout()
+        {
+            var user = await GetCurrentUser(a=>a.Include(x=>x.RefreshTokens));
             var tokenGuid = httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Jti).Value;
-            var user = await uow.UserRepository.GetById(userId, a => a.Include(x => x.RevokedTokens));
             if(user == null)
             {
                 throw HttpUtilsService.BadRequest();

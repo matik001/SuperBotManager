@@ -22,7 +22,7 @@ namespace BleBoxActionsConsumer
         {
         }
 
-        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
+        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action, CancellationToken cancelToken)
         {
             var input = new LightSwitchActionInput(action.ActionData.Input);
             BleBoxClient client = new BleBoxClient();

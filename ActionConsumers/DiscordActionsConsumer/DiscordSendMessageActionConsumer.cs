@@ -28,7 +28,7 @@ namespace DiscordActionsConsumer
         {
         }
 
-        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action)
+        protected override async Task<Dictionary<string, string>> ExecuteAsync(SuperBotManagerBase.DB.Repositories.Action action, CancellationToken cancelToken)
         {
             var input = new SendMessageInput(action.ActionData.Input);
             if(input.TagEveryone)

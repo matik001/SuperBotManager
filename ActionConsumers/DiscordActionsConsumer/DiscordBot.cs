@@ -59,7 +59,7 @@ namespace DiscordActionsConsumer
                 return true;
             });
         }
-        public async Task<string> Prompt(string message, int? spamIntervalSecs = null)
+        public async Task<string> Prompt(string message, int? spamIntervalSecs, CancellationToken cancelToken)
         {
             var sentMessages = new List<RestUserMessage>();
             var receivedMessageCompletionSource = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -82,7 +82,9 @@ namespace DiscordActionsConsumer
                         if(spamIntervalSecs == null)
                             return await receivedMessageCompletionSource.Task;
 
-                        await Task.Delay(TimeSpan.FromSeconds(spamIntervalSecs.Value));
+                        await Task.Delay(TimeSpan.FromSeconds(spamIntervalSecs.Value), cancelToken);
+                        if(cancelToken.IsCancellationRequested)
+                            return null;
                         if(receivedMessageCompletionSource.Task.IsCompleted)
                         {
                             return await receivedMessageCompletionSource.Task;

@@ -6,6 +6,7 @@ using SuperBotManagerBase.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,21 +24,52 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
             this.uow = uow;
             this.actionService = actionService;
         }
-
+        private async Task WaitUntilCancelled(int actionId, CancellationToken cancelToken)
+        {
+            while(true)
+            {
+                var action = await uow.ActionRepository.GetById(actionId);
+                if(action.ActionStatus == ActionStatus.Canceled)
+                    return;
+                await Task.Delay(1000, cancelToken);
+                if(cancelToken.IsCancellationRequested)
+                    return;
+            }
+        }
         public async Task ConsumeAsync(ActionQueueMessage message)
         {
             try
             {
                 var action = message.Action;
-
                 logger.LogInformation($"Processing: {action.Id} ({action.ActionExecutor.ActionExecutorName} - {action.ActionExecutor.ActionDefinition.ActionDefinitionName})");
+
+
+                var dbAction = await uow.ActionRepository.GetById(action.Id);
+                if(dbAction.ActionStatus == ActionStatus.Canceled)
+                {
+                    logger.LogInformation($"Action {action.Id} is canceled. Skipping execution.");
+                    return;
+                }
+
                 action.ActionStatus = ActionStatus.InProgress;
                 await uow.ActionRepository.Update(action);
                 await uow.SaveChangesAsync();
 
                 action.ActionData = await ActionSchema.Decrypt(uow, action.ActionData, action.ActionExecutor.ActionDefinition.ActionDataSchema);
+                var cts = new CancellationTokenSource();
 
-                var output = await ExecuteAsync(action);
+                var cancelTask = WaitUntilCancelled(action.Id, cts.Token);
+                var executeTask = ExecuteAsync(action, cts.Token);
+                await Task.WhenAny(cancelTask, executeTask);
+
+                if(cancelTask.IsCompleted)
+                {
+                    cts.Cancel();
+                    await executeTask;
+                    logger.LogInformation($"Action {action.Id} is canceled. Skipping execution.");
+                    return;
+                }
+                var output = await executeTask;
 
                 logger.LogInformation($"Executed: {action.Id} ({action.ActionExecutor.ActionExecutorName} - {action.ActionExecutor.ActionDefinition.ActionDefinitionName})");
                 action.ActionStatus = ActionStatus.Finished;
@@ -68,6 +100,6 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
             }
         }
 
-        protected abstract Task<Dictionary<string, string>> ExecuteAsync(DB.Repositories.Action action);
+        protected abstract Task<Dictionary<string, string>> ExecuteAsync(DB.Repositories.Action action, CancellationToken cancelToken);
     }
 }
