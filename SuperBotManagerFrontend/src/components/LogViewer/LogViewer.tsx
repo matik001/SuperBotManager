@@ -1,11 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { Table } from 'antd';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { FloatButton, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { LogDTO, logGetAll, logKeys } from 'api/logApi';
 import Spinner from 'components/UI/Spinners/Spinner';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MdOutlineRefresh } from 'react-icons/md';
 import styled from 'styled-components';
 
 const Container = styled.div``;
@@ -50,24 +51,33 @@ const LogViewer = () => {
 
 		[t]
 	);
+	const queryClient = useQueryClient();
 	return (
 		<>
 			{logsQuery.isFetching || !logsQuery.data ? (
 				<Spinner />
 			) : (
-				<Table
-					// style={{ height: '100%', flexGrow: 1 }}
-					rowKey={'id'}
-					columns={columns}
-					dataSource={logsQuery.data}
-					expandable={{ expandedRowRender: (log) => <div>{log.logDetails}</div> }}
-					// scroll={scroll}
-				/>
-				// <Container>
-				// 	{logsQuery.data.map((log) => (
-				// 		<LogViewerItem key={log.id} log={log}></LogViewerItem>
-				// 	))}
-				// </Container>
+				<>
+					<Table
+						// style={{ height: '100%', flexGrow: 1 }}
+						rowKey={'id'}
+						columns={columns}
+						dataSource={logsQuery.data}
+						expandable={{ expandedRowRender: (log) => <div>{log.logDetails}</div> }}
+						// scroll={scroll}
+					/>
+					{!logsQuery.isFetching && (
+						<FloatButton
+							icon={<MdOutlineRefresh />}
+							onClick={() => {
+								queryClient.invalidateQueries({
+									queryKey: logKeys.prefix
+								});
+								logsQuery.refetch();
+							}}
+						/>
+					)}
+				</>
 			)}
 		</>
 	);

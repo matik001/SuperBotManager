@@ -95,10 +95,10 @@ const ActionsExecutorsList: React.FC<ActionsExecutorsListProps> = ({}) => {
 					<FloatButton
 						icon={<MdOutlineRefresh />}
 						onClick={() => {
-							refetch(),
-								queryClient.invalidateQueries({
-									queryKey: actionKeys.prefix
-								});
+							queryClient.invalidateQueries({
+								queryKey: actionKeys.prefix
+							});
+							refetch();
 						}}
 					/>
 				)}
