@@ -1,11 +1,14 @@
 import { LoadingOutlined } from '@ant-design/icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Divider, Input, Space, Spin } from 'antd';
-import { ActionDTO } from 'api/actionApi';
+import { ActionDTO, actionKeys, actionPut } from 'api/actionApi';
 import { ActionExecutorExtendedDTO } from 'api/actionExecutorApi';
+import IconButton from 'components/UI/IconButton/IconButton';
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MdOutlineCancel } from 'react-icons/md';
 import { styled, useTheme } from 'styled-components';
 import { MASK_ENCRYPTED } from 'utils/executorUtils';
 
@@ -56,6 +59,23 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const theme = useTheme();
 	const { t } = useTranslation();
+	const queryClient = useQueryClient();
+	const cancelMutation = useMutation({
+		mutationFn: async () => {
+			await actionPut({
+				...action,
+				actionStatus: 'Canceled'
+			});
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: actionKeys.list()
+			});
+			queryClient.invalidateQueries({
+				queryKey: actionKeys.one(action.id)
+			});
+		}
+	});
 	return (
 		<Container onClick={() => setIsOpen((p) => !p)}>
 			<HeadInfo>
@@ -100,6 +120,19 @@ const QueueItem: React.FC<QueueItemProps> = ({ action, executor }) => {
 					<div>
 						Previous action id: <b>{action.forwardedFromActionId}</b>
 					</div>
+				)}
+				{(action.actionStatus === 'InProgress' || action.actionStatus === 'Pending') && (
+					<IconButton
+						danger
+						type="primary"
+						onClick={(e) => {
+							e.stopPropagation();
+							cancelMutation.mutate();
+						}}
+					>
+						<MdOutlineCancel size={18}></MdOutlineCancel>
+						{t('Cancel')}
+					</IconButton>
 				)}
 				<div style={{ marginLeft: 'auto' }}>
 					{t('Created')}: <b>{t('{{x}} ago', { x: dayjs.utc(action.createdDate).toNow(true) })}</b>

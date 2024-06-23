@@ -92,7 +92,12 @@
 	"Pick an action to create": "Pick an action to create",
 	"Input fields": "Input fields",
 	"Output fields": "Output fields",
-	"Search": "Search"
-
+	"Search": "Search",
+	"Canceled": "Canceled",
+	"Module": "Module",
+	"App":"App",
+	"Title":"Title",
+	"Date":"Date",
+	"User": "User"
 
 }

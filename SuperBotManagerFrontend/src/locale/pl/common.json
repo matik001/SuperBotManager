@@ -92,11 +92,12 @@
 	"Pick an action to create": "Wybierz akcję do utworzenia",
 	"Input fields": "Pola wejściowe",
 	"Output fields": "Pola wyjściowe",
-	"Search": "Szukaj"
-
-
-
-
-
+	"Search": "Szukaj",
+	"Canceled": "Anulowano",
+	"Module": "Moduł",
+	"App":"Aplikacja",
+	"Title":"Tytuł",
+	"Date":"Data",
+"User": "Użytkownik"
 
 }

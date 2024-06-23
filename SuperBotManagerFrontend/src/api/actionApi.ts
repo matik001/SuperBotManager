@@ -5,13 +5,13 @@ export interface ActionSchema {
 	input: Record<string, string>;
 	output: Record<string, string>;
 }
-export type ActionStatus = 'Pending' | 'InProgress' | 'Finished' | 'Error';
+export type ActionStatus = 'Pending' | 'InProgress' | 'Finished' | 'Error' | 'Canceled';
 export interface ActionUpdateDTO {
 	id: number;
 	actionData: ActionSchema;
+	actionStatus: ActionStatus;
 }
 export interface ActionDTO extends ActionUpdateDTO {
-	actionStatus: ActionStatus;
 	actionExecutorId: number;
 
 	runStartType: 'Manual' | 'Scheduled';

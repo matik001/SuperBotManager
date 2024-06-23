@@ -88,6 +88,15 @@ const TopMenu: React.FC<TopMenuProps> = ({}) => {
 							{t('Vault')}
 						</Button>
 					</Link>
+					<Link to="/logs">
+						<Button
+							style={{ marginLeft: '10px', height: '40px' }}
+							type={location.pathname == '/logs' ? 'primary' : 'text'}
+						>
+							{t('Logs')}
+						</Button>
+					</Link>
+
 					<Button
 						loading={logoutMutation.isPending}
 						style={{ marginLeft: '10px', height: '40px' }}

@@ -10,10 +10,10 @@ namespace SuperBotManagerBackend.DTOs
         public int Id { get; set; }
 
         public ActionSchema ActionData { get; set; }
+        public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
     }
     public class ActionDTO : ActionUpdateDTO
     {
-        public ActionStatus ActionStatus { get; set; } = ActionStatus.Pending;
         public RunStartType RunStartType { get; set; } = RunStartType.Manual;
 
         public int ActionExecutorId { get; set; }

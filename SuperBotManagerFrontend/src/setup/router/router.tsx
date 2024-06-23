@@ -1,6 +1,7 @@
 import ActionExecutorEditPage from 'pages/ActionExecutorEditPage';
 import ActionExecutorsPage from 'pages/ActionExecutorsPage';
 import ActionsPage from 'pages/ActionsPage';
+import LogsPage from 'pages/LogsPage';
 import NotFoundPage from 'pages/NotFoundPage';
 import SchedulePage from 'pages/SchedulePage';
 import SignInPage from 'pages/SignInPage';
@@ -24,6 +25,7 @@ const Router = () => {
 						<Route path="/schedule" element={<SchedulePage />} />
 						<Route path="/vault" element={<VaultPage />} />
 						<Route path="/queue" element={<ActionsPage />} />
+						<Route path="/logs" element={<LogsPage />} />
 						<Route path="/" element={<Navigate to="/executors" />} />
 					</>
 				) : (
