@@ -71,11 +71,13 @@ namespace IntercityActionsConsumer
 
             fromInput.SendKeys(Keys.LeftControl + "a");
             fromInput.SendKeys(from);
+            Thread.Sleep(1500);
             _driver.WaitUntilClicable(BY_CONFIRM_FROM).ScrollTo(_driver).Click();
 
 
             fromInput.SendKeys(Keys.LeftControl + "a");
             toInput.SendKeys(to);
+            Thread.Sleep(1500);
             _driver.WaitUntilClicable(BY_CONFIRM_TO).ScrollTo(_driver).Click();
 
 
