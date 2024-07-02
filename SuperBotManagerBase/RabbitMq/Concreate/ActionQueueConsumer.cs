@@ -69,6 +69,9 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
                     logger.LogInformation($"Action {action.Id} is canceled. Skipping execution.");
                     return;
                 }
+                else
+                    cts.Cancel();
+
                 var output = await executeTask;
 
                 logger.LogInformation($"Executed: {action.Id} ({action.ActionExecutor.ActionExecutorName} - {action.ActionExecutor.ActionDefinition.ActionDefinitionName})");
