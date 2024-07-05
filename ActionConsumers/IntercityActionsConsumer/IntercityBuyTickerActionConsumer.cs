@@ -93,6 +93,7 @@ namespace IntercityActionsConsumer
 
                     page.OrderTicket(input.TicketOwner)
                         .Login(loginData)
+                        .AcceptRules()
                         .PayLater()
                         .GoOn();
 

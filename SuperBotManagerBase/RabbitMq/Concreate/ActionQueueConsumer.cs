@@ -59,7 +59,7 @@ namespace SuperBotManagerBase.RabbitMq.Concreate
                 var cts = new CancellationTokenSource();
 
                 var cancelTask = WaitUntilCancelled(action.Id, cts.Token);
-                var executeTask = ExecuteAsync(action, cts.Token);
+                var executeTask = Task.Run(async ()=> await ExecuteAsync(action, cts.Token));
                 await Task.WhenAny(cancelTask, executeTask);
 
                 if(cancelTask.IsCompleted)
